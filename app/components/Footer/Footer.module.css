@@ -1,0 +1,185 @@
+.footer {
+  background: var(--color-text);
+}
+
+/* Top */
+.top {
+  padding: 80px 0 60px;
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* Brand */
+.brandLogo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.logoZh {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-cream);
+  letter-spacing: 0.15em;
+}
+
+.logoEn {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-style: italic;
+  color: rgba(250,247,240,0.5);
+  letter-spacing: 0.2em;
+}
+
+.brandTagline {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: rgba(250,247,240,0.6);
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+  margin-bottom: 28px;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.socialLink {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(250,247,240,0.5);
+  letter-spacing: 0.12em;
+  transition: color var(--transition-base);
+}
+
+.socialLink:hover {
+  color: var(--color-gold);
+}
+
+/* Nav */
+.navTitle {
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.navLink {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: rgba(250,247,240,0.55);
+  letter-spacing: 0.06em;
+  transition: color var(--transition-base), padding-left var(--transition-base);
+  display: block;
+}
+
+.navLink:hover {
+  color: var(--color-cream);
+  padding-left: 6px;
+}
+
+/* Quote Block */
+.quoteBlock {
+  border-left: 1px solid rgba(201,169,110,0.3);
+  padding-left: 28px;
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(250,247,240,0.7);
+  line-height: 2;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.quoteAttr {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-gold);
+  letter-spacing: 0.15em;
+}
+
+/* Gold Divider */
+.goldDivider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,169,110,0.3) 30%, rgba(201,169,110,0.3) 70%, transparent 100%);
+  margin: 0 40px;
+}
+
+/* Bottom */
+.bottom {
+  padding: 24px 0;
+}
+
+.bottomInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copyright {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(250,247,240,0.35);
+  letter-spacing: 0.06em;
+}
+
+.madeWith {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(201,169,110,0.5);
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 1000px) {
+  .topGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+  .quoteBlock {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px solid rgba(201,169,110,0.3);
+    padding-left: 0;
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .topGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .bottomInner {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,161 @@
+.about {
+  background: var(--color-cream);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Text Side */
+.heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 400;
+  color: var(--color-text);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+}
+
+.heading em {
+  font-style: normal;
+  color: var(--color-sage-dark);
+}
+
+.body {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-light);
+  line-height: 2;
+  letter-spacing: 0.05em;
+}
+
+/* Values */
+.values {
+  display: flex;
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 32px;
+}
+
+.valueItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 24px;
+}
+
+.valueItem:not(:last-child) {
+  border-right: 1px solid var(--color-border);
+  margin-right: 24px;
+}
+
+.valueNum {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-gold);
+  letter-spacing: 0.08em;
+}
+
+.valueDesc {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+/* Image Side */
+.imageSide {
+  position: relative;
+}
+
+.imageWrapper {
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  display: block;
+  box-shadow: var(--shadow-medium);
+}
+
+.imageFrame {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 70%;
+  height: 70%;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  border-radius: var(--radius-md);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.quoteCard {
+  position: absolute;
+  bottom: -28px;
+  left: -28px;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-medium);
+  max-width: 240px;
+  border-left: 3px solid var(--color-gold);
+}
+
+.quoteText {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--color-text);
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .imageSide {
+    order: -1;
+  }
+
+  .image {
+    height: 380px;
+  }
+
+  .quoteCard {
+    bottom: -20px;
+    left: 16px;
+  }
+
+  .imageFrame {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .values {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .valueItem:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 20px;
+    margin-right: 0;
+  }
+}
