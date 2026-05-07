@@ -142,14 +142,15 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: var(--color-cream);
-  z-index: 99;
+  z-index: 100;
   padding: 100px 40px 60px;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition-base);
+  overflow-y: auto;
 }
 
 .mobileMenu.mobileOpen {
@@ -209,6 +210,7 @@
   .hamburger {
     z-index: 101;
     display: flex;
+    position: relative;
   }
 
   .mobileMenu {
