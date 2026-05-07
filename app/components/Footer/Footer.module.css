@@ -34,7 +34,7 @@
   font-family: var(--font-display);
   font-size: 0.7rem;
   font-style: italic;
-  color: rgba(250,247,240,0.5);
+  color: rgba(250, 247, 240, 0.5);
   letter-spacing: 0.2em;
 }
 
@@ -42,7 +42,7 @@
   font-family: var(--font-serif);
   font-size: 0.88rem;
   font-weight: 400;
-  color: rgba(250,247,240,0.6);
+  color: rgba(250, 247, 240, 0.6);
   line-height: 1.9;
   letter-spacing: 0.06em;
   margin-bottom: 28px;
@@ -56,7 +56,7 @@
 .socialLink {
   font-family: var(--font-sans);
   font-size: 0.75rem;
-  color: rgba(250,247,240,0.5);
+  color: rgba(250, 247, 240, 0.5);
   letter-spacing: 0.12em;
   transition: color var(--transition-base);
 }
@@ -86,7 +86,7 @@
   font-family: var(--font-serif);
   font-size: 0.88rem;
   font-weight: 400;
-  color: rgba(250,247,240,0.55);
+  color: rgba(250, 247, 240, 0.55);
   letter-spacing: 0.06em;
   transition: color var(--transition-base), padding-left var(--transition-base);
   display: block;
@@ -99,7 +99,7 @@
 
 /* Quote Block */
 .quoteBlock {
-  border-left: 1px solid rgba(201,169,110,0.3);
+  border-left: 1px solid rgba(201, 169, 110, 0.3);
   padding-left: 28px;
 }
 
@@ -108,7 +108,7 @@
   font-size: 0.95rem;
   font-weight: 400;
   font-style: normal;
-  color: rgba(250,247,240,0.7);
+  color: rgba(250, 247, 240, 0.7);
   line-height: 2;
   letter-spacing: 0.08em;
   margin-bottom: 12px;
@@ -125,7 +125,7 @@
 /* Gold Divider */
 .goldDivider {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(201,169,110,0.3) 30%, rgba(201,169,110,0.3) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(201, 169, 110, 0.3) 30%, rgba(201, 169, 110, 0.3) 70%, transparent 100%);
   margin: 0 40px;
 }
 
@@ -143,7 +143,7 @@
 .copyright {
   font-family: var(--font-sans);
   font-size: 0.75rem;
-  color: rgba(250,247,240,0.35);
+  color: rgba(250, 247, 240, 0.35);
   letter-spacing: 0.06em;
 }
 
@@ -151,7 +151,7 @@
   font-family: var(--font-display);
   font-size: 0.75rem;
   font-style: italic;
-  color: rgba(201,169,110,0.5);
+  color: rgba(201, 169, 110, 0.5);
   letter-spacing: 0.12em;
 }
 
@@ -160,13 +160,15 @@
     grid-template-columns: 1fr 1fr;
     gap: 48px;
   }
+
   .brand {
     grid-column: 1 / -1;
   }
+
   .quoteBlock {
     grid-column: 1 / -1;
     border-left: none;
-    border-top: 1px solid rgba(201,169,110,0.3);
+    border-top: 1px solid rgba(201, 169, 110, 0.3);
     padding-left: 0;
     padding-top: 28px;
   }
@@ -177,6 +179,7 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
   .bottomInner {
     flex-direction: column;
     gap: 8px;

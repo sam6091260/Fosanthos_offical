@@ -15,7 +15,7 @@ export async function POST(request) {
 
     // 服務項目對照
     const interestMap = {
-      india: '印度課程代理',
+      india: '印度課程',
       university: '寶老師課程',
       flower: '花波精油諮詢',
       other: '其他 / 只是想聊聊',

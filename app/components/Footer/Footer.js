@@ -24,7 +24,7 @@ export default function Footer() {
                 <span className={styles.logoEn}>Fosanthos Co., Ltd.</span>
               </div>
               <p className={styles.brandTagline}>
-                在日常中，陪伴你走向<br />更穩定與清晰的自己。
+                在日常中，陪伴你走向<br />更穩定與清晰的自己
               </p>
               <div className={styles.socialLinks}>
                 {['Instagram', 'Facebook', 'LINE'].map((s) => (
@@ -68,7 +68,7 @@ export default function Footer() {
             {/* Quote */}
             <div className={styles.quoteBlock}>
               <blockquote className={styles.quote}>
-                "靈性不在遠方，<br />它就在你下一次的呼吸裡。"
+                "靈性不在遠方，<br />它就在你下一次的呼吸裡"
               </blockquote>
               <span className={styles.quoteAttr}>— 心光卉</span>
             </div>

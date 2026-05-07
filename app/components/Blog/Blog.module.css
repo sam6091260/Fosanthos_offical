@@ -14,7 +14,7 @@
 .heading {
   font-family: var(--font-serif);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-text);
   letter-spacing: 0.08em;
   margin-bottom: 16px;

@@ -1,24 +1,65 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { usePathname } from 'next/navigation'
 import styles from './Navbar.module.css'
 
 const navLinks = [
-  { label: '關於我們', href: '/#about' },
-  { label: '服務內容', href: '/#services' },
-  { label: '部落格', href: '/blog' },
-  { label: '品牌哲學', href: '/#philosophy' },
-  { label: '聯絡我們', href: '/#contact' },
+  { label: '關於我們', href: '/#about', sectionId: 'about' },
+  { label: '服務內容', href: '/#services', sectionId: 'services' },
+  { label: '部落格', href: '/blog', sectionId: null },
+  { label: '品牌哲學', href: '/#philosophy', sectionId: 'philosophy' },
+  { label: '聯絡我們', href: '/#contact', sectionId: 'contact' },
 ]
 
 export default function Navbar() {
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
 
+  // 偵測滾動位置
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60)
+      // 回到頂部時清除 active
+      if (window.scrollY < 200) setActiveSection('')
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Intersection Observer：偵測目前可見的 section（僅首頁）
+  useEffect(() => {
+    if (pathname !== '/') {
+      setActiveSection('')
+      return
+    }
+
+    const sectionIds = navLinks
+      .filter((l) => l.sectionId)
+      .map((l) => l.sectionId)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // 找出目前最可見的 section
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        if (visible.length > 0) {
+          setActiveSection(visible[0].target.id)
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5] }
+    )
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [pathname])
 
   // 鎖定頁面滾動
   useEffect(() => {
@@ -26,7 +67,16 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  const handleLinkClick = () => setMenuOpen(false)
+  const handleLinkClick = useCallback(() => setMenuOpen(false), [])
+
+  // 判斷連結是否 active
+  const isActive = (link) => {
+    if (link.href === '/blog') return pathname === '/blog'
+    if (link.sectionId && pathname === '/') {
+      return activeSection === link.sectionId
+    }
+    return false
+  }
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`} role="navigation" aria-label="主要導航">
@@ -41,7 +91,10 @@ export default function Navbar() {
         <ul className={styles.links} role="list">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className={styles.link}>
+              <a
+                href={link.href}
+                className={`${styles.link} ${isActive(link) ? styles.linkActive : ''}`}
+              >
                 {link.label}
               </a>
             </li>
@@ -71,7 +124,11 @@ export default function Navbar() {
         <ul role="list">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className={styles.mobileLink} onClick={handleLinkClick}>
+              <a
+                href={link.href}
+                className={`${styles.mobileLink} ${isActive(link) ? styles.mobileLinkActive : ''}`}
+                onClick={handleLinkClick}
+              >
                 {link.label}
               </a>
             </li>

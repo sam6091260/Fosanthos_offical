@@ -6,7 +6,7 @@ const services = [
   {
     id: 'india-course',
     icon: '☽',
-    badge: '印度課程代理',
+    badge: '印度課程',
     title: '連結古老智慧',
     subtitle: '從身體開始，認識自己',
     image: '/india_course.png',

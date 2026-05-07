@@ -22,7 +22,7 @@
 .heading {
   font-family: var(--font-serif);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-text);
   letter-spacing: 0.1em;
 }
@@ -62,7 +62,7 @@
 .mainQuoteText {
   font-family: var(--font-serif);
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   color: var(--color-text);
   line-height: 2;
@@ -170,19 +170,26 @@
 }
 
 @media (max-width: 768px) {
+
+  .principle {
+    padding: 16px 20px;
+  }
+
   .mainQuote {
-    padding: 40px 28px;
+    padding: 20px 24px;
   }
 
   .quoteSymbol {
-    font-size: 3rem;
-    top: 24px;
-    left: 20px;
+    display: none;
   }
 
   .quoteSymbolRight {
     bottom: 12px;
     right: 20px;
+  }
+
+  .secondaryQuote {
+    padding: 16px 40px;
   }
 
   .secondaryQuotes {

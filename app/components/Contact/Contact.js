@@ -62,7 +62,9 @@ export default function Contact() {
             </h2>
             <span className="gold-line" style={{ margin: '28px 0' }} aria-hidden="true" />
             <p className={`${styles.intro} reveal reveal-delay-2`}>
-              無論你對哪項服務感到好奇，或者只是想聊聊自己最近的狀態，歡迎傳訊給我們。沒有標準答案，只有真誠的回應。
+              無論你對哪項服務感到好奇，或者只是想聊聊自己最近的狀態，歡迎傳訊給我們。
+              <br />
+              <em>沒有標準答案，只有真誠的回應</em>
             </p>
 
             <div className={`${styles.contactItems} reveal reveal-delay-3`}>
@@ -93,8 +95,8 @@ export default function Contact() {
 
             {/* Gentle note */}
             <div className={`${styles.gentleNote} reveal reveal-delay-3`}>
-              <p>每一個問題都值得被好好對待。</p>
-              <p>我們通常在<span> 1-2 </span>個工作天內回覆。</p>
+              <p>每一個問題都值得被好好對待</p>
+              <p>我們通常在<span> 1-2 </span>個工作天內回覆</p>
             </div>
           </div>
 
@@ -145,7 +147,7 @@ export default function Contact() {
                     onChange={handleChange}
                   >
                     <option value="">請選擇服務項目（選填）</option>
-                    <option value="india">印度課程代理</option>
+                    <option value="india">印度課程</option>
                     <option value="university">寶老師課程</option>
                     <option value="flower">花波精油諮詢</option>
                     <option value="other">其他 / 只是想聊聊</option>
