@@ -65,7 +65,7 @@
   font-weight: 500;
   font-style: normal;
   color: var(--color-text);
-  line-height: 2;
+  line-height: 1.6;
   letter-spacing: 0.1em;
 }
 
@@ -91,7 +91,7 @@
 
 .principle {
   text-align: center;
-  padding: 36px 20px;
+  padding: 20px;
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
@@ -125,7 +125,7 @@
   font-size: 0.83rem;
   font-weight: 400;
   color: var(--color-text-light);
-  line-height: 1.9;
+  line-height: 1.6;
   letter-spacing: 0.04em;
 }
 
@@ -150,7 +150,7 @@
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-text);
-  line-height: 2;
+  line-height: 1.6;
   letter-spacing: 0.08em;
   margin-bottom: 16px;
 }
@@ -178,12 +178,18 @@
     font-size: clamp(1.3rem, 3vw, 2.4rem);
   }
 
+  .principles {
+    gap: 16px;
+    margin: 32px 0;
+  }
+
   .principle {
     padding: 16px 20px;
   }
 
   .mainQuote {
     padding: 20px 24px;
+    margin-bottom: 32px;
   }
 
   .quoteSymbol {

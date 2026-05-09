@@ -32,7 +32,7 @@ export default function ArticlePage({ params }) {
     <>
       <Navbar />
       <main className={styles.article}>
-        {post.image ? (
+        {post.image && !post.image.endsWith('.mp4') ? (
           <div className={styles.heroImage}>
             <img src={post.image} alt={post.title} />
             <div className={styles.heroImageOverlay} />
@@ -54,6 +54,17 @@ export default function ArticlePage({ params }) {
           </div>
 
           <div className={styles.divider} />
+
+          {post.image && post.image.endsWith('.mp4') && (
+            <div className={styles.videoPlayerContainer}>
+              <video 
+                src={post.image} 
+                controls 
+                playsInline 
+                className={styles.videoPlayer}
+              />
+            </div>
+          )}
 
           <div className={styles.content}>
             {post.content.split('\n').map((line, i) => (

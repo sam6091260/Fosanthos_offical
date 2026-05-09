@@ -134,7 +134,7 @@
   font-size: 0.92rem;
   font-weight: 500;
   color: var(--color-text-light);
-  line-height: 1.9;
+  line-height: 1.6;
   letter-spacing: 0.04em;
   margin-bottom: 20px;
   display: -webkit-box;
@@ -172,6 +172,12 @@
   background: rgba(122, 112, 96, 0.08);
   color: var(--color-text-light);
   border: 1px solid rgba(122, 112, 96, 0.25);
+}
+
+.categoryBadge[data-category="video"] {
+  background: rgba(196, 135, 117, 0.12);
+  color: #a66657;
+  border: 1px solid rgba(196, 135, 117, 0.3);
 }
 
 /* ─── Post Meta ────────────────────────────────────── */
@@ -336,7 +342,7 @@
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--color-text-light);
-  line-height: 1.7;
+  line-height: 1.6;
   letter-spacing: 0.04em;
   margin-bottom: 12px;
   flex: 1;
@@ -377,33 +383,69 @@
 /* ─── Responsive ───────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .categoryBadge {
+    font-size: 0.6rem;
+    padding: 0 10px;
+    margin-bottom: 2px;
+  }
+
   .featured {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100px 1fr;
     max-height: none;
+    align-items: stretch;
   }
 
   .featuredImage {
-    height: 200px;
+    height: 100%;
     min-height: auto;
   }
 
   .featuredBody {
-    padding: 20px 24px;
+    padding: 8px 12px;
+    justify-content: center;
+  }
+
+  .featuredTitle {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+
+  .featuredExcerpt {
+    display: none;
+  }
+
+  .postMeta {
+    margin-bottom: 8px;
   }
 
   .grid {
     flex-direction: column;
+    gap: 12px;
   }
 
   .card {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .cardTitle {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 2;
   }
 
   .cardImage,
   .cardImagePlaceholder {
-    width: 100%;
-    min-height: 160px;
-    height: 160px;
+    width: 100px;
+    min-height: auto;
+    height: auto;
+  }
+
+  .cardBody {
+    padding: 8px 12px;
+  }
+
+  .cardExcerpt {
+    display: none;
   }
 
   .tabs {
@@ -413,6 +455,10 @@
   .tab {
     font-size: 0.78rem;
     padding: 6px 14px;
+  }
+
+  .readMore {
+    font-size: 0.75rem;
   }
 }
 

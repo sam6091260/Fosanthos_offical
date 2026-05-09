@@ -51,7 +51,11 @@ export default function Blog() {
           <article className={styles.featured} id={`blog-featured-${featuredPost.id}`}>
             {featuredPost.image && (
               <div className={styles.featuredImage}>
-                <img src={featuredPost.image} alt={featuredPost.title} />
+                {featuredPost.image.endsWith('.mp4') ? (
+                  <video src={featuredPost.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                ) : (
+                  <img src={featuredPost.image} alt={featuredPost.title} />
+                )}
                 <div className={styles.featuredImageOverlay} />
               </div>
             )}
@@ -88,7 +92,11 @@ export default function Blog() {
             >
               {post.image ? (
                 <div className={styles.cardImage}>
-                  <img src={post.image} alt={post.title} />
+                  {post.image.endsWith('.mp4') ? (
+                    <video src={post.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                  ) : (
+                    <img src={post.image} alt={post.title} />
+                  )}
                   <div className={styles.cardImageOverlay} />
                 </div>
               ) : (

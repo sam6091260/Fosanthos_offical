@@ -341,6 +341,19 @@ export const blogPosts = [
     image: '/blog_teacher_2.png',
     featured: true,
   },
+  // ── 影音分享 ──
+  {
+    id: 'video-1',
+    category: 'video',
+    categoryLabel: '影音分享',
+    title: '奇蹟分享',
+    excerpt: '',
+    content: ``,
+    date: '2026 年 5 月 9 日',
+    author: '寶老師',
+    image: '/video_share.mp4',
+    featured: true,
+  },
 ]
 
 export const categories = [
@@ -348,4 +361,5 @@ export const categories = [
   { key: 'student', label: '學員奇蹟分享' },
   { key: 'course', label: '近期課程推廣' },
   { key: 'teacher', label: '寶老師短文' },
+  { key: 'video', label: '影音分享' },
 ]

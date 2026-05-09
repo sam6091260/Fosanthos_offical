@@ -52,7 +52,7 @@ body {
   font-family: var(--font-serif);
   background-color: var(--color-cream);
   color: var(--color-text);
-  line-height: 1.8;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -179,7 +179,7 @@ button {
   margin-bottom: 16px;
 }
 
-/* ?�?�?� Scrollbar ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
+/* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -193,7 +193,7 @@ button {
   border-radius: 3px;
 }
 
-/* ?�?�?� Selection ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?� */
+/* --- Selection --- */
 ::selection {
   background: var(--color-yellow);
   color: var(--color-text);
@@ -202,7 +202,7 @@ button {
 @media (max-width: 768px) {
 
   html {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .container {
