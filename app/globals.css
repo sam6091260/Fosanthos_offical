@@ -21,7 +21,7 @@
   --font-display: 'Cormorant Garamond', 'Georgia', serif;
   --font-sans: 'Noto Sans TC', 'Arial', sans-serif;
 
-  --spacing-section: 120px;
+  --spacing-section: 100px;
   --max-width: 1200px;
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -200,6 +200,11 @@ button {
 }
 
 @media (max-width: 768px) {
+
+  html {
+    font-size: 15px;
+  }
+
   .container {
     padding: 0 24px;
   }

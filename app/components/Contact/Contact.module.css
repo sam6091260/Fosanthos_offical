@@ -278,3 +278,9 @@ a.contactItemValue:hover {
     padding: 36px 28px;
   }
 }
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+  }
+}

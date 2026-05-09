@@ -1,15 +1,37 @@
+'use client'
+import { useState, useEffect } from 'react'
 import styles from './Hero.module.css'
+import Image from 'next/image'
+
+const badgeTexts = [
+  "身心靈整合 · 靈性陪伴",
+  "印度課程代理 · 原石精油",
+  "回到初心 · 找回內在力量"
+]
 
 export default function Hero() {
+  const [textIndex, setTextIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % badgeTexts.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <section id="hero" className={styles.hero} aria-label="首頁主視覺">
       {/* Background Image */}
       <div className={styles.bg} aria-hidden="true">
-        <img
-          src="/hero_flower.png"
-          alt="柔和花朵背景"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
           className={styles.bgImg}
-        />
+        >
+          <source src="/hero_flower.mp4" type="video/mp4" />
+        </video>
         <div className={styles.overlay} />
       </div>
 
@@ -18,14 +40,15 @@ export default function Hero() {
         {/* Badge */}
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
-          <span>身心靈整合 · 靈性陪伴</span>
+          <span className={styles.badgeTextWrapper}>
+            <span key={textIndex} className={styles.badgeTextAnimation}>
+              {badgeTexts[textIndex]}
+            </span>
+          </span>
         </div>
 
         {/* Brand Name */}
-        <h1 className={styles.brandName}>
-          <span className={styles.brandZh}>心光卉</span>
-          <span className={styles.brandEn}>Fosanthos</span>
-        </h1>
+        <Image src="/logo_full.png" alt="Fosanthos" className={styles.brandName} width={150} height={150} />
 
         {/* Tagline */}
         <p className={styles.tagline}>

@@ -170,6 +170,13 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .heading {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+  }
 
   .principle {
     padding: 16px 20px;

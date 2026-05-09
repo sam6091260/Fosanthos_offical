@@ -1,4 +1,6 @@
 import styles from './Footer.module.css'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const footerLinks = [
   { label: '關於我們', href: '/#about' },
@@ -20,8 +22,14 @@ export default function Footer() {
             {/* Brand */}
             <div className={styles.brand}>
               <div className={styles.brandLogo}>
-                <span className={styles.logoZh}>心光卉</span>
-                <span className={styles.logoEn}>Fosanthos Co., Ltd.</span>
+                <Image
+                  src="/logo_full.png"
+                  alt="心光卉 Fosanthos"
+                  width={160}
+                  height={140}
+                  priority
+                  className={styles.logoImage}
+                />
               </div>
               <p className={styles.brandTagline}>
                 在日常中，陪伴你走向<br />更穩定與清晰的自己

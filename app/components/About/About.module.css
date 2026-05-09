@@ -122,6 +122,22 @@
   letter-spacing: 0.05em;
 }
 
+.carouselAnim {
+  animation: crossFade 1.5s ease-in-out forwards;
+}
+
+@keyframes crossFade {
+  from {
+    opacity: 0.5;
+    filter: blur(2px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
@@ -144,5 +160,11 @@
 
   .imageFrame {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
   }
 }

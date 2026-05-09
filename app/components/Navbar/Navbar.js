@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
 import styles from './Navbar.module.css'
 
 const navLinks = [
@@ -82,29 +84,35 @@ export default function Navbar() {
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`} role="navigation" aria-label="主要導航">
       <div className={styles.inner}>
         {/* Logo */}
-        <a href="/" className={styles.logo} aria-label="心光卉首頁">
-          <span className={styles.logoZh}>心光卉</span>
-          <span className={styles.logoEn}>Fosanthos</span>
-        </a>
+        <Link href="/" className={styles.logo} aria-label="心光卉首頁">
+          <Image
+            src="/logo.png"
+            alt="心光卉 Fosanthos"
+            width={50}
+            height={30}
+            priority
+            className={styles.logoImage}
+          />
+        </Link>
 
         {/* Desktop Links */}
         <ul className={styles.links} role="list">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className={`${styles.link} ${isActive(link) ? styles.linkActive : ''}`}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
         {/* CTA */}
-        <a href="/#contact" className={styles.cta} id="navbar-cta">
+        <Link href="/#contact" className={styles.cta} id="navbar-cta">
           開始探索
-        </a>
+        </Link>
 
         {/* Mobile Hamburger */}
         <button
@@ -124,19 +132,19 @@ export default function Navbar() {
         <ul role="list">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className={`${styles.mobileLink} ${isActive(link) ? styles.mobileLinkActive : ''}`}
                 onClick={handleLinkClick}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <a href="/#contact" className={styles.mobileCta} onClick={handleLinkClick}>
+            <Link href="/#contact" className={styles.mobileCta} onClick={handleLinkClick}>
               開始探索
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

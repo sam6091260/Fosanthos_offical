@@ -1,7 +1,7 @@
 .blog {
   background: var(--color-cream);
   position: relative;
-  padding-top: 140px;
+  padding-top: 100px;
   min-height: 100vh;
 }
 
@@ -564,6 +564,16 @@
 }
 
 @media (max-width: 768px) {
+
+  .blog {
+    padding-top: 80px;
+  }
+
+
+  .heading {
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+  }
+
   .dialogOverlay {
     padding: 20px 16px;
   }

@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import styles from './Blog.module.css'
 import { blogPosts, categories } from './blogData'
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState('all')
-  const [selectedPost, setSelectedPost] = useState(null)
 
   const filteredPosts =
     activeCategory === 'all'
@@ -15,21 +15,6 @@ export default function Blog() {
   // 找出精選文章（第一篇 featured）
   const featuredPost = filteredPosts.find((p) => p.featured)
   const regularPosts = filteredPosts.filter((p) => p !== featuredPost)
-
-  // 關閉 Dialog
-  const closeDialog = useCallback(() => setSelectedPost(null), [])
-
-  // ESC 關閉
-  useEffect(() => {
-    if (!selectedPost) return
-    const handleKey = (e) => { if (e.key === 'Escape') closeDialog() }
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', handleKey)
-    return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', handleKey)
-    }
-  }, [selectedPost, closeDialog])
 
   return (
     <section id="blog" className={styles.blog} aria-label="部落格分享">
@@ -81,14 +66,14 @@ export default function Blog() {
                 <span className={styles.postDot}>·</span>
                 <span className={styles.postDate}>{featuredPost.date}</span>
               </div>
-              <button
+              <Link
+                href={`/blog/${featuredPost.id}`}
                 className={styles.readMore}
-                onClick={() => setSelectedPost(featuredPost)}
                 id={`blog-read-${featuredPost.id}`}
               >
                 閱讀全文
                 <span className={styles.readMoreArrow}>→</span>
-              </button>
+              </Link>
             </div>
           </article>
         )}
@@ -124,14 +109,14 @@ export default function Blog() {
                   <span className={styles.postDot}>·</span>
                   <span className={styles.postDate}>{post.date}</span>
                 </div>
-                <button
+                <Link
+                  href={`/blog/${post.id}`}
                   className={styles.readMore}
-                  onClick={() => setSelectedPost(post)}
                   id={`blog-read-${post.id}`}
                 >
                   閱讀全文
                   <span className={styles.readMoreArrow}>→</span>
-                </button>
+                </Link>
               </div>
             </article>
           ))}
@@ -145,46 +130,6 @@ export default function Blog() {
           </a>
         </div>
       </div>
-
-      {/* ─── Article Dialog ─── */}
-      {selectedPost && (
-        <div className={styles.dialogOverlay} onClick={closeDialog} aria-modal="true" role="dialog">
-          <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
-            {/* Dialog Header */}
-            {selectedPost.image && (
-              <div className={styles.dialogImage}>
-                <img src={selectedPost.image} alt={selectedPost.title} />
-                <div className={styles.dialogImageOverlay} />
-              </div>
-            )}
-
-            {/* Close Button */}
-            <button className={styles.dialogClose} onClick={closeDialog} aria-label="關閉">
-              ✕
-            </button>
-
-            <div className={styles.dialogBody}>
-              <span className={styles.categoryBadge} data-category={selectedPost.category}>
-                {selectedPost.categoryLabel}
-              </span>
-              <h2 className={styles.dialogTitle}>{selectedPost.title}</h2>
-              <div className={styles.postMeta}>
-                <span className={styles.postAuthor}>{selectedPost.author}</span>
-                <span className={styles.postDot}>·</span>
-                <span className={styles.postDate}>{selectedPost.date}</span>
-              </div>
-              <div className={styles.dialogDivider} />
-              <div className={styles.dialogContent}>
-                {selectedPost.content.split('\n').map((line, i) => (
-                  line.trim() === ''
-                    ? <br key={i} />
-                    : <p key={i}>{line}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+    </section >
   )
 }

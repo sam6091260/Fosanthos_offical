@@ -1,9 +1,35 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './About.module.css'
+
+const aboutCarousel = [
+  {
+    image: '/about_meditation.png',
+    alt: '靜心冥想的女性，感受自然療癒力量',
+    quote: <>「靜下來，<br />才能聽見內心真正的聲音。」</>
+  },
+  {
+    image: '/flower_essence.png',
+    alt: '花波精油，喚醒內在',
+    quote: <>「自然的力量，<br />總是溫柔而堅定。」</>
+  },
+  {
+    image: '/blog_teacher.png',
+    alt: '靈性陪伴與療癒',
+    quote: <>「療癒，<br />從接納不完美的自己開始。」</>
+  }
+]
 
 export default function About() {
   const sectionRef = useRef(null)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => (prev + 1) % aboutCarousel.length)
+    }, 6000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -64,16 +90,17 @@ export default function About() {
           <div className={`${styles.imageSide} reveal reveal-delay-1`}>
             <div className={styles.imageWrapper}>
               <img
-                src="/about_meditation.png"
-                alt="靜心冥想的女性，感受自然療癒力量"
-                className={styles.image}
+                key={`img-${carouselIndex}`}
+                src={aboutCarousel[carouselIndex].image}
+                alt={aboutCarousel[carouselIndex].alt}
+                className={`${styles.image} ${styles.carouselAnim}`}
               />
               {/* Decorative frame */}
               <div className={styles.imageFrame} aria-hidden="true" />
               {/* Quote card */}
               <div className={styles.quoteCard}>
-                <p className={styles.quoteText}>
-                  「靜下來，<br />才能聽見內心真正的聲音。」
+                <p key={`quote-${carouselIndex}`} className={`${styles.quoteText} ${styles.carouselAnim}`}>
+                  {aboutCarousel[carouselIndex].quote}
                 </p>
               </div>
             </div>
