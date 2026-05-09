@@ -96,6 +96,9 @@ export const blogPosts = [
     date: '2026 年 5 月 6 日',
     author: '心光卉團隊',
     image: '/3D_class.jpg',
+    gallery: [
+      '/3D_class.jpg',
+    ],
     featured: true,
   },
   {
@@ -341,6 +344,58 @@ export const blogPosts = [
     image: '/blog_teacher_2.png',
     featured: true,
   },
+
+  // ── 寶老師課程 ──
+  {
+    id: 'teacher-course-1',
+    category: 'teacher-course',
+    categoryLabel: '寶老師課程',
+    title: '黄金纪元 - 意識聖房',
+    excerpt: '透過合一大學創辦人 Sri AmmaBhagavan 啟動的過程，點化黃金紀元意識，幫助參與者經驗神聖的臨在、解決問題並實現願望。',
+    content: `透過合一大學創辦人 Sri AmmaBhagavan 啟動的過程，點化黃金紀元意識，幫助參與者經驗神聖的臨在、解決問題並實現願望。
+
+在這個快速變遷的時代，許多人感到內在迷失與對未來的焦慮。
+你是否曾經渴望一個真正能解決內在掙扎、實現渴望，並讓你Experience到神聖臨在的課程？
+
+✨ 什麼是「意識聖房」？
+「意識聖房」是合一大學創辦人 Sri AmmaBhagavan 在特定神聖時刻所啟動的過程，旨在將「黃金紀元意識」點化給參與者。
+這並非傳統的教授，而是在深層冥想與能量傳導中，直接啟動你內在沉睡的潛能。
+
+在這次的課程中，寶老師將作為引導者，帶領大家體驗這個珍貴的點化過程。
+不論你是剛接觸靈性，或是已有多年經驗，這個過程都將以溫柔而深刻的方式觸動你的內心。
+
+✨ 課程帶來什麼？
+透過這次的點化，你將：
+- 體驗到平靜與神聖的臨在，這是解決一切問題的源頭
+- 經驗到內在的轉化與提升
+- 透過神聖的能量運作，協助清理長久累積的內在模式
+- 獲得清晰與指引，讓你清楚知道下一步該如何走
+- 經驗到生命各面向（關係、事業、健康、財務）的改善
+
+✨ 適合對象
+所有尋求內在平靜、渴望轉化生命、或對黃金紀元意識感到好奇的人。
+不需要任何預備知識，只需一顆開放的心。
+
+✨ 課程形式
+- 溫柔的引導式冥想
+- 深度能量傳導
+- 透過點化啟動內在潛能
+- 現場 Q&A
+
+✨ 講師
+寶老師將親自引導整個過程，以其溫暖與深度的洞見，陪伴大家走過這段轉化的旅程。✨
+
+報名請填寫表單
+
+`,
+    date: '2025 年 3 月 30 日',
+    author: '寶老師',
+    image: '/golden-age.jpg',
+    gallery: [
+      '/room.jpg',
+    ],
+    featured: true,
+  },
   // ── 影音分享 ──
   {
     id: 'video-1',
@@ -360,6 +415,7 @@ export const categories = [
   { key: 'all', label: '全部文章' },
   { key: 'student', label: '學員奇蹟分享' },
   { key: 'course', label: '近期課程推廣' },
+  { key: 'teacher-course', label: '寶老師課程' },
   { key: 'teacher', label: '寶老師短文' },
   { key: 'video', label: '影音分享' },
 ]

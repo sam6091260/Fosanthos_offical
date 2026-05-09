@@ -180,6 +180,12 @@
   border: 1px solid rgba(196, 135, 117, 0.3);
 }
 
+.categoryBadge[data-category="teacher-course"] {
+  background: rgba(147, 130, 158, 0.12);
+  color: #7a6b8a;
+  border: 1px solid rgba(147, 130, 158, 0.3);
+}
+
 /* ─── Post Meta ────────────────────────────────────── */
 .postMeta {
   display: flex;
@@ -383,16 +389,21 @@
 /* ─── Responsive ───────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .header {
+    margin-bottom: 32px;
+  }
+
   .categoryBadge {
     font-size: 0.6rem;
     padding: 0 10px;
-    margin-bottom: 2px;
+    margin-bottom: 8px;
   }
 
   .featured {
     grid-template-columns: 100px 1fr;
     max-height: none;
     align-items: stretch;
+    margin-bottom: 16px;
   }
 
   .featuredImage {
@@ -401,7 +412,7 @@
   }
 
   .featuredBody {
-    padding: 8px 12px;
+    padding: 16px;
     justify-content: center;
   }
 
@@ -415,12 +426,12 @@
   }
 
   .postMeta {
-    margin-bottom: 8px;
+    margin-bottom: 0px;
   }
 
   .grid {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
   }
 
   .card {
@@ -441,7 +452,7 @@
   }
 
   .cardBody {
-    padding: 8px 12px;
+    padding: 16px;
   }
 
   .cardExcerpt {
@@ -450,6 +461,7 @@
 
   .tabs {
     gap: 6px;
+    margin-bottom: 32px;
   }
 
   .tab {
@@ -459,6 +471,10 @@
 
   .readMore {
     font-size: 0.75rem;
+  }
+
+  .postAuthor {
+    font-size: 0.70rem;
   }
 }
 

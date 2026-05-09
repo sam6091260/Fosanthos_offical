@@ -1,11 +1,25 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import styles from './Blog.module.css'
 import { blogPosts, categories } from './blogData'
 
 export default function Blog() {
+  const searchParams = useSearchParams()
   const [activeCategory, setActiveCategory] = useState('all')
+
+  useEffect(() => {
+    const cat = searchParams.get('category')
+    if (cat && categories.some(c => c.key === cat)) {
+      setActiveCategory(cat)
+      // Scroll to the blog section if on the same page
+      const blogSection = document.getElementById('blog')
+      if (blogSection) {
+        blogSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [searchParams])
 
   const filteredPosts =
     activeCategory === 'all'
@@ -102,7 +116,10 @@ export default function Blog() {
               ) : (
                 <div className={styles.cardImagePlaceholder} data-category={post.category}>
                   <span className={styles.placeholderIcon}>
-                    {post.category === 'student' ? '✦' : post.category === 'course' ? '◎' : '✎'}
+                    {post.category === 'student' ? '✦' : 
+                     post.category === 'course' ? '◎' : 
+                     post.category === 'teacher-course' ? '✧' : 
+                     post.category === 'video' ? '▸' : '✎'}
                   </span>
                 </div>
               )}

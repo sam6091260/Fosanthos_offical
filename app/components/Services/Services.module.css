@@ -220,10 +220,6 @@
   gap: 14px;
 }
 
-.cardCtaFeatured {
-  color: var(--color-gold);
-  border-color: rgba(201, 169, 110, 0.5);
-}
 
 .arrow {
   transition: transform var(--transition-base);

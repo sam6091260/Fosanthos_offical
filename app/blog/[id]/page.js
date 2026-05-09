@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ScrollToTop from '../../components/ScrollToTop'
 import { blogPosts } from '../../components/Blog/blogData'
+import Gallery from './Gallery'
 import styles from './Article.module.css'
 
 export function generateStaticParams() {
@@ -73,6 +74,17 @@ export default function ArticlePage({ params }) {
                 : <p key={i}>{line}</p>
             ))}
           </div>
+
+          <Gallery images={post.gallery} title={post.title} />
+
+          {(post.category === 'course' || post.category === 'teacher-course') && (
+            <div className={styles.ctaContainer}>
+              <Link href="/#contact" className={styles.ctaButton}>
+                立即報名諮詢
+                <span className={styles.ctaIcon}>✦</span>
+              </Link>
+            </div>
+          )}
 
           <Link href="/blog" className={styles.backBtn}>
             <span className={styles.arrow}>←</span>

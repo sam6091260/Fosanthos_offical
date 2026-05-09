@@ -167,4 +167,31 @@
   .heading {
     font-size: clamp(1.3rem, 3vw, 2.4rem);
   }
+
+  .values {
+    gap: 12px;
+    padding-top: 24px;
+    margin-top: 32px;
+  }
+
+  .valueItem {
+    padding-right: 0;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .valueItem:not(:last-child) {
+    border-right: 1px solid var(--color-border);
+    margin-right: 0;
+    padding-right: 8px;
+  }
+
+  .valueNum {
+    font-size: 1rem;
+  }
+
+  .valueDesc {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
 }

@@ -73,6 +73,12 @@
   border: 1px solid rgba(196, 135, 117, 0.3);
 }
 
+.categoryBadge[data-category="teacher-course"] {
+  background: rgba(147, 130, 158, 0.12);
+  color: #7a6b8a;
+  border: 1px solid rgba(147, 130, 158, 0.3);
+}
+
 .title {
   font-family: var(--font-serif);
   font-size: clamp(1.8rem, 4vw, 2.5rem);
@@ -143,6 +149,55 @@
 }
 
 
+
+
+
+.ctaContainer {
+  display: flex;
+  justify-content: center;
+  margin: 60px 0 20px;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-gold);
+  color: white;
+  padding: 18px 48px;
+  border-radius: 40px;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  box-shadow: 0 10px 25px rgba(201, 169, 110, 0.3);
+  transition: all var(--transition-base);
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(201, 169, 110, 0.4);
+  background: #b89a64;
+}
+
+.ctaIcon {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .ctaContainer {
+    margin: 40px 0 10px;
+  }
+  
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 32px;
+    font-size: 1rem;
+  }
+}
+
 .backBtn {
   display: inline-flex;
   align-items: center;
@@ -191,5 +246,6 @@
 
   .heroImage {
     height: 16vh;
+    margin-bottom: 24px;
   }
 }

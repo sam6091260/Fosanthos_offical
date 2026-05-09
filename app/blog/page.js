@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import Blog from '../components/Blog'
 import Footer from '../components/Footer'
@@ -13,7 +14,9 @@ export default function BlogPage() {
     <>
       <Navbar />
       <main>
-        <Blog />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Blog />
+        </Suspense>
       </main>
       <Footer />
       <ScrollToTop />
