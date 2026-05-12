@@ -353,7 +353,7 @@ const blogPosts = [
   {
     id: 'video-1',
     category: 'video',
-    categoryLabel: '影音分享影音分享影音分享影音分享影音分享影音分享',
+    categoryLabel: '影音分享',
     title: '奇蹟分享',
     excerpt: '',
     content: '',
