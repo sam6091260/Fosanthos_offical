@@ -17,7 +17,7 @@ export async function POST(request) {
     const interestMap = {
       india: '印度課程',
       university: '寶老師課程',
-      flower: '花波精油諮詢',
+      flower: '彩光花波諮詢',
       other: '其他 / 只是想聊聊',
     }
 

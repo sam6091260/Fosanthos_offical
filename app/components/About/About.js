@@ -10,7 +10,7 @@ const aboutCarousel = [
   },
   {
     image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/flower_essence.png',
-    alt: '花波精油，喚醒內在',
+    alt: '彩光花波，喚醒內在',
     quote: <>「自然的力量，<br />總是溫柔而堅定。」</>
   },
   {

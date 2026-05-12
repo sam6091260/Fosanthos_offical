@@ -149,7 +149,7 @@ export default function Contact() {
                     <option value="">請選擇服務項目（選填）</option>
                     <option value="india">印度課程</option>
                     <option value="university">寶老師課程</option>
-                    <option value="flower">花波精油諮詢</option>
+                    <option value="flower">彩光花波諮詢</option>
                     <option value="other">其他 / 只是想聊聊</option>
                   </select>
                 </div>

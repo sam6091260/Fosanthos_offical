@@ -65,7 +65,7 @@ export default function Footer() {
             <div className={styles.nav}>
               <h3 className={styles.navTitle}>服務項目</h3>
               <ul className={styles.navList} role="list">
-                {['印度課程代理', '寶老師課程', '花波精油諮詢'].map((s) => (
+                {['印度課程代理', '寶老師課程', '彩光花波諮詢'].map((s) => (
                   <li key={s}>
                     <a href="#services" className={styles.navLink}>{s}</a>
                   </li>
