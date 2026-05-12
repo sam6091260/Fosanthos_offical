@@ -4,17 +4,17 @@ import styles from './About.module.css'
 
 const aboutCarousel = [
   {
-    image: '/about_meditation.png',
+    image: '/about_meditation.jpg',
     alt: '靜心冥想的女性，感受自然療癒力量',
     quote: <>「靜下來，<br />才能聽見內心真正的聲音。」</>
   },
   {
-    image: '/flower_essence.png',
+    image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/flower_essence.png',
     alt: '花波精油，喚醒內在',
     quote: <>「自然的力量，<br />總是溫柔而堅定。」</>
   },
   {
-    image: '/blog_teacher.png',
+    image: '/blog_teacher.jpg',
     alt: '靈性陪伴與療癒',
     quote: <>「療癒，<br />從接納不完美的自己開始。」</>
   }
