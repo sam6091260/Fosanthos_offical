@@ -27,7 +27,7 @@ const blogPosts = [
 現在的我，不完美，但很真實。而這份真實，讓我前所未有地平靜。`,
     date: '2025 年 4 月 18 日',
     author: '學員 小雨',
-    image: '/blog_student.png',
+    image: '/blog_student.jpg',
     featured: true,
   },
   {
@@ -51,7 +51,7 @@ const blogPosts = [
 原來，回家的路，一直都在。`,
     date: '2025 年 3 月 25 日',
     author: '學員 阿慧',
-    image: '/flower_essence.png',
+    image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/flower_essence.png',
   },
   // ── 近期課程推廣 ──
   {
@@ -149,7 +149,7 @@ const blogPosts = [
 你不需要成為任何人，你只需要回到自己。`,
     date: '2025 年 4 月 12 日',
     author: '寶老師',
-    image: '/blog_teacher.png',
+    image: '/blog_teacher.jpg',
     featured: true,
   },
   {
