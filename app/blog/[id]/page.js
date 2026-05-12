@@ -3,18 +3,26 @@ import Link from 'next/link'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ScrollToTop from '../../components/ScrollToTop'
-import { blogPosts } from '../../components/Blog/blogData'
 import Gallery from './Gallery'
 import styles from './Article.module.css'
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    id: post.id,
-  }))
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fosanthos-api.zeabur.app'
+
+async function getPost(id) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
+      cache: 'no-store', // 每次都取最新資料
+    })
+    if (!res.ok) return null
+    return res.json()
+  } catch (err) {
+    console.error('無法取得文章:', err)
+    return null
+  }
 }
 
-export function generateMetadata({ params }) {
-  const post = blogPosts.find((p) => p.id === params.id)
+export async function generateMetadata({ params }) {
+  const post = await getPost(params.id)
   if (!post) return { title: '文章未找到 | 心光卉' }
   return {
     title: `${post.title} | 心光卉`,
@@ -22,8 +30,8 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default function ArticlePage({ params }) {
-  const post = blogPosts.find((p) => p.id === params.id)
+export default async function ArticlePage({ params }) {
+  const post = await getPost(params.id)
   
   if (!post) {
     notFound()

@@ -3,11 +3,32 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import styles from './Blog.module.css'
-import { blogPosts, categories } from './blogData'
+import { API_BASE_URL, categories } from './blogData'
 
 export default function Blog() {
   const searchParams = useSearchParams()
   const [activeCategory, setActiveCategory] = useState('all')
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // 從 API 取得文章資料
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        setLoading(true)
+        const res = await fetch(`${API_BASE_URL}/api/posts`)
+        if (!res.ok) throw new Error('API 請求失敗')
+        const data = await res.json()
+        setPosts(data)
+      } catch (err) {
+        console.error('無法取得文章:', err)
+        setPosts([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPosts()
+  }, [])
 
   useEffect(() => {
     const cat = searchParams.get('category')
@@ -23,8 +44,8 @@ export default function Blog() {
 
   const filteredPosts =
     activeCategory === 'all'
-      ? blogPosts
-      : blogPosts.filter((p) => p.category === activeCategory)
+      ? posts
+      : posts.filter((p) => p.category === activeCategory)
 
   // 找出精選文章（第一篇 featured）
   const featuredPost = filteredPosts.find((p) => p.featured)
@@ -60,8 +81,22 @@ export default function Blog() {
           ))}
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className={styles.loading}>
+            <p>載入文章中...</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && filteredPosts.length === 0 && (
+          <div className={styles.loading}>
+            <p>目前沒有文章</p>
+          </div>
+        )}
+
         {/* Featured Post */}
-        {featuredPost && (
+        {!loading && featuredPost && (
           <article className={styles.featured} id={`blog-featured-${featuredPost.id}`}>
             {featuredPost.image && (
               <div className={styles.featuredImage}>
@@ -97,55 +132,57 @@ export default function Blog() {
         )}
 
         {/* Regular Posts Grid */}
-        <div className={styles.grid}>
-          {regularPosts.map((post) => (
-            <article
-              key={post.id}
-              className={styles.card}
-              id={`blog-card-${post.id}`}
-            >
-              {post.image ? (
-                <div className={styles.cardImage}>
-                  {post.image.endsWith('.mp4') ? (
-                    <video src={post.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                  ) : (
-                    <img src={post.image} alt={post.title} />
-                  )}
-                  <div className={styles.cardImageOverlay} />
-                </div>
-              ) : (
-                <div className={styles.cardImagePlaceholder} data-category={post.category}>
-                  <span className={styles.placeholderIcon}>
-                    {post.category === 'student' ? '✦' : 
-                     post.category === 'course' ? '◎' : 
-                     post.category === 'teacher-course' ? '✧' : 
-                     post.category === 'video' ? '▸' : '✎'}
+        {!loading && (
+          <div className={styles.grid}>
+            {regularPosts.map((post) => (
+              <article
+                key={post.id}
+                className={styles.card}
+                id={`blog-card-${post.id}`}
+              >
+                {post.image ? (
+                  <div className={styles.cardImage}>
+                    {post.image.endsWith('.mp4') ? (
+                      <video src={post.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                    ) : (
+                      <img src={post.image} alt={post.title} />
+                    )}
+                    <div className={styles.cardImageOverlay} />
+                  </div>
+                ) : (
+                  <div className={styles.cardImagePlaceholder} data-category={post.category}>
+                    <span className={styles.placeholderIcon}>
+                      {post.category === 'student' ? '✦' : 
+                       post.category === 'course' ? '◎' : 
+                       post.category === 'teacher-course' ? '✧' : 
+                       post.category === 'video' ? '▸' : '✎'}
+                    </span>
+                  </div>
+                )}
+                <div className={styles.cardBody}>
+                  <span className={styles.categoryBadge} data-category={post.category}>
+                    {post.categoryLabel}
                   </span>
+                  <h3 className={styles.cardTitle}>{post.title}</h3>
+                  <p className={styles.cardExcerpt}>{post.excerpt}</p>
+                  <div className={styles.postMeta}>
+                    <span className={styles.postAuthor}>{post.author}</span>
+                    <span className={styles.postDot}>·</span>
+                    <span className={styles.postDate}>{post.date}</span>
+                  </div>
+                  <Link
+                    href={`/blog/${post.id}`}
+                    className={styles.readMore}
+                    id={`blog-read-${post.id}`}
+                  >
+                    閱讀全文
+                    <span className={styles.readMoreArrow}>→</span>
+                  </Link>
                 </div>
-              )}
-              <div className={styles.cardBody}>
-                <span className={styles.categoryBadge} data-category={post.category}>
-                  {post.categoryLabel}
-                </span>
-                <h3 className={styles.cardTitle}>{post.title}</h3>
-                <p className={styles.cardExcerpt}>{post.excerpt}</p>
-                <div className={styles.postMeta}>
-                  <span className={styles.postAuthor}>{post.author}</span>
-                  <span className={styles.postDot}>·</span>
-                  <span className={styles.postDate}>{post.date}</span>
-                </div>
-                <Link
-                  href={`/blog/${post.id}`}
-                  className={styles.readMore}
-                  id={`blog-read-${post.id}`}
-                >
-                  閱讀全文
-                  <span className={styles.readMoreArrow}>→</span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         {/* Back to Home */}
         <div className={styles.viewAll}>

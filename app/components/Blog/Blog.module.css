@@ -386,6 +386,16 @@
   background: rgba(201, 169, 110, 0.05);
 }
 
+/* ─── Loading State ────────────────────────────────── */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+}
+
 /* ─── Responsive ───────────────────────────────────── */
 
 @media (max-width: 768px) {
