@@ -2,13 +2,13 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 複製 package 檔案並安裝依賴
+# 複製 package 檔案並安裝依賴（不含 devDependencies）
 COPY package*.json ./
 RUN npm ci --production
 
 # 複製程式碼
 COPY . .
 
-EXPOSE 3001
+EXPOSE 8080
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
