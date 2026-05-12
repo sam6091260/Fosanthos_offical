@@ -1,9 +1,56 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import styles from './Blog.module.css'
 import { API_BASE_URL, categories } from './blogData'
+
+// ─── 圖片元件（含 Skeleton 過渡） ──────────
+function BlogImage({ src, alt, className }) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <div className={`${className} ${styles.imageWrapper}`}>
+      {!loaded && <div className={styles.skeleton} />}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        className={loaded ? styles.imageLoaded : styles.imageLoading}
+      />
+    </div>
+  )
+}
+
+// ─── Skeleton 卡片佔位元件 ──────────
+function SkeletonCard() {
+  return (
+    <div className={styles.card}>
+      <div className={`${styles.cardImage} ${styles.skeleton}`} />
+      <div className={styles.cardBody}>
+        <div className={`${styles.skeletonLine} ${styles.skeletonShort}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonTitle}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonText}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonText}`} />
+      </div>
+    </div>
+  )
+}
+
+function SkeletonFeatured() {
+  return (
+    <div className={styles.featured}>
+      <div className={`${styles.featuredImage} ${styles.skeleton}`} />
+      <div className={styles.featuredBody}>
+        <div className={`${styles.skeletonLine} ${styles.skeletonShort}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonTitle}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonText}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonText}`} />
+        <div className={`${styles.skeletonLine} ${styles.skeletonShort}`} style={{ marginTop: '12px' }} />
+      </div>
+    </div>
+  )
+}
 
 export default function Blog() {
   const searchParams = useSearchParams()
@@ -81,11 +128,16 @@ export default function Blog() {
           ))}
         </div>
 
-        {/* Loading State */}
+        {/* Skeleton Loading State */}
         {loading && (
-          <div className={styles.loading}>
-            <p>載入文章中...</p>
-          </div>
+          <>
+            <SkeletonFeatured />
+            <div className={styles.grid}>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </div>
+          </>
         )}
 
         {/* Empty State */}
@@ -103,7 +155,7 @@ export default function Blog() {
                 {featuredPost.image.endsWith('.mp4') ? (
                   <video src={featuredPost.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                 ) : (
-                  <img src={featuredPost.image} alt={featuredPost.title} />
+                  <BlogImage src={featuredPost.image} alt={featuredPost.title} className={styles.featuredImageInner} />
                 )}
                 <div className={styles.featuredImageOverlay} />
               </div>
@@ -145,7 +197,7 @@ export default function Blog() {
                     {post.image.endsWith('.mp4') ? (
                       <video src={post.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                     ) : (
-                      <img src={post.image} alt={post.title} />
+                      <BlogImage src={post.image} alt={post.title} className={styles.cardImageInner} />
                     )}
                     <div className={styles.cardImageOverlay} />
                   </div>
