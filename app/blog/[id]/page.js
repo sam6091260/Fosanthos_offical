@@ -3,10 +3,9 @@ import Link from 'next/link'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ScrollToTop from '../../components/ScrollToTop'
+import { API_BASE_URL } from '../../components/Blog/blogData'
 import Gallery from './Gallery'
 import styles from './Article.module.css'
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fosanthos-api.zeabur.app'
 
 async function getPost(id) {
   try {

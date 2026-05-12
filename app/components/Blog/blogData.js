@@ -1,7 +1,8 @@
 // ─── API 設定 ──────────
-// 後端 API 網址（本地開發用 localhost，生產環境用 Zeabur 網址）
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'https://fosanthos-api.zeabur.app'
+// 後端 API 網址由環境變數 NEXT_PUBLIC_API_URL 統一管理
+// - 本地開發: 設定在 .env.local
+// - 生產環境: 設定在 Zeabur 環境變數
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''
 
 // ─── 文章分類（靜態資料） ──────────
 export const categories = [
