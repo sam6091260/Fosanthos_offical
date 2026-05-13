@@ -7,7 +7,8 @@ const PostSchema = new mongoose.Schema({
   title: String,                             // 文章標題
   excerpt: String,                           // 摘要
   content: String,                           // 完整內容
-  date: String,                              // 日期
+  date: String,                              // 日期（顯示用）
+  publishDate: { type: Date, default: Date.now }, // 發布日期（排序用）
   author: String,                            // 作者
   image: String,                             // 封面圖片網址
   gallery: [String],                         // 圖片集

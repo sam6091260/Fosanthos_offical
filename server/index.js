@@ -94,7 +94,7 @@ app.get('/api/posts', async (req, res) => {
   try {
     const { category } = req.query;
     const filter = category && category !== 'all' ? { category } : {};
-    const posts = await Post.find(filter).sort({ createdAt: -1 });
+    const posts = await Post.find(filter).sort({ publishDate: -1 });
     res.json(posts);
   } catch (err) {
     res.status(500).json({ error: err.message });

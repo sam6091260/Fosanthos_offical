@@ -26,6 +26,7 @@ const blogPosts = [
 
 現在的我，不完美，但很真實。而這份真實，讓我前所未有地平靜。`,
     date: '2025 年 4 月 18 日',
+    publishDate: new Date('2025-04-18'),
     author: '學員 小雨',
     image: '/blog_student.jpg',
     featured: true,
@@ -50,6 +51,7 @@ const blogPosts = [
 
 原來，回家的路，一直都在。`,
     date: '2025 年 3 月 25 日',
+    publishDate: new Date('2025-03-25'),
     author: '學員 阿慧',
     image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/flower_essence.png',
   },
@@ -95,6 +97,7 @@ const blogPosts = [
 
 ✨ 一份豐盛而全面的生命轉化 ✨`,
     date: '2026 年 5 月 6 日',
+    publishDate: new Date('2026-05-06'),
     author: '心光卉團隊',
     image: '/3D_class.jpg',
     gallery: ['/3D_class.jpg'],
@@ -121,6 +124,7 @@ const blogPosts = [
 * 在未來，具備將此狀態「傳遞給他人」的能力
 * 進入一條持續擴展、沒有終點的奇蹟之旅`,
     date: '2026 年 5 月 6 日',
+    publishDate: new Date('2026-05-06'),
     author: '心光卉團隊',
     image: '/5D_class.jpg',
     featured: true,
@@ -148,6 +152,7 @@ const blogPosts = [
 
 你不需要成為任何人，你只需要回到自己。`,
     date: '2025 年 4 月 12 日',
+    publishDate: new Date('2025-04-12'),
     author: '寶老師',
     image: '/blog_teacher.jpg',
     featured: true,
@@ -178,6 +183,7 @@ const blogPosts = [
 
 你正在路上，而這條路，沒有遲到這回事。`,
     date: '2025 年 3 月 30 日',
+    publishDate: new Date('2025-03-30'),
     author: '寶老師',
     image: '/blog_teacher_2.png',
     featured: true,
@@ -296,6 +302,7 @@ const blogPosts = [
 先報先得源頭小夜燈
 優惠→新+老慧園：28000`,
     date: '2026 年 5 月 6 日',
+    publishDate: new Date('2026-05-06'),
     author: '心光卉團隊',
     image: '/DY.png',
     featured: true,
@@ -344,6 +351,7 @@ const blogPosts = [
 
 `,
     date: '2025 年 3 月 30 日',
+    publishDate: new Date('2025-03-30'),
     author: '寶老師',
     image: '/golden-age.jpg',
     gallery: ['/room.jpg'],
@@ -358,6 +366,7 @@ const blogPosts = [
     excerpt: '',
     content: '',
     date: '2026 年 5 月 9 日',
+    publishDate: new Date('2026-05-09'),
     author: '寶老師',
     image: '/video_share.mp4',
     featured: true,
