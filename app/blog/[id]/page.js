@@ -5,6 +5,7 @@ import Footer from '../../components/Footer'
 import ScrollToTop from '../../components/ScrollToTop'
 import { API_BASE_URL } from '../../components/Blog/blogData'
 import Gallery from './Gallery'
+import MarkdownContent from './MarkdownContent'
 import styles from './Article.module.css'
 
 async function getPost(id) {
@@ -74,13 +75,7 @@ export default async function ArticlePage({ params }) {
             </div>
           )}
 
-          <div className={styles.content}>
-            {post.content.split('\n').map((line, i) => (
-              line.trim() === ''
-                ? <br key={i} />
-                : <p key={i}>{line}</p>
-            ))}
-          </div>
+          <MarkdownContent content={post.content} />
 
           <Gallery images={post.gallery} title={post.title} />
 

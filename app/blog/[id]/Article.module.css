@@ -148,8 +148,76 @@
   letter-spacing: 0.05em;
 }
 
+/* ─── Markdown Styles ──────────────────────────────── */
+.mdH1 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 48px 0 20px;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
 
+.mdH2 {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  margin: 40px 0 16px;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
 
+.mdH3 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 32px 0 12px;
+  letter-spacing: 0.05em;
+}
+
+.mdBold {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.mdItalic {
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.mdBlockquote {
+  margin: 32px 0;
+  padding: 20px 28px;
+  border-left: 3px solid var(--color-gold);
+  background: rgba(201, 169, 110, 0.06);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.mdBlockquote p {
+  margin: 0;
+}
+
+.mdList {
+  margin: 20px 0;
+  padding-left: 24px;
+}
+
+.mdListItem {
+  margin-bottom: 8px;
+  line-height: 1.8;
+}
+
+.mdHr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 40px 0;
+}
 
 
 .ctaContainer {
