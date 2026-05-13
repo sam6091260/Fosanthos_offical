@@ -148,6 +148,14 @@
   letter-spacing: 0.05em;
 }
 
+.content p {
+  margin: 0 0 1.2em 0;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
 /* ─── Markdown Styles ──────────────────────────────── */
 .mdH1 {
   font-family: var(--font-serif);
@@ -195,7 +203,7 @@
   background: rgba(201, 169, 110, 0.06);
   border-radius: 0 8px 8px 0;
   font-style: italic;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 .mdBlockquote p {
@@ -257,7 +265,7 @@
   .ctaContainer {
     margin: 40px 0 10px;
   }
-  
+
   .ctaButton {
     width: 100%;
     justify-content: center;
