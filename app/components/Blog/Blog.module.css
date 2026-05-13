@@ -129,6 +129,15 @@
   margin-bottom: 16px;
 }
 
+.featuredTitleLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.featuredTitleLink:hover .featuredTitle {
+  color: var(--color-gold);
+}
+
 .featuredExcerpt {
   font-family: var(--font-sans);
   font-size: 0.92rem;
@@ -341,6 +350,15 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.cardTitleLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardTitleLink:hover .cardTitle {
+  color: var(--color-gold);
 }
 
 .cardExcerpt {

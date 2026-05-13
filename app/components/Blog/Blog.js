@@ -153,7 +153,7 @@ export default function Blog() {
             {featuredPost.image && (
               <div className={styles.featuredImage}>
                 {featuredPost.image.endsWith('.mp4') ? (
-                  <video src={featuredPost.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                  <video src={featuredPost.image} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <BlogImage src={featuredPost.image} alt={featuredPost.title} className={styles.featuredImageInner} />
                 )}
@@ -164,7 +164,9 @@ export default function Blog() {
               <span className={styles.categoryBadge} data-category={featuredPost.category}>
                 {featuredPost.categoryLabel}
               </span>
-              <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
+              <Link href={`/blog/${featuredPost.id}`} className={styles.featuredTitleLink}>
+                <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
+              </Link>
               <p className={styles.featuredExcerpt}>{featuredPost.excerpt}</p>
               <div className={styles.postMeta}>
                 <span className={styles.postAuthor}>{featuredPost.author}</span>
@@ -195,7 +197,7 @@ export default function Blog() {
                 {post.image ? (
                   <div className={styles.cardImage}>
                     {post.image.endsWith('.mp4') ? (
-                      <video src={post.image} autoPlay loop muted playsInline style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                      <video src={post.image} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <BlogImage src={post.image} alt={post.title} className={styles.cardImageInner} />
                     )}
@@ -204,10 +206,10 @@ export default function Blog() {
                 ) : (
                   <div className={styles.cardImagePlaceholder} data-category={post.category}>
                     <span className={styles.placeholderIcon}>
-                      {post.category === 'student' ? '✦' : 
-                       post.category === 'course' ? '◎' : 
-                       post.category === 'teacher-course' ? '✧' : 
-                       post.category === 'video' ? '▸' : '✎'}
+                      {post.category === 'student' ? '✦' :
+                        post.category === 'course' ? '◎' :
+                          post.category === 'teacher-course' ? '✧' :
+                            post.category === 'video' ? '▸' : '✎'}
                     </span>
                   </div>
                 )}
@@ -215,7 +217,9 @@ export default function Blog() {
                   <span className={styles.categoryBadge} data-category={post.category}>
                     {post.categoryLabel}
                   </span>
-                  <h3 className={styles.cardTitle}>{post.title}</h3>
+                  <Link href={`/blog/${post.id}`} className={styles.cardTitleLink}>
+                    <h3 className={styles.cardTitle}>{post.title}</h3>
+                  </Link>
                   <p className={styles.cardExcerpt}>{post.excerpt}</p>
                   <div className={styles.postMeta}>
                     <span className={styles.postAuthor}>{post.author}</span>
