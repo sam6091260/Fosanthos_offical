@@ -153,7 +153,13 @@ export default function Gallery({ images = [], title }) {
           >
             {isVideo(img) ? (
               <>
-                <video src={img} muted playsInline preload="metadata" className={styles.galleryVideoThumb} />
+                <video
+                  src={img}
+                  muted playsInline
+                  preload="metadata"
+                  onLoadedMetadata={(e) => { e.currentTarget.currentTime = 0.1 }}
+                  className={styles.galleryVideoThumb}
+                />
                 <div className={styles.playIcon}>▶</div>
               </>
             ) : (

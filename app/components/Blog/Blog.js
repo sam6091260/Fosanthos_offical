@@ -153,7 +153,13 @@ export default function Blog() {
             {featuredPost.image && (
               <div className={styles.featuredImage}>
                 {featuredPost.image.endsWith('.mp4') ? (
-                  <video src={featuredPost.image} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <video
+                    src={featuredPost.image}
+                    autoPlay loop muted playsInline
+                    preload="metadata"
+                    onLoadedMetadata={(e) => { e.currentTarget.currentTime = 0.1 }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 ) : (
                   <BlogImage src={featuredPost.image} alt={featuredPost.title} className={styles.featuredImageInner} />
                 )}
