@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './Gallery.module.css'
 
+const isVideo = (url) => url && /\.(mp4|webm|mov|ogg)$/i.test(url)
+
 export default function Gallery({ images = [], title }) {
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [mounted, setMounted] = useState(false)
@@ -117,12 +119,23 @@ export default function Gallery({ images = [], title }) {
       )}
 
       <div className={styles.lightboxContent} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-        <img 
-          src={images[selectedIndex]} 
-          alt={`${title} zoomed ${selectedIndex + 1}`} 
-          className={styles.lightboxImage}
-          loading="eager"
-        />
+        {isVideo(images[selectedIndex]) ? (
+          <video
+            key={images[selectedIndex]}
+            src={images[selectedIndex]}
+            controls
+            autoPlay
+            playsInline
+            className={styles.lightboxVideo}
+          />
+        ) : (
+          <img 
+            src={images[selectedIndex]} 
+            alt={`${title} zoomed ${selectedIndex + 1}`} 
+            className={styles.lightboxImage}
+            loading="eager"
+          />
+        )}
       </div>
     </div>
   ) : null
@@ -133,12 +146,19 @@ export default function Gallery({ images = [], title }) {
         {images.map((img, index) => (
           <div 
             key={index} 
-            className={styles.galleryItem}
+            className={`${styles.galleryItem} ${isVideo(img) ? styles.galleryVideoItem : ''}`}
             onClick={(e) => openLightbox(e, index)}
             role="button"
-            aria-label={`查看第 ${index + 1} 張圖片`}
+            aria-label={isVideo(img) ? `播放第 ${index + 1} 個影片` : `查看第 ${index + 1} 張圖片`}
           >
-            <img src={img} alt={`${title} gallery ${index + 1}`} loading="lazy" />
+            {isVideo(img) ? (
+              <>
+                <video src={img} muted playsInline preload="metadata" className={styles.galleryVideoThumb} />
+                <div className={styles.playIcon}>▶</div>
+              </>
+            ) : (
+              <img src={img} alt={`${title} gallery ${index + 1}`} loading="lazy" />
+            )}
           </div>
         ))}
       </div>
