@@ -1,4 +1,5 @@
 import './globals.css'
+import PageTransition from './components/PageTransition/PageTransition'
 
 export const metadata = {
   title: '心光卉 Fosanthos | 在日常中，陪伴你走向更清晰的自己',
@@ -31,7 +32,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-TW">
-      <body>{children}</body>
+      <body>
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   )
 }
