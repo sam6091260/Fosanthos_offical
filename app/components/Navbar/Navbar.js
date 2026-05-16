@@ -111,7 +111,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <Link href="/#contact" className={styles.cta} id="navbar-cta">
-          開始探索
+          諮詢探索
         </Link>
 
         {/* Mobile Hamburger */}
@@ -143,7 +143,7 @@ export default function Navbar() {
           ))}
           <li>
             <Link href="/#contact" className={styles.mobileCta} onClick={handleLinkClick}>
-              開始探索
+              諮詢探索
             </Link>
           </li>
         </ul>

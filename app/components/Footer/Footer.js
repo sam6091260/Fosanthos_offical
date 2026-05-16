@@ -35,16 +35,28 @@ export default function Footer() {
                 在日常中，陪伴你走向<br />更穩定與清晰的自己
               </p>
               <div className={styles.socialLinks}>
-                {['Instagram', 'Facebook', 'LINE'].map((s) => (
-                  <a
+                {['Instagram', 'Facebook'].map((s) => (
+
+                  s === "Instagram" ? <a
                     key={s}
-                    href="#"
+                    href="https://www.instagram.com/__ssspirit/"
+                    target="_blank"
+                    className={styles.socialLink}
+                    aria-label={s}
+                    id={`footer-social-${s.toLowerCase()}`}
+                  >
+                    {s}
+                  </a> : s === "Facebook" ? <a
+                    key={s}
+                    href="https://www.facebook.com/saranilu?locale=zh_TW"
+                    target="_blank"
                     className={styles.socialLink}
                     aria-label={s}
                     id={`footer-social-${s.toLowerCase()}`}
                   >
                     {s}
                   </a>
+                    : null
                 ))}
               </div>
             </div>
