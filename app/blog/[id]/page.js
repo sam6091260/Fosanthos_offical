@@ -26,10 +26,15 @@ export async function generateMetadata({ params }) {
   if (!post) return { title: '文章未找到 | 心光卉' }
 
   const pageUrl = `https://fosanthos.com/blog/${post.id}`
-  // 影片文章用 logo 作為預覽圖
-  const ogImage = post.image && !post.image.endsWith('.mp4')
+
+  // 找出可用的縮圖：優先用非 mp4 的主圖，其次找 gallery 裡的靜態圖，最後用 logo
+  const isVideo = (url) => url && url.endsWith('.mp4')
+  const galleryImages = (post.gallery || []).filter((img) => !isVideo(img))
+  const ogImage = !isVideo(post.image)
     ? post.image
-    : 'https://fosanthos.com/logo_square.png'
+    : galleryImages.length > 0
+    ? galleryImages[0]
+    : '/logo_square.png'  // 相對路徑，Next.js 會自動套用 metadataBase
 
   return {
     title: `${post.title} | 心光卉`,
@@ -63,7 +68,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ArticlePage({ params }) {
   const post = await getPost(params.id)
-  
+
   if (!post) {
     notFound()
   }
@@ -86,7 +91,7 @@ export default async function ArticlePage({ params }) {
             {post.categoryLabel}
           </span>
           <h1 className={styles.title}>{post.title}</h1>
-          
+
           <div className={styles.meta}>
             <span className={styles.author}>{post.author}</span>
             <span className={styles.dot}>·</span>
@@ -97,10 +102,10 @@ export default async function ArticlePage({ params }) {
 
           {post.image && post.image.endsWith('.mp4') && (
             <div className={styles.videoPlayerContainer}>
-              <video 
-                src={post.image} 
-                controls 
-                playsInline 
+              <video
+                src={post.image}
+                controls
+                playsInline
                 className={styles.videoPlayer}
               />
             </div>
