@@ -303,6 +303,7 @@ const blogPosts = [
     publishDate: new Date('2026-05-06'),
     author: '心光卉團隊',
     image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/DY.png',
+    gallery: ['https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/81000DY-class-intro-.mp4'],
     featured: true,
   },
   // ── 寶老師短文 ──
@@ -488,6 +489,77 @@ const blogPosts = [
     author: '寶老師',
     image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/golden-age.jpg',
     gallery: ['https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/room.jpg'],
+    featured: true,
+  },
+  {
+    id: 'teacher-course-2',
+    category: 'teacher-course',
+    categoryLabel: '寶老師課程',
+    title: '成為光，傳遞光｜家人齊心同行',
+    excerpt: '奉愛服務，累積善業，不只是幫助別人，更是提升自己的生命層次，讓福報、智慧與光明不斷增長...',
+    content: `奉愛服務，累積善業，不只是幫助別人，更是提升自己的生命層次，
+讓福報、智慧與光明不斷增長。
+
+---
+
+## ✨ 邀請與使命
+
+誠摯邀請所有人全面成就道法的偉大使命。
+
+> 願我們不只是學習光，
+> 更成為光，
+> 把溫暖、希望與力量傳遞出去。
+
+## 🕯️ 成為一座燈塔
+
+願你成為一座燈塔。
+不是為了被仰望，
+而是為了照亮更多生命。
+
+在成長的路上，
+願你堅定前行，持續累積能量，
+讓內在的光越來越清明、越來越璀璨。
+
+當你站穩以後，
+請溫柔地向身邊的人伸出手，
+輕輕告訴他們：
+
+> **「你也可以。」**
+
+---
+
+## 🌊 萬千光芒的呼應
+
+真正偉大的照亮，
+從來不是一個人的發光，
+而是萬千光彼此呼應，
+彼此陪伴，
+共同守護這片充滿喜悅與愛的海洋。
+
+願我們都成為那溫柔而堅定的光，
+驅散迷茫，
+喚醒沉睡已久的力量。
+
+當無數燈塔彼此守望，
+光，就有了方向；
+世界，也因此被溫柔照亮。
+
+---
+
+## 🙏 攜手同行
+
+所有家人們，讓我們一起成為光、
+成為燈塔、
+成為喚醒世界力量的人。
+
+攜手同行，
+我們需要您的助力與參與。
+
+**無限感恩 🙏**`,
+    date: '2026 年 5 月 16 日',
+    publishDate: new Date('2026-05-16'),
+    author: '寶老師',
+    image: 'https://pub-159d2f1534984928bc80b1820c8267c0.r2.dev/fosanthos_video/be-light.mp4',
     featured: true,
   },
   // ── 影音分享 ──

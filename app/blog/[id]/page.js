@@ -24,9 +24,40 @@ async function getPost(id) {
 export async function generateMetadata({ params }) {
   const post = await getPost(params.id)
   if (!post) return { title: '文章未找到 | 心光卉' }
+
+  const pageUrl = `https://fosanthos.com/blog/${post.id}`
+  // 影片文章用 logo 作為預覽圖
+  const ogImage = post.image && !post.image.endsWith('.mp4')
+    ? post.image
+    : 'https://fosanthos.com/logo_square.png'
+
   return {
     title: `${post.title} | 心光卉`,
-    description: post.excerpt,
+    description: post.excerpt || post.title,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.title,
+      url: pageUrl,
+      siteName: '心光卉 Fosanthos',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      type: 'article',
+      locale: 'zh_TW',
+      publishedTime: post.publishDate,
+      authors: [post.author],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt || post.title,
+      images: [ogImage],
+    },
   }
 }
 
