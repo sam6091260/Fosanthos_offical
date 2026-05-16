@@ -44,7 +44,7 @@
 @media (max-width: 768px) {
   .btn {
     bottom: 24px;
-    right: 24px;
+    right: 8px;
     width: 40px;
     height: 40px;
   }

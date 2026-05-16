@@ -1,12 +1,9 @@
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import ScrollToTop from '../../components/ScrollToTop'
 import { API_BASE_URL } from '../../components/Blog/blogData'
-import Gallery from './Gallery'
-import MarkdownContent from './MarkdownContent'
 import styles from './Article.module.css'
+import ArticleContainer from './ArticleContainer'
 
 async function getPost(id) {
   try {
@@ -86,49 +83,7 @@ export default async function ArticlePage({ params }) {
           <div className={styles.noImageContainer} />
         )}
 
-        <div className={styles.container}>
-          <span className={styles.categoryBadge} data-category={post.category}>
-            {post.categoryLabel}
-          </span>
-          <h1 className={styles.title}>{post.title}</h1>
-
-          <div className={styles.meta}>
-            <span className={styles.author}>{post.author}</span>
-            <span className={styles.dot}>·</span>
-            <span className={styles.date}>{post.date}</span>
-          </div>
-
-          <div className={styles.divider} />
-
-          {post.image && post.image.endsWith('.mp4') && (
-            <div className={styles.videoPlayerContainer}>
-              <video
-                src={post.image}
-                controls
-                playsInline
-                className={styles.videoPlayer}
-              />
-            </div>
-          )}
-
-          <MarkdownContent content={post.content} />
-
-          <Gallery images={post.gallery} title={post.title} />
-
-          {(post.category === 'course' || post.category === 'teacher-course') && (
-            <div className={styles.ctaContainer}>
-              <Link href="/#contact" className={styles.ctaButton}>
-                立即報名諮詢
-                <span className={styles.ctaIcon}>✦</span>
-              </Link>
-            </div>
-          )}
-
-          <Link href="/blog" className={styles.backBtn}>
-            <span className={styles.arrow}>←</span>
-            回到部落格列表
-          </Link>
-        </div>
+        <ArticleContainer post={post} />
       </main>
       <Footer />
       <ScrollToTop />
