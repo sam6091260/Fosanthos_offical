@@ -290,7 +290,133 @@
   }
 }
 
+/* ─── 探索更多同分類文章 ──────────────────────── */
+.relatedSection {
+  margin-top: 56px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(201, 169, 110, 0.18);
+}
+
+.relatedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.relatedTitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--color-text);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.relatedViewAll {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-gold);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.relatedViewAll:hover {
+  opacity: 0.7;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.relatedCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.relatedCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(61, 56, 48, 0.12);
+}
+
+.relatedThumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+
+.relatedThumbPlaceholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.12), rgba(201, 169, 110, 0.06));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--color-gold);
+  opacity: 0.6;
+}
+
+.relatedBody {
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.relatedDate {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: rgba(61, 56, 48, 0.4);
+  letter-spacing: 0.06em;
+}
+
+.relatedCardTitle {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .relatedGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .relatedCard {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .relatedThumb,
+  .relatedThumbPlaceholder {
+    width: 100px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+  }
+}
+
 .backBtn {
+
+
   display: inline-flex;
   align-items: center;
   gap: 12px;

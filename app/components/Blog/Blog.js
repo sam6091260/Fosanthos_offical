@@ -54,7 +54,13 @@ function SkeletonFeatured() {
 
 export default function Blog() {
   const searchParams = useSearchParams()
-  const [activeCategory, setActiveCategory] = useState('all')
+  // 從 sessionStorage 初始化，URL param 會再覆寫
+  const [activeCategory, setActiveCategory] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('blog_category') || 'all'
+    }
+    return 'all'
+  })
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -76,6 +82,11 @@ export default function Blog() {
     }
     fetchPosts()
   }, [])
+
+  // 分類變化時儲存到 sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('blog_category', activeCategory)
+  }, [activeCategory])
 
   useEffect(() => {
     const cat = searchParams.get('category')

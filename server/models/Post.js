@@ -15,6 +15,7 @@ const PostSchema = new mongoose.Schema({
   featured: { type: Boolean, default: false }, // 是否精選
   mediaUrl: String,                          // 雲端媒體網址 (R2)
   mediaType: String,                         // 'image' 或 'video'
+  status: { type: String, enum: ['draft', 'published'], default: 'published' }, // 草稿/已發布
   createdAt: { type: Date, default: Date.now }
 });
 
