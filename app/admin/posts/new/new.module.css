@@ -18,3 +18,9 @@
   color: var(--color-cream);
   letter-spacing: 0.06em;
 }
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 4px 16px;
+  }
+}

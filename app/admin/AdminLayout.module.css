@@ -121,8 +121,8 @@
     position: static;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 16px;
-    gap: 8px;
+    padding: 8px 12px;
+    gap: 4px;
   }
 
   .sidebarBrand {
@@ -134,6 +134,11 @@
   .nav {
     flex-direction: row;
     padding: 0;
+  }
+
+  .navItem {
+    padding: 4px 8px;
+    gap: 4px;
   }
 
   .logoutBtn {

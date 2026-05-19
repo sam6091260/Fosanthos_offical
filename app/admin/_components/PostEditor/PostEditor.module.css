@@ -12,15 +12,68 @@
   border-right: 1px solid rgba(201, 169, 110, 0.1);
   overflow-y: auto;
   height: 100%;
-  padding: 16px 28px;
+  padding: 10px 24px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   background: #1e1b17;
 }
 
+/* 收起狀態：寬度不變，只是內容區消失 */
+.formColCollapsed {
+  overflow: hidden;
+}
+
+/* 收折按鈕：桌機隱藏，手機才顯示 */
+.collapseBtn {
+  display: none;
+  /* 桌機不顯示 */
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  background: #1e1b17;
+  border: none;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.12);
+  cursor: pointer;
+  color: rgba(201, 169, 110, 0.6);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  transition: color 0.2s ease;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.collapseBtn:hover {
+  color: var(--color-gold);
+}
+
+.collapseBtnLabel {
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.collapseBtnArrow {
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+}
+
+.collapseBtnArrowUp {
+  transform: rotate(180deg);
+}
+
+/* formBody 內容區 */
+.formBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+
 .contentCol {
-  padding: 32px 36px;
+  padding: 18px 24px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -464,12 +517,55 @@ select.input option {
 }
 
 @media (max-width: 900px) {
+
+  /* 單欄堆疊：表單在上，編輯器在下 */
   .editor {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    overflow-y: auto;
   }
 
+  /* 手機 formCol */
   .formCol {
+    height: auto;
+    overflow-y: unset;
     border-right: none;
     border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+  }
+
+  /* 手機收起時：只顯示按鈕 */
+  .formColCollapsed {
+    max-height: none;
+    overflow: hidden;
+  }
+
+  /* 手機收起時： CSS 陰藏 formBody */
+  .formColCollapsed .formBody {
+    display: none;
+  }
+
+  /* 手機才顯示收折按鈕 */
+  .collapseBtn {
+    display: flex;
+  }
+
+  /* 手機 formBody：展開時佔滿可用高度 */
+  .formBody {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .contentCol {
+    height: auto;
+    flex: 1;
+    min-height: 50vh;
+    padding: 20px 16px;
+  }
+
+  .publishBtn,
+  .draftBtn,
+  .cancelBtn {
+    padding: 6px 12px;
   }
 }

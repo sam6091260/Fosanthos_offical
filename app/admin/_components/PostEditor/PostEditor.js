@@ -98,6 +98,7 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
   const [uploadingGallery, setUploadingGallery] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [formCollapsed, setFormCollapsed] = useState(false)
 
   // ── 工具列插入 ──────────────────────────────────────────
   function insertMarkdown(insertFn) {
@@ -233,126 +234,144 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     <div className={styles.editor}>
 
       {/* ── 左欄：表單 ── */}
-      <div className={styles.formCol}>
+      <div className={`${styles.formCol} ${formCollapsed ? styles.formColCollapsed : ''}`}>
 
-        {/* 基本資料 */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>基本資料</h2>
+        {/* 收折按鈕 bar */}
+        <button
+          type="button"
+          className={styles.collapseBtn}
+          onClick={() => setFormCollapsed((c) => !c)}
+          title={formCollapsed ? '展開設定面板' : '收起設定面板'}
+        >
+          <span className={styles.collapseBtnLabel}>設定面板</span>
+          <span className={`${styles.collapseBtnArrow} ${!formCollapsed ? styles.collapseBtnArrowUp : ''}`}>
+            ▼
+          </span>
+        </button>
 
-          <label className={styles.label}>標題 *</label>
-          <input
-            className={styles.input}
-            value={form.title}
-            onChange={(e) => handleChange('title', e.target.value)}
-            placeholder="文章標題"
-          />
+        {/* formBody 永遠渲染；手機收起時由 CSS 隐藏 */}
+        <div className={styles.formBody}>
 
-          <label className={styles.label}>摘要</label>
-          <textarea
-            className={`${styles.input} ${styles.textarea}`}
-            rows={2}
-            value={form.excerpt}
-            onChange={(e) => handleChange('excerpt', e.target.value)}
-            placeholder="簡短描述，顯示於列表頁"
-          />
+            {/* 基本資料 */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>基本資料</h2>
 
-          <div className={styles.row}>
-            <div className={styles.col}>
-              <label className={styles.label}>分類</label>
-              <select
-                className={styles.input}
-                value={form.category}
-                onChange={(e) => handleChange('category', e.target.value)}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.col}>
-              <label className={styles.label}>作者</label>
+              <label className={styles.label}>標題 *</label>
               <input
                 className={styles.input}
-                value={form.author}
-                onChange={(e) => handleChange('author', e.target.value)}
+                value={form.title}
+                onChange={(e) => handleChange('title', e.target.value)}
+                placeholder="文章標題"
               />
-            </div>
-          </div>
 
-          <div className={styles.row}>
-            <div className={styles.col}>
-              <label className={styles.label}>日期（留空自動填入）</label>
-              <input
-                className={styles.input}
-                value={form.date}
-                onChange={(e) => handleChange('date', e.target.value)}
-                placeholder="2026 年 5 月 18 日"
+              <label className={styles.label}>摘要</label>
+              <textarea
+                className={`${styles.input} ${styles.textarea}`}
+                rows={2}
+                value={form.excerpt}
+                onChange={(e) => handleChange('excerpt', e.target.value)}
+                placeholder="簡短描述，顯示於列表頁"
               />
-            </div>
-            <div className={styles.col}>
-              <label className={styles.label}>設定</label>
-              <label className={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  checked={form.featured}
-                  onChange={(e) => handleChange('featured', e.target.checked)}
-                />
-                精選文章（顯示於列表頂部）
-              </label>
-            </div>
-          </div>
-        </section>
 
-        {/* 封面媒體 */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>封面媒體</h2>
-          <p className={styles.hint}>圖片限 10MB，影片限 500MB</p>
-          <DropZone
-            accept="image/*,video/*"
-            loading={uploadingCover}
-            preview={form.image}
-            onFile={handleCoverUpload}
-            onClear={() => setForm((f) => ({ ...f, image: '' }))}
-            label="拖曳或點擊上傳封面圖片 / 影片"
-          />
-        </section>
-
-        {/* Gallery */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>
-            Gallery（{form.gallery.length}/{GALLERY_MAX}）
-          </h2>
-          <p className={styles.hint}>每個圖片限 10MB，影片限 500MB，最多 {GALLERY_MAX} 個</p>
-
-          {form.gallery.length < GALLERY_MAX && (
-            <DropZone
-              accept="image/*,video/*"
-              multiple
-              loading={uploadingGallery}
-              onFile={(file, files) => handleGalleryUpload(files || [file])}
-              label="拖曳或點擊新增 Gallery 媒體"
-            />
-          )}
-
-          {form.gallery.length > 0 && (
-            <div className={styles.galleryGrid}>
-              {form.gallery.map((url) => (
-                <div key={url} className={styles.galleryItem}>
-                  {isVideoUrl(url) ? (
-                    <video src={url} className={styles.galleryThumb} muted />
-                  ) : (
-                    <img src={url} className={styles.galleryThumb} alt="" />
-                  )}
-                  <button
-                    className={styles.galleryRemove}
-                    onClick={() => removeGallery(i)}
-                    type="button"
-                  >✕</button>
+              <div className={styles.row}>
+                <div className={styles.col}>
+                  <label className={styles.label}>分類</label>
+                  <select
+                    className={styles.input}
+                    value={form.category}
+                    onChange={(e) => handleChange('category', e.target.value)}
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
+                <div className={styles.col}>
+                  <label className={styles.label}>作者</label>
+                  <input
+                    className={styles.input}
+                    value={form.author}
+                    onChange={(e) => handleChange('author', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.col}>
+                  <label className={styles.label}>日期（留空自動填入）</label>
+                  <input
+                    className={styles.input}
+                    value={form.date}
+                    onChange={(e) => handleChange('date', e.target.value)}
+                    placeholder="2026 年 5 月 18 日"
+                  />
+                </div>
+                <div className={styles.col}>
+                  <label className={styles.label}>設定</label>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={form.featured}
+                      onChange={(e) => handleChange('featured', e.target.checked)}
+                    />
+                    精選文章（顯示於列表頂部）
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            {/* 封面媒體 */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>封面媒體</h2>
+              <p className={styles.hint}>圖片限 10MB，影片限 500MB</p>
+              <DropZone
+                accept="image/*,video/*"
+                loading={uploadingCover}
+                preview={form.image}
+                onFile={handleCoverUpload}
+                onClear={() => setForm((f) => ({ ...f, image: '' }))}
+                label="拖曳或點擊上傳封面圖片 / 影片"
+              />
+            </section>
+
+            {/* Gallery */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>
+                Gallery（{form.gallery.length}/{GALLERY_MAX}）
+              </h2>
+              <p className={styles.hint}>每個圖片限 10MB，影片限 500MB，最多 {GALLERY_MAX} 個</p>
+
+              {form.gallery.length < GALLERY_MAX && (
+                <DropZone
+                  accept="image/*,video/*"
+                  multiple
+                  loading={uploadingGallery}
+                  onFile={(file, files) => handleGalleryUpload(files || [file])}
+                  label="拖曳或點擊新增 Gallery 媒體"
+                />
+              )}
+
+              {form.gallery.length > 0 && (
+                <div className={styles.galleryGrid}>
+                  {form.gallery.map((url) => (
+                    <div key={url} className={styles.galleryItem}>
+                      {isVideoUrl(url) ? (
+                        <video src={url} className={styles.galleryThumb} muted />
+                      ) : (
+                        <img src={url} className={styles.galleryThumb} alt="" />
+                      )}
+                      <button
+                        className={styles.galleryRemove}
+                        onClick={() => removeGallery(form.gallery.indexOf(url))}
+                        type="button"
+                      >✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+
+        </div>
 
       </div>
 
