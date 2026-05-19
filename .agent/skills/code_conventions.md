@@ -25,6 +25,27 @@ useEffect(() => { fetchPosts() }, [fetchPosts])
 function handleSave() { ... }
 ```
 
+#### 瀏覽器儲存（sessionStorage / localStorage）— Hydration 安全寫法
+```js
+// ✅ 正確：先用預設值，mount 後再讀取（Server 與 Client 初次 render 一致）
+const [activeCategory, setActiveCategory] = useState('all')
+useEffect(() => {
+  const saved = sessionStorage.getItem('blog_category')
+  if (saved) setActiveCategory(saved)
+}, [])
+
+// ❌ 錯誤：lazy initializer 在 Next.js SSR 中會造成 hydration mismatch
+const [activeCategory, setActiveCategory] = useState(() => {
+  if (typeof window !== 'undefined') {
+    return sessionStorage.getItem('blog_category') || 'all'
+  }
+  return 'all'
+})
+// Server 渲染 → 'all'
+// Client 第一次 render（hydration）→ sessionStorage 值（不同！）
+// → React Hydration Error
+```
+
 #### 非受控 Textarea 模式（保留 Ctrl+Z）
 ```js
 // ✅ 使用 defaultValue + ref

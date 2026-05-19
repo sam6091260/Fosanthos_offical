@@ -84,14 +84,15 @@ function RelatedPosts({ currentPost }) {
 
 // ── 主元件 ──────────────────────────────────────────────
 export default function ArticleContainer({ post }) {
-  // 從 localStorage 讀取字體大小偏好設定
-  const [fontSize, setFontSize] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('article_fontSize') || 'medium'
-    }
-    return 'medium'
-  })
+  // Server 與 Client 初次 render 保持一致（'medium'），mount 後再從 localStorage 還原
+  const [fontSize, setFontSize] = useState('medium')
   const [isExpanded, setIsExpanded] = useState(false)
+
+  // mount 後從 localStorage 還原（避免 SSR hydration mismatch）
+  useEffect(() => {
+    const saved = localStorage.getItem('article_fontSize')
+    if (saved) setFontSize(saved)
+  }, [])
 
   const fontSizes = {
     small: '0.95rem',
