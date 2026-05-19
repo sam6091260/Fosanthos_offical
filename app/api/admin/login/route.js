@@ -7,7 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 // Map<ip, { count: number, resetAt: number }>
 const loginAttempts = new Map()
 const MAX_ATTEMPTS = 5       // 最多 5 次失敗
-const WINDOW_MS = 15 * 60 * 1000  // 15 分鐘窗口
+const WINDOW_MS = 5 * 60 * 1000   // 5 分鐘窗口（5 次失敗後鎖定）
 
 function getRateLimit(ip) {
   const now = Date.now()
