@@ -35,6 +35,20 @@ const TOOLBAR = [
   { label: '分隔線', insert: () => `\n---\n` },
 ]
 
+// ── 工具函式 ────────────────────────────────────────────────
+function isVideoUrl(url) {
+  if (!url) return false
+  return url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov')
+}
+
+function formatDateTW() {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = now.getMonth() + 1
+  const d = now.getDate()
+  return `${y} 年 ${m} 月 ${d} 日`
+}
+
 function generateId(title, category) {
   const prefix = category || 'post'
   // 只保留 ASCII 字母數字，避免中文字造成 URL 編碼問題
@@ -68,6 +82,7 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     status: initialData.status || 'draft',
   })
 
+  const contentRef = useRef(null)  // 宣告在使用它的函式之前
   const [tab, setTab] = useState('edit')  // 'edit' | 'preview'
 
   // 切換到預覽時從 ref 同步內容（textarea 非受控，不套用 form.content）
@@ -77,12 +92,12 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     }
     setTab(newTab)
   }
+
   const [saving, setSaving] = useState(false)
   const [uploadingCover, setUploadingCover] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const contentRef = useRef(null)
 
   // ── 工具列插入 ──────────────────────────────────────────
   function insertMarkdown(insertFn) {
@@ -196,12 +211,12 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
         content: currentContent,
         status,
         id: isEdit ? form.id : generateId(form.title, form.category),
-        date: form.date || new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' }).replace(/\//g, ' 年 ').replace('月', ' 月 ').replace('日', ' 日'),
         publishDate: status === 'published' ? new Date().toISOString() : undefined,
+        date: form.date || formatDateTW(),
       }
 
       const res = isEdit
-        ? await adminFetch(`/api/posts/${form.id}`, { method: 'PUT', body: JSON.stringify(payload) })
+        ? await adminFetch(`/api/posts/${encodeURIComponent(form.id)}`, { method: 'PUT', body: JSON.stringify(payload) })
         : await adminFetch('/api/posts', { method: 'POST', body: JSON.stringify(payload) })
 
       if (!res.ok) throw new Error((await res.json()).error)
@@ -321,9 +336,9 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
 
           {form.gallery.length > 0 && (
             <div className={styles.galleryGrid}>
-              {form.gallery.map((url, i) => (
-                <div key={i} className={styles.galleryItem}>
-                  {url.endsWith('.mp4') || url.includes('video') ? (
+              {form.gallery.map((url) => (
+                <div key={url} className={styles.galleryItem}>
+                  {isVideoUrl(url) ? (
                     <video src={url} className={styles.galleryThumb} muted />
                   ) : (
                     <img src={url} className={styles.galleryThumb} alt="" />

@@ -48,7 +48,7 @@
 
 .input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 44px 12px 16px; /* 右側留空間給眼睛按鈕 */
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(201, 169, 110, 0.2);
   border-radius: 8px;
@@ -96,4 +96,33 @@
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ─── 密碼欄位眼睛按鈕 ─── */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper .input {
+  padding-right: 44px; /* 給眼睛按鈕留空間 */
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(250, 247, 240, 0.35);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.eyeBtn:hover {
+  color: var(--color-gold);
 }

@@ -8,7 +8,22 @@ const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/cl
 const Post = require('./models/Post');
 
 const app = express();
-app.use(cors());
+
+// ─── CORS：只允許已知前端來源 ──────────────────────────────
+const ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'https://fosanthos.zeabur.app',
+  'https://fosanthos.com',
+  'https://backend.fosanthos.com',
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    // origin 為 undefined 時表示 Server-to-Server（允許）
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) callback(null, true)
+    else callback(new Error(`CORS blocked: ${origin}`))
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // ─── 1. MongoDB ────────────────────────────────────────────
@@ -213,8 +228,8 @@ app.post('/api/upload/video', authMiddleware, (req, res, next) => {
   }
 });
 
-// ─── Legacy batch insert（seed 使用）────────────────────────
-app.post('/api/posts/batch', async (req, res) => {
+// ─── Legacy batch insert（seed 使用，需認證）─────────────
+app.post('/api/posts/batch', authMiddleware, async (req, res) => {
   try {
     const posts = req.body;
     if (!Array.isArray(posts)) return res.status(400).json({ error: '請傳入文章陣列' });
