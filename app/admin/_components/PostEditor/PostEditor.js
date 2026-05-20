@@ -99,6 +99,8 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [formCollapsed, setFormCollapsed] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiMsg, setAiMsg] = useState('')   // '' | 'ok' | error string
 
   // ── 工具列插入 ──────────────────────────────────────────
   function insertMarkdown(insertFn) {
@@ -118,6 +120,61 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
       el.value = newValue
       const cursor = start + inserted.length
       el.setSelectionRange(cursor, cursor)
+    }
+  }
+
+  // ── AI Markdown 格式化 ──────────────────────────────────
+  async function handleAiFormat() {
+    const el = contentRef.current
+    if (!el) return
+
+    // 若有選取文字只處理選取部分，否則整篇
+    const start = el.selectionStart
+    const end = el.selectionEnd
+    const hasSelection = start !== end
+    const targetText = hasSelection ? el.value.slice(start, end) : el.value
+
+    if (!targetText.trim()) {
+      setAiMsg('請先輸入文章內容')
+      setTimeout(() => setAiMsg(''), 3000)
+      return
+    }
+
+    setAiLoading(true)
+    setAiMsg('')
+    try {
+      const res = await fetch('/api/ai/format-markdown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: targetText }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'AI 處理失敗')
+
+      el.focus()
+      if (hasSelection) {
+        // 只替換選取範圍
+        el.setSelectionRange(start, end)
+      } else {
+        // 全選整個 textarea
+        el.setSelectionRange(0, el.value.length)
+      }
+      const ok = document.execCommand('insertText', false, data.result)
+      if (!ok) {
+        // fallback
+        if (hasSelection) {
+          el.value = el.value.slice(0, start) + data.result + el.value.slice(end)
+        } else {
+          el.value = data.result
+        }
+      }
+      setAiMsg('ok')
+      setTimeout(() => setAiMsg(''), 3000)
+    } catch (err) {
+      setAiMsg(err.message)
+      setTimeout(() => setAiMsg(''), 5000)
+    } finally {
+      setAiLoading(false)
     }
   }
 
@@ -408,6 +465,25 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
                     {btn.label}
                   </button>
                 ))}
+
+                {/* AI 格式化按鈕 */}
+                <div className={styles.toolbarDivider} />
+                <button
+                  type="button"
+                  className={`${styles.aiBtn} ${aiLoading ? styles.aiBtnLoading : ''}`}
+                  onClick={handleAiFormat}
+                  disabled={aiLoading}
+                  title="AI 自動判斷並加入 Markdown 格式（有選取文字則只處理選取部分）"
+                >
+                  {aiLoading ? '✨ 整理中…' : '✨ AI 整理'}
+                </button>
+
+                {/* AI 狀態提示 */}
+                {aiMsg && (
+                  <span className={`${styles.aiMsg} ${aiMsg === 'ok' ? styles.aiMsgOk : styles.aiMsgErr}`}>
+                    {aiMsg === 'ok' ? '✓ 格式化完成' : `⚠ ${aiMsg}`}
+                  </span>
+                )}
               </div>
               <textarea
                 ref={contentRef}

@@ -353,6 +353,90 @@ select.input option {
   color: var(--color-gold);
 }
 
+/* AI 整理按鈕分隔線 */
+.toolbarDivider {
+  width: 1px;
+  height: 20px;
+  background: rgba(201, 169, 110, 0.2);
+  margin: 0 4px;
+  align-self: center;
+}
+
+/* AI 整理按鈕 */
+.aiBtn {
+  padding: 4px 14px;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.18), rgba(180, 140, 80, 0.12));
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  border-radius: 5px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-gold);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.aiBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.12), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.aiBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.28), rgba(180, 140, 80, 0.2));
+  border-color: var(--color-gold);
+  box-shadow: 0 0 10px rgba(201, 169, 110, 0.2);
+}
+
+.aiBtn:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.aiBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* loading 狀態：脇豌發光動畫 */
+.aiBtnLoading {
+  animation: aiPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes aiPulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(201, 169, 110, 0.2); }
+  50%       { box-shadow: 0 0 14px rgba(201, 169, 110, 0.5); border-color: var(--color-gold); }
+}
+
+/* AI 狀態提示文字 */
+.aiMsg {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 4px;
+  animation: aiFadeIn 0.3s ease;
+}
+
+@keyframes aiFadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.aiMsgOk {
+  color: #a8b5a0;
+  background: rgba(168, 181, 160, 0.12);
+}
+
+.aiMsgErr {
+  color: #e07070;
+  background: rgba(224, 112, 112, 0.1);
+}
+
 /* ─── Content Textarea ────────────────────────────────── */
 .contentArea {
   flex: 1;
