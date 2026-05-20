@@ -24,10 +24,19 @@ export async function POST(request) {
     return NextResponse.json({ error: '未授權：需要管理員登入' }, { status: 401 })
   }
 
-  // 動態 import jsonwebtoken（避免 Edge runtime 相容問題）
-  const jwt = (await import('jsonwebtoken')).default
+  // 用 Node.js 內建 crypto 驗證 JWT（HS256），不需要外部依賴
   try {
-    jwt.verify(token, process.env.JWT_SECRET)
+    const [headerB64, payloadB64, sigB64] = token.split('.')
+    if (!headerB64 || !payloadB64 || !sigB64) throw new Error('invalid token structure')
+    const crypto = await import('node:crypto')
+    const secret = process.env.JWT_SECRET || ''
+    const data = `${headerB64}.${payloadB64}`
+    const expected = crypto.createHmac('sha256', secret)
+      .update(data)
+      .digest('base64url')
+    if (expected !== sigB64) throw new Error('signature mismatch')
+    const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString())
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) throw new Error('expired')
   } catch {
     return NextResponse.json({ error: '未授權：Token 無效或已過期' }, { status: 401 })
   }
