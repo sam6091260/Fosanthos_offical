@@ -19,6 +19,12 @@ export default function MarkdownContent({ content }) {
           ol: ({ children }) => <ol className={styles.mdList}>{children}</ol>,
           li: ({ children }) => <li className={styles.mdListItem}>{children}</li>,
           hr: () => <hr className={styles.mdHr} />,
+          img: ({ src, alt }) => (
+            <span className={styles.mdImageWrapper}>
+              <img src={src} alt={alt || ''} className={styles.mdImage} />
+              {alt && <span className={styles.mdImageCaption}>{alt}</span>}
+            </span>
+          ),
         }}
       >
         {content}

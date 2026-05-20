@@ -253,6 +253,20 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     setForm((f) => ({ ...f, gallery: f.gallery.filter((_, i) => i !== index) }))
   }
 
+  function insertGalleryImage(url) {
+    const el = contentRef.current
+    if (!el) return
+    el.focus()
+    const start = el.selectionStart
+    const end = el.selectionEnd
+    const syntax = `\n\n![](${url})\n\n`
+    const ok = document.execCommand('insertText', false, syntax)
+    if (!ok) {
+      el.value = el.value.slice(0, start) + syntax + el.value.slice(end)
+      el.setSelectionRange(start + syntax.length, start + syntax.length)
+    }
+  }
+
   // ── 儲存 ────────────────────────────────────────────────
   async function handleSave(status) {
     setError('')
@@ -417,11 +431,19 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
                       ) : (
                         <img src={url} className={styles.galleryThumb} alt="" />
                       )}
-                      <button
-                        className={styles.galleryRemove}
-                        onClick={() => removeGallery(form.gallery.indexOf(url))}
-                        type="button"
-                      >✕</button>
+                      <div className={styles.galleryActions}>
+                        <button
+                          className={styles.galleryInsert}
+                          onClick={() => insertGalleryImage(url)}
+                          type="button"
+                          title="插入至內文游標位置"
+                        >↙</button>
+                        <button
+                          className={styles.galleryRemove}
+                          onClick={() => removeGallery(form.gallery.indexOf(url))}
+                          type="button"
+                        >✕</button>
+                      </div>
                     </div>
                   ))}
                 </div>
