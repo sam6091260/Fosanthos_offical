@@ -259,6 +259,11 @@
   letter-spacing: 0.04em;
   opacity: 0.7;
 }
+
+/* 圖片尺寸變體 */
+.mdImage_small  { max-width: 300px;  }   /* 約 40% */
+.mdImage_medium { max-width: 500px;  }   /* 約 65% */
+.mdImage_large  { max-width: 720px;  }   /* 100%（預設） */
 .ctaContainer {
   display: flex;
   justify-content: center;

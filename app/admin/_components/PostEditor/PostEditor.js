@@ -253,13 +253,13 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     setForm((f) => ({ ...f, gallery: f.gallery.filter((_, i) => i !== index) }))
   }
 
-  function insertGalleryImage(url) {
+  function insertGalleryImage(url, size = 'large') {
     const el = contentRef.current
     if (!el) return
     el.focus()
     const start = el.selectionStart
     const end = el.selectionEnd
-    const syntax = `\n\n![](${url})\n\n`
+    const syntax = `\n\n![${size}](${url})\n\n`
     const ok = document.execCommand('insertText', false, syntax)
     if (!ok) {
       el.value = el.value.slice(0, start) + syntax + el.value.slice(end)
@@ -434,10 +434,22 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
                       <div className={styles.galleryActions}>
                         <button
                           className={styles.galleryInsert}
-                          onClick={() => insertGalleryImage(url)}
+                          onClick={() => insertGalleryImage(url, 'small')}
                           type="button"
-                          title="插入至內文游標位置"
-                        >↙</button>
+                          title="插入小圖（40%）"
+                        >S</button>
+                        <button
+                          className={styles.galleryInsert}
+                          onClick={() => insertGalleryImage(url, 'medium')}
+                          type="button"
+                          title="插入中圖（65%）"
+                        >M</button>
+                        <button
+                          className={styles.galleryInsert}
+                          onClick={() => insertGalleryImage(url, 'large')}
+                          type="button"
+                          title="插入大圖（100%）"
+                        >L</button>
                         <button
                           className={styles.galleryRemove}
                           onClick={() => removeGallery(form.gallery.indexOf(url))}

@@ -19,12 +19,22 @@ export default function MarkdownContent({ content }) {
           ol: ({ children }) => <ol className={styles.mdList}>{children}</ol>,
           li: ({ children }) => <li className={styles.mdListItem}>{children}</li>,
           hr: () => <hr className={styles.mdHr} />,
-          img: ({ src, alt }) => (
-            <span className={styles.mdImageWrapper}>
-              <img src={src} alt={alt || ''} className={styles.mdImage} />
-              {alt && <span className={styles.mdImageCaption}>{alt}</span>}
-            </span>
-          ),
+          img: ({ src, alt }) => {
+            const SIZE_KEYS = ['small', 'medium', 'large']
+            const isSize = SIZE_KEYS.includes(alt)
+            const sizeClass = isSize ? styles[`mdImage_${alt}`] : ''
+            const caption = isSize ? null : alt
+            return (
+              <span className={styles.mdImageWrapper}>
+                <img
+                  src={src}
+                  alt={caption || ''}
+                  className={`${styles.mdImage} ${sizeClass}`}
+                />
+                {caption && <span className={styles.mdImageCaption}>{caption}</span>}
+              </span>
+            )
+          },
         }}
       >
         {content}
