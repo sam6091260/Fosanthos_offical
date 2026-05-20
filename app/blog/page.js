@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
-import Navbar from '../components/Navbar'
-import Blog from '../components/Blog'
-import Footer from '../components/Footer'
-import ScrollToTop from '../components/ScrollToTop'
+import Navbar from '../components/Navbar/Navbar'
+import Blog from '../components/Blog/Blog'
+import Footer from '../components/Footer/Footer'
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
 
 export const metadata = {
   title: '部落格分享 | 心光卉',
