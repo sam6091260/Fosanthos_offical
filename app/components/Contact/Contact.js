@@ -81,7 +81,7 @@ export default function Contact() {
                 <span className={styles.contactItemIcon}>☏</span>
                 <div>
                   <span className={styles.contactItemLabel}>服務時間</span>
-                  <span className={styles.contactItemValue}>週一至週五，上午 10:00 — 下午 6:00</span>
+                  <span className={styles.contactItemValue}>週一至週五，上午 10:00 至下午 6:00</span>
                 </div>
               </div>
               <div className={styles.contactItem}>

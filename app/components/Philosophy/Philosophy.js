@@ -93,8 +93,8 @@ export default function Philosophy() {
 
         {/* Secondary Quotes */}
         <div className={styles.secondaryQuotes}>
-          {quotes.map((q, i) => (
-            <div key={i} className={`${styles.secondaryQuote} reveal reveal-delay-${i + 1}`}>
+          {quotes.map((q) => (
+            <div key={q.text} className={`${styles.secondaryQuote} reveal reveal-delay-1`}>
               <p className={styles.secondaryQuoteText}>
                 {q.text.split('\n').map((line, j) => (
                   <span key={j}>{line}<br /></span>

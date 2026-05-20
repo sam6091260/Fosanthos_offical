@@ -90,7 +90,7 @@ export default function Footer() {
               <blockquote className={styles.quote}>
                 "靈性不在遠方，<br />它就在你下一次的呼吸裡"
               </blockquote>
-              <span className={styles.quoteAttr}>— 心光卉</span>
+              <span className={styles.quoteAttr}>· 心光卉</span>
             </div>
           </div>
         </div>

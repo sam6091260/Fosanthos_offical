@@ -122,7 +122,7 @@ export default function Blog() {
             每一段故事，都是一束光
           </h2>
           <p className={styles.subheading}>
-            學員的轉變、課程的溫度、寶老師的日常觀察 — 在這裡慢慢讀。
+            學員的轉變、課程的溫度、寶老師的日常觀察，在這裡慢慢讀。
           </p>
         </div>
 
@@ -262,10 +262,10 @@ export default function Blog() {
 
         {/* Back to Home */}
         <div className={styles.viewAll}>
-          <a href="/" className={styles.viewAllBtn} id="blog-back-home">
+          <Link href="/" className={styles.viewAllBtn} id="blog-back-home">
             回到首頁
             <span className={styles.readMoreArrow}>→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section >

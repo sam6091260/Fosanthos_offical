@@ -37,9 +37,7 @@ export default function Navbar() {
       return
     }
 
-    const sectionIds = navLinks
-      .filter((l) => l.sectionId)
-      .map((l) => l.sectionId)
+    const sectionIds = navLinks.flatMap((l) => l.sectionId ? [l.sectionId] : [])
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -81,7 +79,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`} role="navigation" aria-label="主要導航">
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`} aria-label="主要導航">
       <div className={styles.inner}>
         {/* Logo */}
         <Link href="/" className={styles.logo} aria-label="心光卉首頁">

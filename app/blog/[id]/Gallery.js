@@ -6,7 +6,9 @@ import styles from './Gallery.module.css'
 
 const isVideo = (url) => url && /\.(mp4|webm|mov|ogg)$/i.test(url)
 
-export default function Gallery({ images = [], title }) {
+const EMPTY_IMAGES = []
+
+export default function Gallery({ images = EMPTY_IMAGES, title }) {
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [mounted, setMounted] = useState(false)
 
@@ -51,18 +53,13 @@ export default function Gallery({ images = [], title }) {
   useEffect(() => {
     if (selectedIndex !== null) {
       const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth
-      document.body.style.overflow = 'hidden'
-      if (scrollBarWidth > 0) {
-        document.body.style.paddingRight = `${scrollBarWidth}px`
-      }
+      const pr = scrollBarWidth > 0 ? `${scrollBarWidth}px` : ''
+      Object.assign(document.body.style, { overflow: 'hidden', paddingRight: pr })
     } else {
-      document.body.style.overflow = ''
-      document.body.style.paddingRight = ''
+      Object.assign(document.body.style, { overflow: '', paddingRight: '' })
     }
-    
     return () => {
-      document.body.style.overflow = ''
-      document.body.style.paddingRight = ''
+      Object.assign(document.body.style, { overflow: '', paddingRight: '' })
     }
   }, [selectedIndex])
 
@@ -145,10 +142,12 @@ export default function Gallery({ images = [], title }) {
       <div className={styles.gallery}>
         {images.map((img, index) => (
           <div 
-            key={index} 
+            key={img}
             className={`${styles.galleryItem} ${isVideo(img) ? styles.galleryVideoItem : ''}`}
             onClick={(e) => openLightbox(e, index)}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && openLightbox(e, index)}
             role="button"
+            tabIndex={0}
             aria-label={isVideo(img) ? `播放第 ${index + 1} 個影片` : `查看第 ${index + 1} 張圖片`}
           >
             {isVideo(img) ? (

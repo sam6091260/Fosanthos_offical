@@ -14,7 +14,7 @@ export default function BlogPage() {
     <>
       <Navbar />
       <main>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading…</div>}>
           <Blog />
         </Suspense>
       </main>

@@ -50,7 +50,6 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="密碼"
               className={styles.input}
-              autoFocus
               required
             />
             <button

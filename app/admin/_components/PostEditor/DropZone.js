@@ -63,6 +63,10 @@ export default function DropZone({ accept, multiple, loading, preview, onFile, o
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
       onClick={() => !loading && inputRef.current?.click()}
+      onKeyDown={(e) => !loading && (e.key === 'Enter' || e.key === ' ') && inputRef.current?.click()}
+      role="button"
+      tabIndex={0}
+      aria-label={label}
     >
       <input
         ref={inputRef}

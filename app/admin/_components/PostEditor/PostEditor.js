@@ -30,7 +30,7 @@ const TOOLBAR = [
     : '> 引言文字'
   },
   { label: '清單', insert: (s) => s
-    ? s.split('\n').filter((l) => l.trim()).map((l) => `- ${l.trim()}`).join('\n')
+    ? s.split('\n').flatMap((l) => l.trim() ? [`- ${l.trim()}`] : []).join('\n')
     : '- 項目一\n- 項目二\n- 項目三'
   },
   { label: '分隔線', insert: () => `\n---\n` },
@@ -68,7 +68,9 @@ function getUploadEndpoint(file) {
   return file.type.startsWith('video/') ? '/api/upload/video' : '/api/upload/image'
 }
 
-export default function PostEditor({ initialData = {}, onSuccess }) {
+const EMPTY_INITIAL_DATA = {}
+
+export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess }) {
   const isEdit = !!initialData.id
   const router = useRouter()
 
@@ -234,20 +236,26 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     setUploadingGallery(true)
     const urls = []
     try {
-      for (const file of toUpload) {
-        const isVideo = file.type.startsWith('video/')
-        const limit = isVideo ? VIDEO_MAX : IMAGE_MAX
-        if (file.size > limit) {
-          alert(`「${file.name}」超過限制（${isVideo ? '500MB' : '10MB'}），已跳過`)
-          continue
-        }
+    const validFiles = toUpload.filter((file) => {
+      const isVid = file.type.startsWith('video/')
+      const limit = isVid ? VIDEO_MAX : IMAGE_MAX
+      if (file.size > limit) {
+        alert(`「${file.name}」超過限制（${isVid ? '500MB' : '10MB'}），已跳過`)
+        return false
+      }
+      return true
+    })
+    const results = await Promise.all(
+      validFiles.map(async (file) => {
         const fd = new FormData()
         fd.append('file', file)
         const res = await adminUpload(getUploadEndpoint(file), fd)
         if (!res.ok) throw new Error((await res.json()).error)
         const { url } = await res.json()
-        urls.push(url)
-      }
+        return url
+      })
+    )
+    urls.push(...results)
       setForm((f) => ({ ...f, gallery: [...f.gallery, ...urls] }))
     } catch (err) {
       alert(`上傳失敗：${err.message}`)
@@ -334,16 +342,18 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>基本資料</h2>
 
-              <label className={styles.label}>標題 *</label>
+              <label htmlFor="editor-title" className={styles.label}>標題 *</label>
               <input
+                id="editor-title"
                 className={styles.input}
                 value={form.title}
                 onChange={(e) => handleChange('title', e.target.value)}
                 placeholder="文章標題"
               />
 
-              <label className={styles.label}>摘要</label>
+              <label htmlFor="editor-excerpt" className={styles.label}>摘要</label>
               <textarea
+                id="editor-excerpt"
                 className={`${styles.input} ${styles.textarea}`}
                 rows={2}
                 value={form.excerpt}
@@ -353,8 +363,9 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
 
               <div className={styles.row}>
                 <div className={styles.col}>
-                  <label className={styles.label}>分類</label>
+                  <label htmlFor="editor-category" className={styles.label}>分類</label>
                   <select
+                    id="editor-category"
                     className={styles.input}
                     value={form.category}
                     onChange={(e) => handleChange('category', e.target.value)}
@@ -365,8 +376,9 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
                   </select>
                 </div>
                 <div className={styles.col}>
-                  <label className={styles.label}>作者</label>
+                  <label htmlFor="editor-author" className={styles.label}>作者</label>
                   <input
+                    id="editor-author"
                     className={styles.input}
                     value={form.author}
                     onChange={(e) => handleChange('author', e.target.value)}
@@ -376,8 +388,9 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
 
               <div className={styles.row}>
                 <div className={styles.col}>
-                  <label className={styles.label}>日期（留空自動填入）</label>
+                  <label htmlFor="editor-date" className={styles.label}>日期（留空自動填入）</label>
                   <input
+                    id="editor-date"
                     className={styles.input}
                     value={form.date}
                     onChange={(e) => handleChange('date', e.target.value)}
@@ -385,7 +398,7 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
                   />
                 </div>
                 <div className={styles.col}>
-                  <label className={styles.label}>設定</label>
+                  <p className={styles.label}>設定</p>
                   <label className={styles.checkboxLabel}>
                     <input
                       type="checkbox"
