@@ -3,8 +3,9 @@
 import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
-import { adminFetch, adminUpload } from '../../_lib/api'
+import { adminFetch, adminUpload, getToken } from '../../_lib/api'
 import styles from './PostEditor.module.css'
+import DropZone from './DropZone'
 
 const CATEGORIES = [
   { value: 'student', label: '學員奇蹟分享' },
@@ -63,6 +64,10 @@ function generateId(title, category) {
   return asciiSlug ? `${prefix}-${ts}-${asciiSlug}` : `${prefix}-${ts}`
 }
 
+function getUploadEndpoint(file) {
+  return file.type.startsWith('video/') ? '/api/upload/video' : '/api/upload/image'
+}
+
 export default function PostEditor({ initialData = {}, onSuccess }) {
   const isEdit = !!initialData.id
   const router = useRouter()
@@ -82,8 +87,17 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     status: initialData.status || 'draft',
   })
 
-  const contentRef = useRef(null)  // 宣告在使用它的函式之前
-  const [tab, setTab] = useState('edit')  // 'edit' | 'preview'
+  // ── State ─────────────────────────────────────────────
+  const [tab, setTab] = useState('edit')            // 'edit' | 'preview'
+  const [saving, setSaving] = useState(false)
+  const [uploadingCover, setUploadingCover] = useState(false)
+  const [uploadingGallery, setUploadingGallery] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [formCollapsed, setFormCollapsed] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiMsg, setAiMsg] = useState('')            // '' | 'ok' | error string
+  const contentRef = useRef(null)
 
   // 切換到預覽時從 ref 同步內容（textarea 非受控，不套用 form.content）
   function handleTabChange(newTab) {
@@ -92,15 +106,6 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     }
     setTab(newTab)
   }
-
-  const [saving, setSaving] = useState(false)
-  const [uploadingCover, setUploadingCover] = useState(false)
-  const [uploadingGallery, setUploadingGallery] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const [formCollapsed, setFormCollapsed] = useState(false)
-  const [aiLoading, setAiLoading] = useState(false)
-  const [aiMsg, setAiMsg] = useState('')   // '' | 'ok' | error string
 
   // ── 工具列插入 ──────────────────────────────────────────
   function insertMarkdown(insertFn) {
@@ -143,9 +148,13 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     setAiLoading(true)
     setAiMsg('')
     try {
+      const token = await getToken()
       const res = await fetch('/api/ai/format-markdown', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ content: targetText }),
       })
       const data = await res.json()
@@ -203,8 +212,7 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
     try {
       const fd = new FormData()
       fd.append('file', file)
-      const endpoint = isVideo ? '/api/upload/video' : '/api/upload/image'
-      const res = await adminUpload(endpoint, fd)
+      const res = await adminUpload(getUploadEndpoint(file), fd)
       if (!res.ok) throw new Error((await res.json()).error)
       const { url } = await res.json()
       setForm((f) => ({ ...f, image: url }))
@@ -235,8 +243,7 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
         }
         const fd = new FormData()
         fd.append('file', file)
-        const endpoint = isVideo ? '/api/upload/video' : '/api/upload/image'
-        const res = await adminUpload(endpoint, fd)
+        const res = await adminUpload(getUploadEndpoint(file), fd)
         if (!res.ok) throw new Error((await res.json()).error)
         const { url } = await res.json()
         urls.push(url)
@@ -576,68 +583,4 @@ export default function PostEditor({ initialData = {}, onSuccess }) {
   )
 }
 
-// ── DropZone 元件 ─────────────────────────────────────────
-function DropZone({ accept, multiple, loading, preview, onFile, onClear, label }) {
-  const inputRef = useRef(null)
-  const [dragging, setDragging] = useState(false)
 
-  const handleDrop = useCallback((e) => {
-    e.preventDefault()
-    setDragging(false)
-    const files = e.dataTransfer.files
-    if (!files.length) return
-    if (multiple) {
-      onFile(null, files)
-    } else {
-      onFile(files[0])
-    }
-  }, [multiple, onFile])
-
-  function handleInputChange(e) {
-    const files = e.target.files
-    if (!files.length) return
-    if (multiple) {
-      onFile(null, files)
-    } else {
-      onFile(files[0])
-    }
-    e.target.value = ''
-  }
-
-  if (preview) {
-    const isVideo = preview.endsWith('.mp4') || preview.includes('/video/')
-    return (
-      <div className={styles.previewBox}>
-        {isVideo
-          ? <video src={preview} className={styles.previewMedia} controls muted />
-          : <img src={preview} className={styles.previewMedia} alt="封面" />
-        }
-        <button type="button" className={styles.clearBtn} onClick={onClear}>移除</button>
-      </div>
-    )
-  }
-
-  return (
-    <div
-      className={`${styles.dropZone} ${dragging ? styles.dropZoneDragging : ''} ${loading ? styles.dropZoneLoading : ''}`}
-      onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
-      onDragLeave={() => setDragging(false)}
-      onDrop={handleDrop}
-      onClick={() => !loading && inputRef.current?.click()}
-    >
-      <input
-        ref={inputRef}
-        type="file"
-        accept={accept}
-        multiple={multiple}
-        style={{ display: 'none' }}
-        onChange={handleInputChange}
-      />
-      {loading ? (
-        <span className={styles.dropLabel}>上傳中…</span>
-      ) : (
-        <span className={styles.dropLabel}>{label}</span>
-      )}
-    </div>
-  )
-}
