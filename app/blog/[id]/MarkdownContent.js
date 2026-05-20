@@ -1,11 +1,13 @@
 'use client'
 import ReactMarkdown from 'react-markdown'
+import remarkBreaks from 'remark-breaks'
 import styles from './Article.module.css'
 
 export default function MarkdownContent({ content }) {
   return (
     <div className={styles.content}>
       <ReactMarkdown
+        remarkPlugins={[remarkBreaks]}
         components={{
           // 自訂 Markdown 渲染元件
           h1: ({ children }) => <h1 className={styles.mdH1}>{children}</h1>,
