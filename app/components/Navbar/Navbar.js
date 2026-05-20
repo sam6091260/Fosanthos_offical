@@ -94,7 +94,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <ul className={styles.links} role="list">
+        <ul className={styles.links}>
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link
@@ -127,7 +127,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileOpen : ''}`} role="dialog" aria-modal="true">
-        <ul role="list">
+        <ul>
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link

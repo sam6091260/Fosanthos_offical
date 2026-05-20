@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import styles from './Hero.module.css'
 import Image from 'next/image'
 
@@ -67,19 +68,19 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className={styles.actions}>
-          <a href="#services" className={styles.btnPrimary} id="hero-explore-btn">
+          <Link href="#services" className={styles.btnPrimary} id="hero-explore-btn">
             探索服務
-          </a>
-          <a href="#about" className={styles.btnSecondary} id="hero-about-btn">
+          </Link>
+          <Link href="#about" className={styles.btnSecondary} id="hero-about-btn">
             了解我們
-          </a>
+          </Link>
         </div>
       </div>
       {/* Scroll Indicator */}
-      <a href="#services" className={styles.scrollIndicator} aria-label="向下滾動">
+      <Link href="#services" className={styles.scrollIndicator} aria-label="向下滾動">
         <div className={styles.scrollLine} />
         <span className={styles.scrollText}>探索</span>
-      </a>
+      </Link>
     </section>
   )
 }

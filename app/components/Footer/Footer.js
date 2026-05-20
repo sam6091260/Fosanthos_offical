@@ -14,7 +14,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className={styles.footer} role="contentinfo">
+    <footer className={styles.footer}>
       {/* Top Section */}
       <div className={styles.top}>
         <div className="container">
@@ -64,10 +64,10 @@ export default function Footer() {
             {/* Navigation */}
             <div className={styles.nav}>
               <h3 className={styles.navTitle}>網站導覽</h3>
-              <ul className={styles.navList} role="list">
+              <ul className={styles.navList}>
                 {footerLinks.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className={styles.navLink}>{link.label}</a>
+                    <Link href={link.href} className={styles.navLink}>{link.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -76,10 +76,10 @@ export default function Footer() {
             {/* Services */}
             <div className={styles.nav}>
               <h3 className={styles.navTitle}>服務項目</h3>
-              <ul className={styles.navList} role="list">
+              <ul className={styles.navList}>
                 {['印度課程代理', '寶老師課程', '彩光花波諮詢'].map((s) => (
                   <li key={s}>
-                    <a href="#services" className={styles.navLink}>{s}</a>
+                    <Link href="#services" className={styles.navLink}>{s}</Link>
                   </li>
                 ))}
               </ul>
