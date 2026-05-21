@@ -5,11 +5,11 @@ import styles from './Philosophy.module.css'
 const quotes = [
   {
     text: '你不需要改變自己，\n你只需要更了解自己。',
-    attr: '· 心光卉',
+    attr: '心光卉',
   },
   {
     text: '內在的穩定，\n不是沒有風，而是風中的樹根。',
-    attr: '· 心光卉',
+    attr: '心光卉',
   },
 ]
 
@@ -68,7 +68,7 @@ export default function Philosophy() {
         </div>
 
         {/* Gold Divider */}
-        <span className={`gold-line reveal reveal-delay-3`} style={{width: '100px'}} aria-hidden="true" />
+        <span className={`gold-line reveal reveal-delay-3`} style={{ width: '100px' }} aria-hidden="true" />
 
         {/* Principles */}
         <div className={styles.principles}>
