@@ -5,22 +5,19 @@ import Link from 'next/link'
 import { adminFetch } from './_lib/api'
 import styles from './admin.module.css'
 
-const CATEGORY_LABELS = {
-  student: '學員分享',
-  course: '課程推廣',
-  teacher: '寶老師短文',
-  'teacher-course': '寶老師課程',
-  video: '影音分享',
-}
-
 const CATEGORIES = [
-  { key: 'all', label: '全部' },
-  { key: 'student', label: '學員分享' },
-  { key: 'course', label: '課程推廣' },
+  { key: 'all',            label: '全部' },
+  { key: 'student',        label: '學員奇蹟分享' },
+  { key: 'course',         label: '近期課程推廣' },
   { key: 'teacher-course', label: '寶老師課程' },
-  { key: 'teacher', label: '寶老師短文' },
-  { key: 'video', label: '影音分享' },
+  { key: 'teacher',        label: '寶老師短文' },
+  { key: 'video',          label: '影音分享' },
 ]
+
+// 從 CATEGORIES 推導，不重複定義
+const CATEGORY_LABELS = Object.fromEntries(
+  CATEGORIES.filter((c) => c.key !== 'all').map((c) => [c.key, c.label])
+)
 
 export default function AdminDashboard() {
   const [posts, setPosts] = useState([])
