@@ -129,20 +129,22 @@
   letter-spacing: 0.04em;
 }
 
-/* Secondary Quotes */
-.secondaryQuotes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 16px;
-}
-
+/* Secondary Quote — 輪播單卡 */
 .secondaryQuote {
   background: var(--color-cream-dark);
   border-radius: var(--radius-md);
-  padding: 36px 40px;
+  padding: 36px 40px 28px;
   border-left: 3px solid var(--color-gold);
   position: relative;
+  max-width: 600px;
+  margin: 16px auto 0;
+  text-align: center;
+}
+
+/* 文字淡入動畫（每次 key 變化觸發） */
+@keyframes quoteFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .secondaryQuoteText {
@@ -153,6 +155,7 @@
   line-height: 1.6;
   letter-spacing: 0.08em;
   margin-bottom: 16px;
+  animation: quoteFade 0.5s ease both;
 }
 
 .secondaryQuoteAttr {
@@ -161,6 +164,35 @@
   font-style: italic;
   color: var(--color-gold);
   letter-spacing: 0.15em;
+}
+
+/* 圓點指示器 */
+.quoteDots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.quoteDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  opacity: 0.3;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.quoteDot:hover {
+  opacity: 0.6;
+}
+
+.quoteDotActive {
+  opacity: 1;
+  transform: scale(1.4);
 }
 
 @media (max-width: 1000px) {
@@ -202,11 +234,7 @@
   }
 
   .secondaryQuote {
-    padding: 16px 40px;
-  }
-
-  .secondaryQuotes {
-    grid-template-columns: 1fr;
+    padding: 20px 24px 20px;
   }
 }
 
@@ -214,4 +242,4 @@
   .principles {
     grid-template-columns: 1fr;
   }
-}
+}

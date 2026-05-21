@@ -1,20 +1,21 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './Philosophy.module.css'
 
 const quotes = [
   {
     text: '你不需要改變自己，\n你只需要更了解自己。',
-    attr: '— 心光卉',
+    attr: '· 心光卉',
   },
   {
     text: '內在的穩定，\n不是沒有風，而是風中的樹根。',
-    attr: '— 心光卉',
+    attr: '· 心光卉',
   },
 ]
 
 export default function Philosophy() {
   const sectionRef = useRef(null)
+  const [quoteIndex, setQuoteIndex] = useState(0)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,6 +32,16 @@ export default function Philosophy() {
     reveals?.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
+
+  // 每 4 秒自動切換語錄
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % quotes.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const q = quotes[quoteIndex]
 
   return (
     <section id="philosophy" className={`${styles.philosophy} section`} ref={sectionRef} aria-label="品牌哲學">
@@ -91,18 +102,28 @@ export default function Philosophy() {
           ))}
         </div>
 
-        {/* Secondary Quotes */}
-        <div className={styles.secondaryQuotes}>
-          {quotes.map((q) => (
-            <div key={q.text} className={`${styles.secondaryQuote} reveal reveal-delay-1`}>
-              <p className={styles.secondaryQuoteText}>
-                {q.text.split('\n').map((line, j) => (
-                  <span key={j}>{line}<br /></span>
-                ))}
-              </p>
-              <span className={styles.secondaryQuoteAttr}>{q.attr}</span>
-            </div>
-          ))}
+        {/* Secondary Quote — 單一輪播卡片 */}
+        <div className={`${styles.secondaryQuote} reveal reveal-delay-1`}>
+          <p key={quoteIndex} className={styles.secondaryQuoteText}>
+            {q.text.split('\n').map((line, j) => (
+              <span key={j}>{line}<br /></span>
+            ))}
+          </p>
+          <span className={styles.secondaryQuoteAttr}>{q.attr}</span>
+
+          {/* 圓點指示器 */}
+          <div className={styles.quoteDots} role="tablist" aria-label="語錄切換">
+            {quotes.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={i === quoteIndex}
+                aria-label={`第 ${i + 1} 則語錄`}
+                className={`${styles.quoteDot} ${i === quoteIndex ? styles.quoteDotActive : ''}`}
+                onClick={() => setQuoteIndex(i)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
