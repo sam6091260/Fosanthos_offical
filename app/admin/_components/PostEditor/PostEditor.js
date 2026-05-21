@@ -295,7 +295,7 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
         status,
         id: isEdit ? form.id : generateId(form.title, form.category),
         publishDate: status === 'published' ? new Date().toISOString() : undefined,
-        date: form.date || formatDateTW(),
+        date: isEdit ? formatDateTW() : (form.date || formatDateTW()),
       }
 
       const res = isEdit
