@@ -4,16 +4,12 @@ import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import { adminFetch, adminUpload, getToken } from '../../_lib/api'
+import { CATEGORY_LIST } from '../../../components/Blog/blogData'
 import styles from './PostEditor.module.css'
 import DropZone from './DropZone'
 
-const CATEGORIES = [
-  { value: 'student', label: '學員奇蹟分享' },
-  { value: 'course', label: '近期課程推廣' },
-  { value: 'teacher', label: '寶老師短文' },
-  { value: 'teacher-course', label: '寶老師課程' },
-  { value: 'video', label: '影音分享' },
-]
+// 從共用 blogData 匯入，使用 value/label 形狀符合 <select> 用法
+const CATEGORIES = CATEGORY_LIST.map((c) => ({ value: c.key, label: c.label }))
 
 const IMAGE_MAX = 10 * 1024 * 1024   // 10 MB
 const VIDEO_MAX = 500 * 1024 * 1024  // 500 MB

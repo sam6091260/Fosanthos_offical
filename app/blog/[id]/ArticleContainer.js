@@ -5,15 +5,7 @@ import MarkdownContent from './MarkdownContent'
 import Gallery from './Gallery'
 import Link from 'next/link'
 
-const CATEGORY_LABELS = {
-  student: '學員奇蹟分享',
-  course: '近期課程推廣',
-  'teacher-course': '寶老師課程',
-  teacher: '寶老師短文',
-  video: '影音分享',
-}
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''
+import { CATEGORY_LABELS, API_BASE_URL } from '../../components/Blog/blogData'
 
 // ── 相關文章卡片區塊 ─────────────────────────────────────
 function RelatedPosts({ currentPost }) {

@@ -3,21 +3,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { adminFetch } from './_lib/api'
+import { ADMIN_CATEGORIES, CATEGORY_LABELS } from '../components/Blog/blogData'
 import styles from './admin.module.css'
 
-const CATEGORIES = [
-  { key: 'all',            label: '全部' },
-  { key: 'student',        label: '學員奇蹟分享' },
-  { key: 'course',         label: '近期課程推廣' },
-  { key: 'teacher-course', label: '寶老師課程' },
-  { key: 'teacher',        label: '寶老師短文' },
-  { key: 'video',          label: '影音分享' },
-]
+const CATEGORIES = ADMIN_CATEGORIES
 
-// 從 CATEGORIES 推導，不重複定義
-const CATEGORY_LABELS = Object.fromEntries(
-  CATEGORIES.filter((c) => c.key !== 'all').map((c) => [c.key, c.label])
-)
 
 export default function AdminDashboard() {
   const [posts, setPosts] = useState([])
