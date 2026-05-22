@@ -389,6 +389,100 @@ select.input option {
   align-self: center;
 }
 
+/* 連結按鈕（繼承 toolbarBtn，加金色提示） */
+.linkBtn {
+  color: rgba(201, 169, 110, 0.75);
+  border-color: rgba(201, 169, 110, 0.25);
+}
+
+.linkBtn:hover {
+  color: var(--color-gold);
+  background: rgba(201, 169, 110, 0.15);
+}
+
+/* 連結對話框 */
+.linkDialog {
+  background: rgba(18, 15, 10, 0.95);
+  border: 1px solid rgba(201, 169, 110, 0.25);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linkDialogRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.linkDialogLabel {
+  font-size: 0.75rem;
+  color: rgba(250, 247, 240, 0.45);
+  width: 56px;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+}
+
+.linkDialogInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  color: rgba(250, 247, 240, 0.85);
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.linkDialogInput:focus {
+  border-color: rgba(201, 169, 110, 0.5);
+}
+
+.linkDialogActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.linkDialogConfirm {
+  padding: 5px 16px;
+  background: rgba(201, 169, 110, 0.15);
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  color: var(--color-gold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.linkDialogConfirm:hover {
+  background: rgba(201, 169, 110, 0.28);
+}
+
+.linkDialogCancel {
+  padding: 5px 16px;
+  background: transparent;
+  border: 1px solid rgba(250, 247, 240, 0.1);
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  color: rgba(250, 247, 240, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.linkDialogCancel:hover {
+  color: rgba(250, 247, 240, 0.7);
+  border-color: rgba(250, 247, 240, 0.2);
+}
+
+
 /* AI 整理按鈕 */
 .aiBtn {
   padding: 4px 14px;

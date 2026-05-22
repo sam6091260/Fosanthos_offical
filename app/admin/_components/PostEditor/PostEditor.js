@@ -95,7 +95,9 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
   const [formCollapsed, setFormCollapsed] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMsg, setAiMsg] = useState('')            // '' | 'ok' | error string
+  const [linkDialog, setLinkDialog] = useState({ open: false, url: '', text: '' })
   const contentRef = useRef(null)
+  const savedSelectionRef = useRef(null)
 
   // 切換到預覽時從 ref 同步內容（textarea 非受控，不套用 form.content）
   function handleTabChange(newTab) {
@@ -124,6 +126,35 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
       const cursor = start + inserted.length
       el.setSelectionRange(cursor, cursor)
     }
+  }
+
+  // ── 連結插入 ────────────────────────────────────────────
+  function openLinkDialog() {
+    const el = contentRef.current
+    if (!el) return
+    const start = el.selectionStart
+    const end = el.selectionEnd
+    const selected = el.value.slice(start, end)
+    savedSelectionRef.current = { start, end }
+    setLinkDialog({ open: true, url: '', text: selected })
+  }
+
+  function confirmLink() {
+    const { url, text } = linkDialog
+    if (!url.trim()) return
+    const displayText = text.trim() || url.trim()
+    const markdown = `[${displayText}](${url.trim()})`
+    const el = contentRef.current
+    if (!el) { setLinkDialog({ open: false, url: '', text: '' }); return }
+    el.focus()
+    const { start, end } = savedSelectionRef.current || { start: 0, end: 0 }
+    el.setSelectionRange(start, end)
+    const ok = document.execCommand('insertText', false, markdown)
+    if (!ok) {
+      el.value = el.value.slice(0, start) + markdown + el.value.slice(end)
+      el.setSelectionRange(start + markdown.length, start + markdown.length)
+    }
+    setLinkDialog({ open: false, url: '', text: '' })
   }
 
   // ── AI Markdown 格式化 ──────────────────────────────────
@@ -516,6 +547,16 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                   </button>
                 ))}
 
+                {/* 連結按鈕 */}
+                <button
+                  type="button"
+                  className={`${styles.toolbarBtn} ${styles.linkBtn}`}
+                  onClick={openLinkDialog}
+                  title="插入超連結"
+                >
+                  🔗 連結
+                </button>
+
                 {/* AI 格式化按鈕 */}
                 <div className={styles.toolbarDivider} />
                 <button
@@ -535,6 +576,44 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                   </span>
                 )}
               </div>
+
+              {/* 連結對話框 */}
+              {linkDialog.open && (
+                <div className={styles.linkDialog}>
+                  <div className={styles.linkDialogRow}>
+                    <label className={styles.linkDialogLabel}>顯示文字</label>
+                    <input
+                      className={styles.linkDialogInput}
+                      value={linkDialog.text}
+                      onChange={(e) => setLinkDialog((d) => ({ ...d, text: e.target.value }))}
+                      placeholder="連結顯示的文字（留空則直接顯示網址）"
+                      autoFocus
+                    />
+                  </div>
+                  <div className={styles.linkDialogRow}>
+                    <label className={styles.linkDialogLabel}>網址 *</label>
+                    <input
+                      className={styles.linkDialogInput}
+                      value={linkDialog.url}
+                      onChange={(e) => setLinkDialog((d) => ({ ...d, url: e.target.value }))}
+                      placeholder="https://..."
+                      onKeyDown={(e) => { if (e.key === 'Enter') confirmLink() }}
+                    />
+                  </div>
+                  <div className={styles.linkDialogActions}>
+                    <button type="button" className={styles.linkDialogConfirm} onClick={confirmLink}>
+                      插入連結
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.linkDialogCancel}
+                      onClick={() => setLinkDialog({ open: false, url: '', text: '' })}
+                    >
+                      取消
+                    </button>
+                  </div>
+                </div>
+              )}
               <textarea
                 ref={contentRef}
                 className={`${styles.input} ${styles.contentArea}`}
