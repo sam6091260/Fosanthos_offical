@@ -1,6 +1,7 @@
 'use client'
 import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
+import rehypeRaw from 'rehype-raw'
 import styles from './Article.module.css'
 
 export default function MarkdownContent({ content }) {
@@ -8,6 +9,7 @@ export default function MarkdownContent({ content }) {
     <div className={styles.content}>
       <ReactMarkdown
         remarkPlugins={[remarkBreaks]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           // 自訂 Markdown 渲染元件
           h1: ({ children }) => <h1 className={styles.mdH1}>{children}</h1>,
@@ -21,6 +23,12 @@ export default function MarkdownContent({ content }) {
           ol: ({ children }) => <ol className={styles.mdList}>{children}</ol>,
           li: ({ children }) => <li className={styles.mdListItem}>{children}</li>,
           hr: () => <hr className={styles.mdHr} />,
+          // 連結樣式
+          a: ({ href, children }) => (
+            <a href={href} className={styles.mdLink} target="_blank" rel="noopener noreferrer">
+              {children}
+            </a>
+          ),
           img: ({ src, alt }) => {
             const SIZE_KEYS = ['small', 'medium', 'large']
             const isSize = SIZE_KEYS.includes(alt)

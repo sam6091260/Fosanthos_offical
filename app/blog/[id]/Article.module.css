@@ -234,6 +234,20 @@
   margin: 40px 0;
 }
 
+/* ─── Markdown 連結 ──────────────────── */
+.mdLink {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 169, 110, 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.mdLink:hover {
+  color: #e8c87a;
+  text-decoration-color: rgba(232, 200, 122, 0.7);
+}
+
 /* ─── Markdown 行內圖片 ──────────────────── */
 .mdImageWrapper {
   display: block;

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { adminFetch, adminUpload, getToken } from '../../_lib/api'
 import { CATEGORY_LIST } from '../../../components/Blog/blogData'
 import styles from './PostEditor.module.css'
@@ -96,6 +97,7 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMsg, setAiMsg] = useState('')            // '' | 'ok' | error string
   const [linkDialog, setLinkDialog] = useState({ open: false, url: '', text: '' })
+  const [colorDialog, setColorDialog] = useState({ open: false, color: '#c9a96e', text: '' })
   const contentRef = useRef(null)
   const savedSelectionRef = useRef(null)
 
@@ -155,6 +157,34 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
       el.setSelectionRange(start + markdown.length, start + markdown.length)
     }
     setLinkDialog({ open: false, url: '', text: '' })
+  }
+
+  // ── 文字顏色插入 ───────────────────────────────────────────
+  function openColorDialog() {
+    const el = contentRef.current
+    if (!el) return
+    const start = el.selectionStart
+    const end = el.selectionEnd
+    const selected = el.value.slice(start, end)
+    savedSelectionRef.current = { start, end }
+    setColorDialog({ open: true, color: '#c9a96e', text: selected })
+  }
+
+  function confirmColor() {
+    const { color, text } = colorDialog
+    const displayText = text.trim() || '文字'
+    const markdown = `<span style="color: ${color}">${displayText}</span>`
+    const el = contentRef.current
+    if (!el) { setColorDialog((d) => ({ ...d, open: false })); return }
+    el.focus()
+    const { start, end } = savedSelectionRef.current || { start: 0, end: 0 }
+    el.setSelectionRange(start, end)
+    const ok = document.execCommand('insertText', false, markdown)
+    if (!ok) {
+      el.value = el.value.slice(0, start) + markdown + el.value.slice(end)
+      el.setSelectionRange(start + markdown.length, start + markdown.length)
+    }
+    setColorDialog((d) => ({ ...d, open: false }))
   }
 
   // ── AI Markdown 格式化 ──────────────────────────────────
@@ -557,6 +587,16 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                   🔗 連結
                 </button>
 
+                {/* 顏色按鈕 */}
+                <button
+                  type="button"
+                  className={`${styles.toolbarBtn} ${styles.colorBtn}`}
+                  onClick={openColorDialog}
+                  title="插入自定義顏色文字"
+                >
+                  🎨 顏色
+                </button>
+
                 {/* AI 格式化按鈕 */}
                 <div className={styles.toolbarDivider} />
                 <button
@@ -614,6 +654,63 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                   </div>
                 </div>
               )}
+
+              {/* 顏色對話框 */}
+              {colorDialog.open && (
+                <div className={styles.linkDialog}>
+                  <div className={styles.linkDialogRow}>
+                    <label className={styles.linkDialogLabel}>文字</label>
+                    <input
+                      className={styles.linkDialogInput}
+                      value={colorDialog.text}
+                      onChange={(e) => setColorDialog((d) => ({ ...d, text: e.target.value }))}
+                      placeholder="要變色的文字（留空則插入佔位符）"
+                      autoFocus
+                    />
+                  </div>
+                  <div className={styles.linkDialogRow}>
+                    <label className={styles.linkDialogLabel}>顏色</label>
+                    <div className={styles.colorPickerRow}>
+                      <input
+                        type="color"
+                        className={styles.colorPickerInput}
+                        value={colorDialog.color}
+                        onChange={(e) => setColorDialog((d) => ({ ...d, color: e.target.value }))}
+                      />
+                      <input
+                        className={`${styles.linkDialogInput} ${styles.colorHexInput}`}
+                        value={colorDialog.color}
+                        onChange={(e) => setColorDialog((d) => ({ ...d, color: e.target.value }))}
+                        placeholder="#c9a96e"
+                        maxLength={7}
+                      />
+                      {/* 品牌快選色 */}
+                      {['#c9a96e','#a8b5a0','#e8726a','#6a9bb5','#d4956a','#ffffff','#f5e6b8'].map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          className={styles.colorSwatch}
+                          style={{ background: c }}
+                          onClick={() => setColorDialog((d) => ({ ...d, color: c }))}
+                          title={c}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.linkDialogActions}>
+                    <button type="button" className={styles.linkDialogConfirm} onClick={confirmColor}>
+                      插入顏色文字
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.linkDialogCancel}
+                      onClick={() => setColorDialog((d) => ({ ...d, open: false }))}
+                    >
+                      取消
+                    </button>
+                  </div>
+                </div>
+              )}
               <textarea
                 ref={contentRef}
                 className={`${styles.input} ${styles.contentArea}`}
@@ -629,7 +726,7 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
             </>
           ) : (
             <div className={styles.preview}>
-              <ReactMarkdown>{form.content || '*（無內容）*'}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{form.content || '*（無內容）*'}</ReactMarkdown>
             </div>
           )}
         </section>
