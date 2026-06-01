@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "gsap": "^3.15.0",
     "jose": "^6.2.3",
     "next": "^13.5.11",
     "nodemailer": "^8.0.7",

@@ -120,45 +120,8 @@ button {
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
-
-  100% {
-    background-position: 200% center;
-  }
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 0.9s var(--transition-base) both;
-}
-
-/* Intersection observer trigger class */
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-delay-1 {
-  transition-delay: 0.15s;
-}
-
-.reveal-delay-2 {
-  transition-delay: 0.3s;
-}
-
-.reveal-delay-3 {
-  transition-delay: 0.45s;
-}
-
 /* Gold divider */
+
 .gold-line {
   display: block;
   width: 60px;

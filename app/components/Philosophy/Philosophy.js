@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import styles from './Philosophy.module.css'
+import useScrollReveal from '../../hooks/useScrollReveal'
 
 const quotes = [
   {
@@ -17,21 +18,7 @@ export default function Philosophy() {
   const sectionRef = useRef(null)
   const [quoteIndex, setQuoteIndex] = useState(0)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.2 }
-    )
-    const reveals = sectionRef.current?.querySelectorAll('.reveal')
-    reveals?.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  useScrollReveal(sectionRef)
 
   // 每 4 秒自動切換語錄
   useEffect(() => {
@@ -50,12 +37,12 @@ export default function Philosophy() {
       <div className="container">
         {/* Header */}
         <div className={styles.header}>
-          <span className={`section-label reveal`}>品牌哲學</span>
-          <h2 className={`${styles.heading} reveal reveal-delay-1`}>我們相信的事</h2>
+          <span className="section-label" data-reveal>品牌哲學</span>
+          <h2 className={styles.heading} data-reveal data-reveal-delay="1">我們相信的事</h2>
         </div>
 
         {/* Main Quote */}
-        <div className={`${styles.mainQuote} reveal reveal-delay-2`}>
+        <div className={styles.mainQuote} data-reveal data-reveal-delay="2">
           <span className={styles.quoteSymbol} aria-hidden="true">"</span>
           <blockquote className={styles.mainQuoteText}>
             靈性不在遠方的山頂，
@@ -68,7 +55,7 @@ export default function Philosophy() {
         </div>
 
         {/* Gold Divider */}
-        <span className={`gold-line reveal reveal-delay-3`} style={{ width: '100px' }} aria-hidden="true" />
+        <span className="gold-line" data-reveal data-reveal-delay="3" style={{ width: '100px' }} aria-hidden="true" />
 
         {/* Principles */}
         <div className={styles.principles}>
@@ -94,7 +81,7 @@ export default function Philosophy() {
               desc: '花、植物、土地，都是最古老的療癒智慧。我們學習大自然的語言，回應人的內在需求。',
             },
           ].map((p, i) => (
-            <div key={p.title} className={`${styles.principle} reveal reveal-delay-${i + 1}`}>
+            <div key={p.title} className={styles.principle} data-reveal data-reveal-delay={i + 1}>
               <span className={styles.principleIcon} aria-hidden="true">{p.icon}</span>
               <h3 className={styles.principleTitle}>{p.title}</h3>
               <p className={styles.principleDesc}>{p.desc}</p>
@@ -103,7 +90,7 @@ export default function Philosophy() {
         </div>
 
         {/* Secondary Quote — 單一輪播卡片 */}
-        <div className={`${styles.secondaryQuote} reveal reveal-delay-1`}>
+        <div className={styles.secondaryQuote} data-reveal data-reveal-delay="1">
           <p key={quoteIndex} className={styles.secondaryQuoteText}>
             {q.text.split('\n').map((line, j) => (
               <span key={j}>{line}<br /></span>

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import styles from './About.module.css'
+import useScrollReveal from '../../hooks/useScrollReveal'
 
 const aboutCarousel = [
   {
@@ -31,21 +32,7 @@ export default function About() {
     return () => clearInterval(interval)
   }, [])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.15 }
-    )
-    const reveals = sectionRef.current?.querySelectorAll('.reveal')
-    reveals?.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  useScrollReveal(sectionRef)
 
   return (
     <section id="about" className={`${styles.about} section`} ref={sectionRef} aria-label="關於心光卉">
@@ -53,26 +40,26 @@ export default function About() {
         <div className={styles.grid}>
           {/* Text Side */}
           <div className={styles.textSide}>
-            <span className={`section-label reveal`}>關於我們</span>
-            <h2 className={`${styles.heading} reveal reveal-delay-1`}>
+            <span className="section-label" data-reveal>關於我們</span>
+            <h2 className={styles.heading} data-reveal data-reveal-delay="1">
               陪伴，不是給你答案
               <br />
               <em>而是讓你聽見自己</em>
             </h2>
             <span className="gold-line" style={{ margin: '28px 0' }} aria-hidden="true" />
 
-            <p className={`${styles.body} reveal reveal-delay-2`}>
+            <p className={styles.body} data-reveal data-reveal-delay="2">
               心光卉，取自「心中有光，卉木欣然」的意象。我們相信，療癒不是一個目的地，而是一種持續進行的日常練習。
             </p>
-            <p className={`${styles.body} reveal reveal-delay-2`} style={{ marginTop: '20px' }}>
+            <p className={styles.body} data-reveal data-reveal-delay="2" style={{ marginTop: '20px' }}>
               透過身心靈整合的視角，我們連結古老的印度智慧與現代生活，引導每一位探索者在自己的節奏中，慢慢找到那份內在的穩定與清晰。
             </p>
-            <p className={`${styles.body} reveal reveal-delay-2`} style={{ marginTop: '20px' }}>
+            <p className={styles.body} data-reveal data-reveal-delay="2" style={{ marginTop: '20px' }}>
               我們不說教，不給框架。只是靜靜地，在你身旁。
             </p>
 
             {/* Stats / Values */}
-            <div className={`${styles.values} reveal reveal-delay-3`}>
+            <div className={styles.values} data-reveal data-reveal-delay="3">
               {[
                 { num: '靈性', desc: '不分宗教，回歸本質' },
                 { num: '自然', desc: '以萬物為師' },
@@ -87,7 +74,7 @@ export default function About() {
           </div>
 
           {/* Image Side */}
-          <div className={`${styles.imageSide} reveal reveal-delay-1`}>
+          <div className={styles.imageSide} data-reveal data-reveal-delay="1">
             <div className={styles.imageWrapper}>
               <img
                 key={`img-${carouselIndex}`}

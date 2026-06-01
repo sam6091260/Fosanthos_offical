@@ -1,6 +1,7 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import styles from './Contact.module.css'
+import useScrollReveal from '../../hooks/useScrollReveal'
 
 export default function Contact() {
   const sectionRef = useRef(null)
@@ -8,19 +9,7 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('visible')
-        })
-      },
-      { threshold: 0.1 }
-    )
-    const reveals = sectionRef.current?.querySelectorAll('.reveal')
-    reveals?.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  useScrollReveal(sectionRef)
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -54,20 +43,20 @@ export default function Contact() {
         <div className={styles.grid}>
           {/* Left Info */}
           <div className={styles.infoSide}>
-            <span className={`section-label reveal`}>聯絡我們</span>
-            <h2 className={`${styles.heading} reveal reveal-delay-1`}>
+            <span className="section-label" data-reveal>聯絡我們</span>
+            <h2 className={styles.heading} data-reveal data-reveal-delay="1">
               帶著你的問題
               <br />
               <em>我們在這裡等你</em>
             </h2>
             <span className="gold-line" style={{ margin: '28px 0' }} aria-hidden="true" />
-            <p className={`${styles.intro} reveal reveal-delay-2`}>
+            <p className={styles.intro} data-reveal data-reveal-delay="2">
               無論你對哪項服務感到好奇，或者只是想聊聊自己最近的狀態，歡迎傳訊給我們。
               <br />
               <em>沒有標準答案，只有真誠的回應</em>
             </p>
 
-            <div className={`${styles.contactItems} reveal reveal-delay-3`}>
+            <div className={styles.contactItems} data-reveal data-reveal-delay="3">
               <div className={styles.contactItem}>
                 <span className={styles.contactItemIcon}>✉</span>
                 <div>
@@ -94,14 +83,14 @@ export default function Contact() {
             </div>
 
             {/* Gentle note */}
-            <div className={`${styles.gentleNote} reveal reveal-delay-3`}>
+            <div className={styles.gentleNote} data-reveal data-reveal-delay="3">
               <p>每一個問題都值得被好好對待</p>
               <p>我們通常在<span> 1-2 </span>個工作天內回覆</p>
             </div>
           </div>
 
           {/* Form */}
-          <div className={`${styles.formSide} reveal reveal-delay-2`}>
+          <div className={styles.formSide} data-reveal data-reveal-delay="2">
             {!submitted ? (
               <form
                 className={styles.form}

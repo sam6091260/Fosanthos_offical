@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import styles from './Services.module.css'
+import useScrollReveal from '../../hooks/useScrollReveal'
 
 const services = [
   {
@@ -48,21 +49,7 @@ const services = [
 export default function Services() {
   const sectionRef = useRef(null)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    const reveals = sectionRef.current?.querySelectorAll('.reveal')
-    reveals?.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  useScrollReveal(sectionRef)
 
   return (
     <section id="services" className={`${styles.services} section`} ref={sectionRef} aria-label="服務內容">
@@ -72,11 +59,11 @@ export default function Services() {
       <div className="container">
         {/* Header */}
         <div className={styles.header}>
-          <span className={`section-label reveal`}>我們的服務</span>
-          <h2 className={`${styles.heading} reveal reveal-delay-1`}>
+          <span className="section-label" data-reveal>我們的服務</span>
+          <h2 className={styles.heading} data-reveal data-reveal-delay="1">
             三個面向，陪你探索自己
           </h2>
-          <p className={`${styles.subheading} reveal reveal-delay-2`}>
+          <p className={styles.subheading} data-reveal data-reveal-delay="2">
             無論你從哪個門走進來，我們都在這裡等你。
           </p>
         </div>
@@ -87,7 +74,9 @@ export default function Services() {
             <article
               key={service.id}
               id={`service-${service.id}`}
-              className={`${styles.card} ${service.featured ? styles.featured : ''} reveal reveal-delay-${index + 1}`}
+              className={`${styles.card} ${service.featured ? styles.featured : ''}`}
+              data-reveal
+              data-reveal-delay={index + 1}
               aria-label={service.badge}
             >
               {/* Card Image */}
