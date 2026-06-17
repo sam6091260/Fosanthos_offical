@@ -78,6 +78,16 @@ a.contactItemValue:hover {
   color: var(--color-gold);
 }
 
+.contactSocialLink {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.contactSocialLink:hover {
+  color: var(--color-gold);
+}
+
 /* Gentle Note */
 .gentleNote {
   background: rgba(201, 169, 110, 0.08);

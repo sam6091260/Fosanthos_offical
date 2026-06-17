@@ -57,7 +57,7 @@ export default function Contact() {
             </p>
 
             <div className={styles.contactItems} data-reveal data-reveal-delay="3">
-              <div className={styles.contactItem}>
+              {/* <div className={styles.contactItem}>
                 <span className={styles.contactItemIcon}>✉</span>
                 <div>
                   <span className={styles.contactItemLabel}>電子信箱</span>
@@ -65,7 +65,7 @@ export default function Contact() {
                     hello@xinguanghui.com
                   </a>
                 </div>
-              </div>
+              </div> */}
               <div className={styles.contactItem}>
                 <span className={styles.contactItemIcon}>☏</span>
                 <div>
@@ -77,7 +77,11 @@ export default function Contact() {
                 <span className={styles.contactItemIcon}>◎</span>
                 <div>
                   <span className={styles.contactItemLabel}>社群媒體</span>
-                  <span className={styles.contactItemValue}>Instagram · Facebook · LINE</span>
+                  <span className={styles.contactItemValue}>
+                    <a href="https://www.instagram.com/__ssspirit/" target="_blank" rel="noopener noreferrer" className={styles.contactSocialLink}>Instagram</a>
+                    {' · '}
+                    <a href="https://www.facebook.com/saranilu?locale=zh_TW" target="_blank" rel="noopener noreferrer" className={styles.contactSocialLink}>Facebook</a>
+                  </span>
                 </div>
               </div>
             </div>
