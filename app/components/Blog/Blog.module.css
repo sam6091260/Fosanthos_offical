@@ -104,7 +104,8 @@
   min-height: 360px;
 }
 
-.featuredImage img {
+.featuredImage img,
+.featuredImage video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -114,7 +115,8 @@
   transition: transform var(--transition-slow);
 }
 
-.featured:hover .featuredImage img {
+.featured:hover .featuredImage img,
+.featured:hover .featuredImage video {
   transform: scale(1.05);
 }
 
@@ -293,7 +295,8 @@
   overflow: hidden;
 }
 
-.cardImage img {
+.cardImage img,
+.cardImage video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -303,7 +306,8 @@
   transition: transform var(--transition-slow);
 }
 
-.card:hover .cardImage img {
+.card:hover .cardImage img,
+.card:hover .cardImage video {
   transform: scale(1.06);
 }
 
