@@ -1,6 +1,16 @@
 require('dotenv').config();
+const dns = require('dns');
 const express = require('express');
 const mongoose = require('mongoose');
+
+// ─── DNS fallback 修正 ─────────────────────────────────────
+// 某些 Windows 多網卡環境下，Node 讀不到系統 DNS 會退回 127.0.0.1，
+// 導致 mongodb+srv:// 的 SRV 查詢 ECONNREFUSED。偵測到才覆寫，
+// 正式環境（Linux）不受影響。
+if (dns.getServers().every((s) => s === '127.0.0.1' || s === '::1')) {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  console.log('⚠ 偵測到本機 DNS 異常，已改用 8.8.8.8 / 1.1.1.1');
+}
 const cors = require('cors');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
