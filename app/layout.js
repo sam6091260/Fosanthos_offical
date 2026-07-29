@@ -9,18 +9,19 @@ export const metadata = {
   metadataBase: new URL(SITE_URL),
   viewport: {
     width: 'device-width',
-    // iOS 專用的舊式宣告：讓版面視窗以裝置螢幕高度計算，而非瀏覽器可視區。
-    // 對照組 seizexiri.com 有這行、內容能鋪到工具列位置；本站缺少此宣告。
-    height: 'device-height',
     initialScale: 1,
-    // 讓版面視窗延伸到安全區（iOS home indicator、瀏海）。
-    // 沒有這行，頁面底部永遠碰不到螢幕下緣，會留一條約 34px 的空白帶。
-    // 開啟後 env(safe-area-inset-*) 才有值，固定定位的元素需自行內縮。
+    // 直向 Safari 下 env(safe-area-inset-*) 實測皆為 0，cover 在那裡沒有作用；
+    // 保留是為了橫向（瀏海會佔左右）與未來的 PWA standalone 模式。
     viewportFit: 'cover',
   },
-  // Safari 會取樣頁面背景色去染自己的 UI（狀態列、工具列）。
-  // 明確宣告可避免取到不預期的顏色，讓上下邊界與頁面融為一體。
-  themeColor: '#FAF7F0',
+  // iOS Safari 會用這個顏色畫它自己的 UI 區域（狀態列、底部工具列）。
+  // 沒設就改為取樣頁面背景色。
+  //
+  // 實測：iPhone 直向時網頁只拿得到 735px，螢幕有 896px，中間 161px 是
+  // Safari 的 UI —— 網頁無法繪製進去。因此那塊「空白帶」唯一能做的就是
+  // 讓它的顏色與頁面底部接得上，看不出接縫。
+  // 站上多數區塊底部是白色卡片／內容區，故取純白。
+  themeColor: '#FFFFFF',
   // 站台同時可由 zeabur 網域存取，canonical 一律指向正式網域，避免重複內容
   alternates: {
     canonical: '/',
