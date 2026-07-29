@@ -5,7 +5,8 @@
   right: 0;
   z-index: 100;
   transition: background var(--transition-base), backdrop-filter var(--transition-base), box-shadow var(--transition-base);
-  padding: 20px 0;
+  /* 背景延伸到安全區，內容往內縮（橫向與 PWA 時 --sa-top/left/right 才非 0）*/
+  padding: calc(20px + var(--sa-top)) var(--sa-right) 20px var(--sa-left);
 }
 
 .navbar.scrolled {
@@ -160,7 +161,11 @@
   height: 100dvh; /* 選單為固定覆蓋層，dvh 可精準貼合可視高度 */
   background: var(--color-cream);
   z-index: 100;
-  padding: 100px 40px 60px;
+  padding:
+    calc(100px + var(--sa-top))
+    calc(40px + var(--sa-right))
+    calc(60px + var(--sa-bottom))
+    calc(40px + var(--sa-left));
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition-base);
@@ -240,6 +245,6 @@
   }
 
   .inner {
-    padding: 0 24px;
+    padding: 0 calc(24px + var(--sa-right)) 0 calc(24px + var(--sa-left));
   }
 }

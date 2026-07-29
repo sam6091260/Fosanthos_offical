@@ -129,8 +129,8 @@
 
 .closeButton {
   position: fixed;
-  top: 24px;
-  right: 24px;
+  top: calc(24px + var(--sa-top));
+  right: calc(24px + var(--sa-right));
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -175,16 +175,16 @@
 }
 
 .prevButton {
-  left: 24px;
+  left: calc(24px + var(--sa-left));
 }
 
 .nextButton {
-  right: 24px;
+  right: calc(24px + var(--sa-right));
 }
 
 .counter {
   position: fixed;
-  bottom: 24px;
+  bottom: calc(24px + var(--sa-bottom));
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.7);

@@ -1,7 +1,8 @@
 .btn {
   position: fixed;
-  bottom: 36px;
-  right: 36px;
+  /* 避開 home indicator 與橫向的瀏海 */
+  bottom: calc(36px + var(--sa-bottom));
+  right: calc(36px + var(--sa-right));
   z-index: 99;
   width: 46px;
   height: 46px;
@@ -43,8 +44,8 @@
 
 @media (max-width: 768px) {
   .btn {
-    bottom: 24px;
-    right: 8px;
+    bottom: calc(24px + var(--sa-bottom));
+    right: calc(8px + var(--sa-right));
     width: 40px;
     height: 40px;
   }

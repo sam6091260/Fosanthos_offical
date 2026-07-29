@@ -136,7 +136,8 @@
 
 /* Bottom */
 .bottom {
-  padding: 24px 0;
+  /* 深色頁尾背景延伸到安全區，文字往上內縮避開 home indicator */
+  padding: 24px 0 calc(24px + var(--sa-bottom));
 }
 
 .bottomInner {

@@ -7,6 +7,17 @@ export const metadata = {
   description: SITE_DESCRIPTION,
   keywords: '心光卉, 身心靈, 印度課程, 彩光花波, 冥想, 自我療癒, 靈性成長',
   metadataBase: new URL(SITE_URL),
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    // 讓版面視窗延伸到安全區（iOS home indicator、瀏海）。
+    // 沒有這行，頁面底部永遠碰不到螢幕下緣，會留一條約 34px 的空白帶。
+    // 開啟後 env(safe-area-inset-*) 才有值，固定定位的元素需自行內縮。
+    viewportFit: 'cover',
+  },
+  // Safari 會取樣頁面背景色去染自己的 UI（狀態列、工具列）。
+  // 明確宣告可避免取到不預期的顏色，讓上下邊界與頁面融為一體。
+  themeColor: '#FAF7F0',
   // 站台同時可由 zeabur 網域存取，canonical 一律指向正式網域，避免重複內容
   alternates: {
     canonical: '/',
@@ -50,10 +61,8 @@ export const metadata = {
   },
 }
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-}
+// 注意：Next 13.5 沒有獨立的 `viewport` export（那是 Next 14 才有的）。
+// 這裡必須寫在 metadata 裡，否則會被忽略、只輸出 Next 的預設 viewport。
 
 export default function RootLayout({ children }) {
   return (
