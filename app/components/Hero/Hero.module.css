@@ -117,6 +117,13 @@
 }
 
 /* Brand Name */
+/* h1 容器：只負責語意，不影響版面（字級歸零，避免 h1 預設樣式撐開空間） */
+.brandHeading {
+  font-size: 0;
+  line-height: 0;
+  margin: 0;
+}
+
 .brandName {
   display: block;
   margin: 0 auto;

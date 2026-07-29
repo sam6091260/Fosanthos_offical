@@ -36,9 +36,13 @@ export default function MarkdownContent({ content }) {
             const caption = isSize ? null : alt
             return (
               <span className={styles.mdImageWrapper}>
+                {/* 內文圖片來自 Markdown，尺寸未知，改用 next/image 反而會造成版面跳動，
+                    因此維持原生 img，只加上延遲載入與非同步解碼 */}
                 <img
                   src={src}
                   alt={caption || ''}
+                  loading="lazy"
+                  decoding="async"
                   className={`${styles.mdImage} ${sizeClass}`}
                 />
                 {caption && <span className={styles.mdImageCaption}>{caption}</span>}

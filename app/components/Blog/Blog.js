@@ -1,20 +1,24 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import styles from './Blog.module.css'
 import { API_BASE_URL, categories } from './blogData'
+import CategoryFromQuery from './CategoryFromQuery'
 
 // ─── 圖片元件（含 Skeleton 過渡） ──────────
-function BlogImage({ src, alt, className }) {
+// 外層 .imageWrapper 是 position: relative，所以用 fill 讓 next/image 自動轉檔並填滿容器
+function BlogImage({ src, alt, className, sizes = '(max-width: 768px) 100vw, 480px' }) {
   const [loaded, setLoaded] = useState(false)
 
   return (
     <div className={`${className} ${styles.imageWrapper}`}>
       {!loaded && <div className={styles.skeleton} />}
-      <img
+      <Image
         src={src}
         alt={alt}
+        fill
+        sizes={sizes}
         onLoad={() => setLoaded(true)}
         className={loaded ? styles.imageLoaded : styles.imageLoading}
       />
@@ -53,7 +57,6 @@ function SkeletonFeatured() {
 }
 
 export default function Blog() {
-  const searchParams = useSearchParams()
   // Server 與 Client 初次 render 保持一致（'all'），mount 後再從 sessionStorage 還原
   const [activeCategory, setActiveCategory] = useState('all')
   const [posts, setPosts] = useState([])
@@ -91,18 +94,6 @@ export default function Blog() {
     sessionStorage.setItem('blog_category', activeCategory)
   }, [activeCategory])
 
-  useEffect(() => {
-    const cat = searchParams.get('category')
-    if (cat && categories.some(c => c.key === cat)) {
-      setActiveCategory(cat)
-      // Scroll to the blog section if on the same page
-      const blogSection = document.getElementById('blog')
-      if (blogSection) {
-        blogSection.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-  }, [searchParams])
-
   const filteredPosts =
     activeCategory === 'all'
       ? posts
@@ -114,13 +105,18 @@ export default function Blog() {
 
   return (
     <section id="blog" className={styles.blog} aria-label="部落格分享">
+      {/* 網址 ?category=xxx 的處理隔離在自己的 Suspense 內，不影響本區塊的 SSR */}
+      <Suspense fallback={null}>
+        <CategoryFromQuery onCategory={setActiveCategory} />
+      </Suspense>
+
       <div className="container">
         {/* Header */}
         <div className={styles.header}>
           <span className="section-label">部落格分享</span>
-          <h2 className={styles.heading}>
+          <h1 className={styles.heading}>
             每一段故事，都是一束光
-          </h2>
+          </h1>
           <p className={styles.subheading}>
             學員的轉變、課程的溫度、寶老師的日常觀察，在這裡慢慢讀。
           </p>
@@ -174,7 +170,12 @@ export default function Blog() {
                     onLoadedMetadata={(e) => { e.currentTarget.currentTime = 0.1 }}
                   />
                 ) : (
-                  <BlogImage src={featuredPost.image} alt={featuredPost.title} className={styles.featuredImageInner} />
+                  <BlogImage
+                    src={featuredPost.image}
+                    alt={featuredPost.title}
+                    className={styles.featuredImageInner}
+                    sizes="(max-width: 768px) 100vw, 640px"
+                  />
                 )}
                 <div className={styles.featuredImageOverlay} />
               </div>
@@ -218,7 +219,12 @@ export default function Blog() {
                     {post.image.endsWith('.mp4') ? (
                       <video src={post.image} autoPlay loop muted playsInline />
                     ) : (
-                      <BlogImage src={post.image} alt={post.title} className={styles.cardImageInner} />
+                      <BlogImage
+                        src={post.image}
+                        alt={post.title}
+                        className={styles.cardImageInner}
+                        sizes="(max-width: 768px) 100vw, 240px"
+                      />
                     )}
                     <div className={styles.cardImageOverlay} />
                   </div>

@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import Image from 'next/image'
 import styles from './Services.module.css'
 import useScrollReveal from '../../hooks/useScrollReveal'
 
@@ -82,7 +83,12 @@ export default function Services() {
               {/* Card Image */}
               {service.image ? (
                 <div className={styles.cardImage}>
-                  <img src={service.image} alt={service.imageAlt} />
+                  <Image
+                    src={service.image}
+                    alt={service.imageAlt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 400px"
+                  />
                   <div className={styles.cardImageOverlay} />
                 </div>
               ) : (

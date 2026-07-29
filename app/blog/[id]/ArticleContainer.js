@@ -4,6 +4,7 @@ import styles from './Article.module.css'
 import MarkdownContent from './MarkdownContent'
 import Gallery from './Gallery'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { CATEGORY_LABELS, API_BASE_URL } from '../../components/Blog/blogData'
 
@@ -56,7 +57,14 @@ function RelatedPosts({ currentPost }) {
           return (
             <Link key={p.id} href={`/blog/${encodeURIComponent(p.id)}`} className={styles.relatedCard}>
               {thumb ? (
-                <img src={thumb} alt={p.title} className={styles.relatedThumb} />
+                <Image
+                  src={thumb}
+                  alt={p.title}
+                  width={400}
+                  height={225}
+                  sizes="(max-width: 768px) 100vw, 260px"
+                  className={styles.relatedThumb}
+                />
               ) : (
                 <div className={styles.relatedThumbPlaceholder}>
                   {isVideo ? '▶' : '✦'}
@@ -158,7 +166,7 @@ export default function ArticleContainer({ post }) {
 
         <MarkdownContent content={post.content} />
 
-        <Gallery images={post.gallery} />
+        <Gallery images={post.gallery} title={post.title} />
 
         {(post.category === 'course' || post.category === 'teacher-course') && (
           <div className={styles.ctaContainer}>

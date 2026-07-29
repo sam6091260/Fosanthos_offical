@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import styles from './About.module.css'
 import useScrollReveal from '../../hooks/useScrollReveal'
 
@@ -76,10 +77,15 @@ export default function About() {
           {/* Image Side */}
           <div className={styles.imageSide} data-reveal data-reveal-delay="1">
             <div className={styles.imageWrapper}>
-              <img
+              {/* .imageWrapper 沒有固定高度（高度由 .image 的 600px 決定），
+                  所以這裡用 width/height 而非 fill，實際尺寸仍由 CSS 控制 */}
+              <Image
                 key={`img-${carouselIndex}`}
                 src={aboutCarousel[carouselIndex].image}
                 alt={aboutCarousel[carouselIndex].alt}
+                width={800}
+                height={600}
+                sizes="(max-width: 968px) 100vw, 560px"
                 className={`${styles.image} ${styles.carouselAnim}`}
               />
               {/* Decorative frame */}

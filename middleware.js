@@ -6,6 +6,12 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 // 後台專屬網域：直接跳轉到 /admin
 const ADMIN_HOSTNAME = 'backend.fosanthos.com'
 
+// 後台頁面一律不進搜尋引擎索引（admin layout 是 client component，無法用 metadata 設定）
+function noIndex(response) {
+  response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+  return response
+}
+
 export async function middleware(request) {
   const { pathname } = request.nextUrl
   const hostname = request.headers.get('host') || ''
@@ -19,7 +25,7 @@ export async function middleware(request) {
   if (!pathname.startsWith('/admin')) return NextResponse.next()
 
   // 登入頁不需要保護
-  if (pathname === '/admin/login') return NextResponse.next()
+  if (pathname === '/admin/login') return noIndex(NextResponse.next())
 
   const token = request.cookies.get('admin_token')?.value
 
@@ -29,7 +35,7 @@ export async function middleware(request) {
 
   try {
     await jwtVerify(token, JWT_SECRET)
-    return NextResponse.next()
+    return noIndex(NextResponse.next())
   } catch {
     const response = NextResponse.redirect(new URL('/admin/login', request.url))
     response.cookies.delete('admin_token')

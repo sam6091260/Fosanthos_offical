@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import Image from 'next/image'
 import styles from './Gallery.module.css'
 
 const isVideo = (url) => url && /\.(mp4|webm|mov|ogg)$/i.test(url)
@@ -162,7 +163,12 @@ export default function Gallery({ images = EMPTY_IMAGES, title }) {
                 <div className={styles.playIcon}>▶</div>
               </>
             ) : (
-              <img src={img} alt={`${title} gallery ${index + 1}`} loading="lazy" />
+              <Image
+                src={img}
+                alt={`${title} gallery ${index + 1}`}
+                fill
+                sizes="(max-width: 768px) 50vw, 300px"
+              />
             )}
           </div>
         ))}

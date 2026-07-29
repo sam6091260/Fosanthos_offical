@@ -75,8 +75,10 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Brand Name */}
-        <Image src="/logo_full.png" alt="Fosanthos" className={styles.brandName} width={150} height={150} data-hero="brand" />
+        {/* Brand Name — 以 h1 包住品牌 Logo，讓首頁有明確的主標題（SEO / 無障礙） */}
+        <h1 className={styles.brandHeading}>
+          <Image src="/logo_full.png" alt="心光卉 Fosanthos" className={styles.brandName} width={150} height={150} data-hero="brand" priority />
+        </h1>
 
         {/* Tagline */}
         <p className={styles.tagline} data-hero="tagline">
