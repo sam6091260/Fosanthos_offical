@@ -154,8 +154,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  /* fixed 定位，100% 即為可視寬度；100vw 會多算捲軸寬度造成水平溢出 */
+  width: 100%;
   height: 100vh;
+  height: 100dvh; /* 選單為固定覆蓋層，dvh 可精準貼合可視高度 */
   background: var(--color-cream);
   z-index: 100;
   padding: 100px 40px 60px;

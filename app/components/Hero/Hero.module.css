@@ -17,8 +17,10 @@
 
 .bgImg {
   display: block;
-  width: 100vw;
-  height: 100vh;
+  /* 父層 .bg 已是 position:absolute; inset:0，用 100% 精準貼合即可。
+     不可用 100vw —— 它包含捲軸寬度，在桌機會造成水平溢出。 */
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
   transform: scale(1.05);

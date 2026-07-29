@@ -54,7 +54,11 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* 用 clip 而非 hidden：hidden 會讓 body 變成捲動容器，iOS Safari 因此
+     失去「內容延伸到收合工具列底下」的原生行為，底部會出現一條空白帶。
+     clip 只裁切、不建立捲動容器。水平溢出的根因（100vw）已另外修掉，
+     這裡僅作為保險。 */
+  overflow-x: clip;
 }
 
 img {
