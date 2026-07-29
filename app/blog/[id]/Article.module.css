@@ -1,6 +1,7 @@
 .article {
   background: var(--color-cream);
   min-height: 100vh;
+  min-height: 100svh; /* 見 Hero.module.css 的說明：svh 才不會被工具列裁掉 */
   padding-bottom: 100px;
 }
 

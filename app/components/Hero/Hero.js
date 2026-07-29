@@ -14,6 +14,18 @@ const badgeTexts = [
 export default function Hero() {
   const [textIndex, setTextIndex] = useState(0)
   const contentRef = useRef(null)
+  const videoRef = useRef(null)
+
+  // React 對 <video muted> 有已知問題：它只設 attribute，不一定會設到 DOM
+  // property，而 iOS 是看 property 決定能不能自動播放。這裡補上並主動 play()。
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    v.muted = true
+    v.defaultMuted = true
+    // 播放被瀏覽器政策擋下是正常情況（例如低耗電模式），此時會顯示 poster
+    v.play().catch(() => {})
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,10 +64,15 @@ export default function Hero() {
       {/* Background Image */}
       <div className={styles.bg} aria-hidden="true">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
+          preload="metadata"
+          // 自動播放被擋下時（iOS 低耗電模式、省數據模式）顯示影片首幀，
+          // 不會只剩灰底加一顆播放鈕
+          poster="/hero_flower_poster.jpg"
           className={styles.bgImg}
         >
           <source src="/hero_flower.mp4" type="video/mp4" />

@@ -2,6 +2,11 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
+  /* iPhone 實測：100vh = 735px（工具列收起時），但初次載入工具列展開，
+     可視高度只有 695px（= 100svh），首屏底部 40px 會落在畫面外。
+     svh 取「工具列展開」的最小高度，首屏必定完整可見；
+     不用 dvh 是因為它會隨工具列收合即時改變，捲動時背景影片會跟著抖。 */
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
