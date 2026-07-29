@@ -5,6 +5,12 @@
 const R2_HOST = process.env.NEXT_PUBLIC_R2_HOST || 'pub-159d2f1534984928bc80b1820c8267c0.r2.dev'
 
 const nextConfig = {
+  // 關閉頁面 ETag。Zeabur 邊緣快取對 ISR 頁面做再驗證時，若它自己存的
+  // body 損毀（例如容器崩潰期間存到壞的版本），源頭回 304 會讓它把
+  // 「304 + 空回應」直接發給訪客，且因 ETag 不變而永遠無法自癒 ——
+  // 實際症狀：從列表點進文章時 client-side exception（RSC payload 為空）。
+  // 不發 ETag 後，邊緣每次再驗證都會拿到 200 完整內容，死循環不再成立。
+  generateEtags: false,
   images: {
     // 只允許自家 R2，避免變成公開的圖片轉檔代理
     remotePatterns: [
