@@ -1,122 +1,122 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-// 診斷用元件（暫時）。不使用專案的任何樣式，避免受既有 CSS 影響。
+// 診斷用元件（暫時）。設計成「一張截圖就能定案」：
+//  - 數據面板固定在畫面正中央，捲到哪都看得到
+//  - 文件最底部是洋紅色，若 Safari 有取樣頁面色去染工具列，那條會變洋紅
+//  - 紅線標示 position:fixed bottom:0，藍線標示扣掉 safe-area 後的位置
 export default function ViewportProbe() {
   const [m, setM] = useState(null)
 
   useEffect(() => {
     const read = () => {
-      const cs = getComputedStyle(document.body)
-      const hs = getComputedStyle(document.documentElement)
-      const probe = document.getElementById('safe-probe')
-      const ps = probe ? getComputedStyle(probe) : null
+      const g = (id) => getComputedStyle(document.getElementById(id))
       setM({
-        innerHeight: window.innerHeight,
-        clientHeight: document.documentElement.clientHeight,
-        visualH: window.visualViewport ? Math.round(window.visualViewport.height) : '不支援',
+        safeBottom: g('probe').paddingBottom,
+        safeTop: g('probe').paddingTop,
+        innerH: window.innerHeight,
+        clientH: document.documentElement.clientHeight,
+        visualH: window.visualViewport ? Math.round(window.visualViewport.height) : '—',
         screenH: window.screen.height,
         dpr: window.devicePixelRatio,
-        scrollY: Math.round(window.scrollY),
-        docH: document.documentElement.scrollHeight,
-        bodyOverflow: `${cs.overflowX} / ${cs.overflowY}`,
-        htmlOverflow: `${hs.overflowX} / ${hs.overflowY}`,
-        safeTop: ps ? ps.paddingTop : '?',
-        safeBottom: ps ? ps.paddingBottom : '?',
-        svh: getComputedStyle(document.getElementById('unit-svh')).height,
-        lvh: getComputedStyle(document.getElementById('unit-lvh')).height,
-        dvh: getComputedStyle(document.getElementById('unit-dvh')).height,
+        svh: g('u-svh').height,
+        lvh: g('u-lvh').height,
+        dvh: g('u-dvh').height,
+        vh: g('u-vh').height,
+        vpMeta: document.querySelector('meta[name=viewport]')?.content || '（無）',
+        theme: document.querySelector('meta[name=theme-color]')?.content || '（無）',
       })
     }
     read()
-    window.addEventListener('scroll', read, { passive: true })
-    window.addEventListener('resize', read)
+    const evts = ['scroll', 'resize', 'orientationchange']
+    evts.forEach((e) => window.addEventListener(e, read, { passive: true }))
     window.visualViewport?.addEventListener('resize', read)
+    window.visualViewport?.addEventListener('scroll', read)
     return () => {
-      window.removeEventListener('scroll', read)
-      window.removeEventListener('resize', read)
+      evts.forEach((e) => window.removeEventListener(e, read))
       window.visualViewport?.removeEventListener('resize', read)
+      window.visualViewport?.removeEventListener('scroll', read)
     }
   }, [])
 
-  const row = (k, v) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '3px 0' }}>
-      <span style={{ opacity: 0.7 }}>{k}</span>
-      <b style={{ fontVariantNumeric: 'tabular-nums' }}>{v}</b>
+  const R = (k, v, hot) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '2px 0' }}>
+      <span style={{ opacity: 0.65 }}>{k}</span>
+      <b style={{ color: hot ? '#ff4d4d' : '#fff', fontVariantNumeric: 'tabular-nums' }}>{v}</b>
     </div>
   )
 
+  const hidden = { position: 'absolute', visibility: 'hidden', pointerEvents: 'none' }
+
   return (
-    <div style={{ font: '13px/1.5 ui-monospace, monospace', background: '#111', color: '#eee' }}>
-      {/* 量測 svh / lvh / dvh 用的隱形元素 */}
-      <div id="unit-svh" style={{ height: '100svh', position: 'absolute', visibility: 'hidden' }} />
-      <div id="unit-lvh" style={{ height: '100lvh', position: 'absolute', visibility: 'hidden' }} />
-      <div id="unit-dvh" style={{ height: '100dvh', position: 'absolute', visibility: 'hidden' }} />
-      <div id="safe-probe" style={{
-        position: 'absolute', visibility: 'hidden',
+    <div style={{ font: '12px/1.45 ui-monospace, monospace', background: '#111', color: '#eee' }}>
+      <div id="u-vh" style={{ ...hidden, height: '100vh' }} />
+      <div id="u-svh" style={{ ...hidden, height: '100svh' }} />
+      <div id="u-lvh" style={{ ...hidden, height: '100lvh' }} />
+      <div id="u-dvh" style={{ ...hidden, height: '100dvh' }} />
+      <div id="probe" style={{
+        ...hidden,
         paddingTop: 'env(safe-area-inset-top, 0px)',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }} />
 
-      {/* 固定在版面視窗底部的紅線 —— 標示「頁面認為的底部」在哪 */}
+      {/* 固定在畫面正中央的數據面板 —— 捲到任何位置截圖都看得到 */}
       <div style={{
-        position: 'fixed', left: 0, right: 0, bottom: 0, height: 4,
-        background: 'red', zIndex: 99999,
-      }} />
-      <div style={{
-        position: 'fixed', left: 0, right: 0, bottom: 0, height: 26,
-        background: 'rgba(255,0,0,.35)', color: '#fff', textAlign: 'center',
-        fontSize: 11, lineHeight: '26px', zIndex: 99998,
+        position: 'fixed', top: '50%', left: 8, right: 8, transform: 'translateY(-50%)',
+        background: 'rgba(0,0,0,.9)', border: '1px solid #444', borderRadius: 10,
+        padding: '10px 12px', zIndex: 99997,
       }}>
-        ↑ 紅線 = position:fixed bottom:0 的位置
-      </div>
-
-      <div style={{ padding: '20px 16px 8px' }}>
-        <h1 style={{ fontSize: 16, margin: '0 0 4px' }}>視窗診斷</h1>
-        <p style={{ opacity: 0.6, margin: '0 0 14px', fontSize: 11 }}>
-          請<b>向下捲到最底</b>，等工具列縮成膠囊後截圖給我
-        </p>
         {m ? (
-          <div style={{ background: '#1e1e1e', padding: 12, borderRadius: 8 }}>
-            {row('window.innerHeight', m.innerHeight)}
-            {row('documentElement.clientHeight', m.clientHeight)}
-            {row('visualViewport.height', m.visualH)}
-            {row('screen.height', m.screenH)}
-            {row('devicePixelRatio', m.dpr)}
-            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '8px 0' }} />
-            {row('100svh', m.svh)}
-            {row('100lvh', m.lvh)}
-            {row('100dvh', m.dvh)}
-            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '8px 0' }} />
-            {row('safe-area-inset-top', m.safeTop)}
-            {row('safe-area-inset-bottom', m.safeBottom)}
-            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '8px 0' }} />
-            {row('body overflow x/y', m.bodyOverflow)}
-            {row('html overflow x/y', m.htmlOverflow)}
-            {row('scrollY', m.scrollY)}
-            {row('文件總高', m.docH)}
-          </div>
+          <>
+            {R('safe-area-inset-bottom', m.safeBottom, m.safeBottom === '0px')}
+            {R('safe-area-inset-top', m.safeTop)}
+            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '5px 0' }} />
+            {R('innerHeight', m.innerH)}
+            {R('clientHeight', m.clientH)}
+            {R('visualViewport', m.visualH)}
+            {R('screen.height (CSS px)', Math.round(m.screenH))}
+            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '5px 0' }} />
+            {R('100vh', m.vh)}
+            {R('100svh', m.svh)}
+            {R('100lvh', m.lvh)}
+            {R('100dvh', m.dvh)}
+            <hr style={{ border: 0, borderTop: '1px solid #333', margin: '5px 0' }} />
+            <div style={{ opacity: 0.65, fontSize: 10, wordBreak: 'break-all' }}>{m.vpMeta}</div>
+            <div style={{ opacity: 0.65, fontSize: 10 }}>theme-color: {m.theme}</div>
+          </>
         ) : '量測中…'}
       </div>
 
-      {/* 一段長內容，確保可以捲動讓工具列收合 */}
-      {Array.from({ length: 14 }).map((_, i) => (
+      {/* 紅線：position:fixed bottom:0 —— 頁面認為的底部 */}
+      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, height: 3, background: '#f00', zIndex: 99999 }} />
+      {/* 藍線：扣掉 safe-area-inset-bottom 之後的位置 */}
+      <div style={{
+        position: 'fixed', left: 0, right: 0, bottom: 'env(safe-area-inset-bottom, 0px)',
+        height: 3, background: '#00b0ff', zIndex: 99999,
+      }} />
+
+      <div style={{ padding: '16px 14px 6px' }}>
+        <b style={{ fontSize: 14 }}>視窗診斷 v2</b>
+        <p style={{ opacity: 0.6, margin: '4px 0 0', fontSize: 11 }}>
+          請<b>捲到最底</b>再截圖。紅線＝頁面底部，藍線＝扣掉安全區的位置。<br />
+          兩條線若重合 → 安全區為 0（cover 未生效）。
+        </p>
+      </div>
+
+      {Array.from({ length: 12 }).map((_, i) => (
         <div key={i} style={{
-          height: 90, margin: '8px 16px', borderRadius: 6,
-          background: `hsl(${i * 26} 60% 30%)`,
+          height: 80, margin: '6px 14px', borderRadius: 6,
+          background: `hsl(${i * 30} 55% 28%)`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          區塊 {i + 1}
-        </div>
+        }}>{i + 1}</div>
       ))}
 
-      {/* 文件的最後一塊：亮綠色。若它能鋪到螢幕實體底部 = 內容有延伸到工具列底下 */}
+      {/* 文件最底 300px：洋紅。若 Safari 取樣頁面色染工具列，那條會變洋紅 */}
       <div style={{
-        height: 220, background: 'lime', color: '#000', fontWeight: 700,
-        display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-        paddingBottom: 4,
+        height: 300, background: 'magenta', color: '#000', fontWeight: 700, fontSize: 13,
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 6,
       }}>
-        文件最底部（綠色）— 這塊有沒有碰到螢幕實體最下緣？
+        ↓ 洋紅有沒有延伸到螢幕最底？
       </div>
     </div>
   )

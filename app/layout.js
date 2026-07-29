@@ -9,6 +9,9 @@ export const metadata = {
   metadataBase: new URL(SITE_URL),
   viewport: {
     width: 'device-width',
+    // iOS 專用的舊式宣告：讓版面視窗以裝置螢幕高度計算，而非瀏覽器可視區。
+    // 對照組 seizexiri.com 有這行、內容能鋪到工具列位置；本站缺少此宣告。
+    height: 'device-height',
     initialScale: 1,
     // 讓版面視窗延伸到安全區（iOS home indicator、瀏海）。
     // 沒有這行，頁面底部永遠碰不到螢幕下緣，會留一條約 34px 的空白帶。
