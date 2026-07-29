@@ -393,6 +393,10 @@
 
 .relatedThumb {
   width: 100%;
+  /* next/image 會輸出 width/height 屬性，瀏覽器把它們當成 CSS 尺寸提示。
+     若這裡不指定 height: auto，那個 height 會生效並讓 aspect-ratio 失效
+     （手機版就會從 100x100 變成 100x225 的細長條）。 */
+  height: auto;
   aspect-ratio: 16/9;
   object-fit: cover;
   display: block;
