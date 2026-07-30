@@ -172,6 +172,22 @@ Content-Type: application/json
 
 ## 日常操作：上傳圖片與影片
 
+### 方法零：後台「雲端媒體庫」重複選用（最省容量）
+
+> [!TIP]
+> 同一張照片要用在多篇文章時，**不需要重新上傳**。
+
+**步驟：**
+
+1. 進入後台編輯器（`/admin/posts/new` 或編輯既有文章）
+2. 在「封面媒體」或「Gallery」區塊點 **☁ 從雲端媒體庫選擇**
+3. 彈窗會列出 R2 上所有已上傳的圖片與影片（可依類型篩選、以檔名搜尋）
+4. 封面：點一下即選用；Gallery：可複選後按「加入」
+5. 標示 **使用中** 代表已被某篇文章引用；未使用的檔案可用垃圾桶圖示直接從 R2 刪除
+
+> [!NOTE]
+> 刪除鍵只會出現在**沒有任何文章使用**的檔案上，後端也會再驗證一次，避免誤刪線上圖片。
+
 ### 方法一：透過 Cloudflare R2 網頁上傳（推薦）
 
 > [!TIP]
@@ -246,6 +262,8 @@ content: "文章內容"
 | `POST` | `/api/posts` | 新增一篇文章（純文字） | 見上方範例 |
 | `POST` | `/api/posts/batch` | 批次新增文章 | 傳入陣列 |
 | `POST` | `/api/upload` | 上傳檔案 + 建立文章 | multipart/form-data |
+| `GET` | `/api/admin/media` | 列出 R2 已上傳媒體（需 JWT） | `?type=image\|video\|all` |
+| `DELETE` | `/api/admin/media` | 刪除未被引用的 R2 媒體（需 JWT） | body: `{ "key": "fosanthos_images/xxx.jpg" }` |
 
 ---
 

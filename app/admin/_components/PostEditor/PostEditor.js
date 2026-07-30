@@ -8,6 +8,7 @@ import { adminFetch, adminUpload, getToken } from '../../_lib/api'
 import { CATEGORY_LIST } from '../../../components/Blog/blogData'
 import styles from './PostEditor.module.css'
 import DropZone from './DropZone'
+import MediaPicker from './MediaPicker'
 
 // 從共用 blogData 匯入，使用 value/label 形狀符合 <select> 用法
 const CATEGORIES = CATEGORY_LIST.map((c) => ({ value: c.key, label: c.label }))
@@ -96,6 +97,7 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
   const [formCollapsed, setFormCollapsed] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMsg, setAiMsg] = useState('')            // '' | 'ok' | error string
+  const [picker, setPicker] = useState({ open: false, target: null })  // target: 'cover' | 'gallery'
   const [linkDialog, setLinkDialog] = useState({ open: false, url: '', text: '' })
   const [colorDialog, setColorDialog] = useState({ open: false, color: '#c9a96e', text: '' })
   const contentRef = useRef(null)
@@ -321,6 +323,24 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
     }
   }
 
+  // ── 從雲端媒體庫選用（不重複上傳）─────────────────────────
+  const closePicker = useCallback(() => setPicker({ open: false, target: null }), [])
+
+  function handlePickFromLibrary(urls) {
+    if (!urls.length) return
+    if (picker.target === 'cover') {
+      setForm((f) => ({ ...f, image: urls[0] }))
+      return
+    }
+    setForm((f) => {
+      const merged = [...f.gallery]
+      for (const url of urls) {
+        if (!merged.includes(url) && merged.length < GALLERY_MAX) merged.push(url)
+      }
+      return { ...f, gallery: merged }
+    })
+  }
+
   function removeGallery(index) {
     setForm((f) => ({ ...f, gallery: f.gallery.filter((_, i) => i !== index) }))
   }
@@ -480,6 +500,13 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                 onClear={() => setForm((f) => ({ ...f, image: '' }))}
                 label="拖曳或點擊上傳封面圖片 / 影片"
               />
+              <button
+                type="button"
+                className={styles.libraryBtn}
+                onClick={() => setPicker({ open: true, target: 'cover' })}
+              >
+                ☁ 從雲端媒體庫選擇
+              </button>
             </section>
 
             {/* Gallery */}
@@ -490,13 +517,22 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
               <p className={styles.hint}>每個圖片限 10MB，影片限 500MB，最多 {GALLERY_MAX} 個</p>
 
               {form.gallery.length < GALLERY_MAX && (
-                <DropZone
-                  accept="image/*,video/*"
-                  multiple
-                  loading={uploadingGallery}
-                  onFile={(file, files) => handleGalleryUpload(files || [file])}
-                  label="拖曳或點擊新增 Gallery 媒體"
-                />
+                <>
+                  <DropZone
+                    accept="image/*,video/*"
+                    multiple
+                    loading={uploadingGallery}
+                    onFile={(file, files) => handleGalleryUpload(files || [file])}
+                    label="拖曳或點擊新增 Gallery 媒體"
+                  />
+                  <button
+                    type="button"
+                    className={styles.libraryBtn}
+                    onClick={() => setPicker({ open: true, target: 'gallery' })}
+                  >
+                    ☁ 從雲端媒體庫選擇
+                  </button>
+                </>
               )}
 
               {form.gallery.length > 0 && (
@@ -764,6 +800,17 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
           </div>
         </div>
       </div>
+
+      {/* 雲端媒體庫選擇器 */}
+      <MediaPicker
+        open={picker.open}
+        accept="all"
+        multiple={picker.target === 'gallery'}
+        maxSelect={picker.target === 'gallery' ? GALLERY_MAX - form.gallery.length : 1}
+        existing={picker.target === 'gallery' ? form.gallery : []}
+        onSelect={handlePickFromLibrary}
+        onClose={closePicker}
+      />
     </div>
   )
 }
