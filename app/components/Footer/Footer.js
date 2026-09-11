@@ -79,7 +79,7 @@ export default function Footer() {
               <ul className={styles.navList}>
                 {['印度課程代理', '寶老師課程', '彩光花波諮詢'].map((s) => (
                   <li key={s}>
-                    <Link href="#services" className={styles.navLink}>{s}</Link>
+                    <Link href="/#services" className={styles.navLink}>{s}</Link>
                   </li>
                 ))}
               </ul>
