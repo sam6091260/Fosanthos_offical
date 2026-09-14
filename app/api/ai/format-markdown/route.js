@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 
+// 模型名稱可用 GEMINI_MODEL 環境變數覆蓋，日後 Google 汰換版本時不必改程式
+const GEMINI_MODEL = process.env.GEMINI_MODEL?.trim() || 'gemini-3.6-flash'
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent'
+  `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`
 
 const SYSTEM_PROMPT = `你是一位繁體中文文章的 Markdown 格式化助手，專門為身心靈品牌網站整理文章。
 
@@ -48,7 +50,7 @@ export async function POST(request) {
       return NextResponse.json({ error: '內容不能為空' }, { status: 400 })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.GEMINI_API_KEY?.trim()
     if (!apiKey) {
       return NextResponse.json({ error: '未設定 GEMINI_API_KEY' }, { status: 500 })
     }
