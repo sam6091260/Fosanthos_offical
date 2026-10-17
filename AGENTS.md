@@ -88,6 +88,7 @@ xinguanghui/
 
 ### 前端（`.env.local` / Railway）
 - `NEXT_PUBLIC_API_URL` — 後端 API 網址
+- `NEXT_PUBLIC_WEB3FORMS_KEY` — 聯絡表單 Web3Forms access key（前端直接送出）
 - `GMAIL_USER` — 聯絡表單寄件信箱
 - `GMAIL_APP_PASSWORD` — Gmail 應用程式密碼
 

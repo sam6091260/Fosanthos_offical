@@ -19,16 +19,24 @@ export default function Contact() {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+          subject: '心光卉官網｜新的聯絡表單',
+          from_name: '心光卉官網',
+          name: form.name,
+          email: form.email,
+          interest: form.interest,
+          message: form.message,
+        }),
       })
       const data = await res.json()
-      if (res.ok) {
+      if (data.success) {
         setSubmitted(true)
       } else {
-        alert(data.error || '寄送失敗，請稍後再試')
+        alert(data.message || '寄送失敗，請稍後再試')
       }
     } catch {
       alert('網路錯誤，請檢查網路連線後再試')
