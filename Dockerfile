@@ -8,6 +8,11 @@ RUN npm ci
 
 # 複製程式碼並建置
 COPY . .
+
+# NEXT_PUBLIC_* 會在 build 時被寫死進前端 bundle，必須在 build 前傳入
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm run build
 
 # 第二階段：運行

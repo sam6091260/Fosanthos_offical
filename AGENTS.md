@@ -2,7 +2,7 @@
 
 ## 專案概述
 心光卉（Fosanthos）是一個身心靈整合品牌的官方網站，提供課程推廣、文章分享、聯絡表單等功能。
-採用前後端分離架構，部署於 Zeabur 雲端平台。
+採用前後端分離架構，部署於 Railway 雲端平台（原本為 Zeabur，已遷移）。
 
 ## 技術架構
 
@@ -10,13 +10,13 @@
 - **框架**: Next.js 13 (App Router)
 - **語言**: JavaScript (JSX)
 - **樣式**: CSS Modules (`.module.css`)
-- **部署**: Zeabur → `fosanthos.zeabur.app`
+- **部署**: Railway → `fosanthos.com`
 
 ### 後端（`/server` 目錄）
 - **框架**: Express.js
 - **資料庫**: MongoDB Atlas (Mongoose ODM)
 - **檔案儲存**: Cloudflare R2 (S3 相容)
-- **部署**: Zeabur → `fosanthos-api.zeabur.app`
+- **部署**: Railway → `api.fosanthos.com`
 
 ## 目錄結構
 
@@ -80,18 +80,18 @@ xinguanghui/
 ```
 
 ### 部署流程
-- `git push origin main` → Zeabur 自動部署前後端
-- 前端 Root Directory：空（根目錄）
+- `git push origin main` → Railway 自動部署前後端
+- 前端 Root Directory：空（根目錄）；`NEXT_PUBLIC_*` 需在 Dockerfile 宣告 `ARG` 才能在 build 時讀到 Railway 變數
 - 後端 Root Directory：`server`
 
 ## 環境變數
 
-### 前端（`.env.local` / Zeabur）
+### 前端（`.env.local` / Railway）
 - `NEXT_PUBLIC_API_URL` — 後端 API 網址
 - `GMAIL_USER` — 聯絡表單寄件信箱
 - `GMAIL_APP_PASSWORD` — Gmail 應用程式密碼
 
-### 後端（`server/.env` / Zeabur）
-- `PORT` — 伺服器 Port（Zeabur 用 8080）
+### 後端（`server/.env` / Railway）
+- `PORT` — 伺服器 Port（Railway 會自動注入，勿寫死）
 - `MONGO_URI` — MongoDB Atlas 連線字串
 - `R2_ENDPOINT`, `R2_ACCESS_KEY`, `R2_SECRET_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL` — Cloudflare R2 設定
