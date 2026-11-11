@@ -1,0 +1,55 @@
+/* 固定在畫面左側的旗子，尾端為燕尾缺口 */
+.flag {
+  position: fixed;
+  top: 50%;
+  left: var(--sa-left);
+  z-index: 99;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 44px;
+  padding: 18px 0 34px;
+  background: linear-gradient(180deg, var(--color-gold) 0%, #B8955A 100%);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: 0 6px 0 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 14px), 0 100%);
+  box-shadow: var(--shadow-soft);
+  transform: translate(-4px, -50%);
+  transition: transform var(--transition-base), filter var(--transition-base);
+}
+
+.flag:hover,
+.flag:focus-visible {
+  transform: translate(0, -50%);
+  filter: brightness(1.06);
+}
+
+.flag:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.text {
+  writing-mode: vertical-rl;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .flag {
+    width: 32px;
+    padding: 14px 0 24px 4px;
+    /* 手機版半透明，避免遮住後方內文 */
+    background: linear-gradient(180deg, rgba(201, 169, 110, 0.55) 0%, rgba(184, 149, 90, 0.55) 100%);
+    box-shadow: none;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 11px), 0 100%);
+  }
+
+  .text {
+    font-size: 13px;
+  }
+}

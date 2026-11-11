@@ -6,6 +6,7 @@ import Philosophy from './components/Philosophy/Philosophy'
 import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+import SanctumFlag from './components/SanctumFlag'
 import JsonLd from './components/JsonLd'
 import {
   SITE_URL,
@@ -66,6 +67,7 @@ export default function HomePage() {
       </main>
       <Footer />
       <ScrollToTop />
+      <SanctumFlag />
     </>
   )
 }
