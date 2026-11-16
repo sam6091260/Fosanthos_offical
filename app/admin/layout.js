@@ -13,10 +13,10 @@ export default function AdminLayout({ children }) {
     router.push('/admin/login')
   }
 
+  // 選單只放「區塊」；新增按鈕放在各自的列表頁（文章管理、課程管理右上角）
+  // match：子頁面（新增／編輯）也算在該區塊，讓選單保持亮起
   const navItems = [
-    { href: '/admin', label: '文章管理', icon: '📄' },
-    { href: '/admin/posts/new', label: '新增文章', icon: '✏️' },
-    // match：子頁面（新增／編輯課程）也算在「課程管理」
+    { href: '/admin', label: '文章管理', icon: '📄', match: '/admin/posts' },
     { href: '/admin/courses', label: '課程管理', icon: '🗓️', match: '/admin/courses' },
   ]
 
