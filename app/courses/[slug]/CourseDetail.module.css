@@ -1,0 +1,446 @@
+.page {
+  background: var(--color-cream);
+  padding-top: 100px;
+}
+
+/* ─── Hero ─────────────────────────────────────────── */
+.hero {
+  padding-bottom: 56px;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.heroMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  background: linear-gradient(135deg, rgba(200, 212, 192, 0.3), rgba(201, 169, 110, 0.12));
+}
+
+.heroMedia img {
+  object-fit: cover;
+}
+
+.heroPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+}
+
+.backLink {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.backLink:hover {
+  color: var(--color-gold);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.heroNext {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-yellow-light), rgba(200, 212, 192, 0.25));
+  border: 1px solid rgba(201, 169, 110, 0.25);
+  margin-bottom: 20px;
+}
+
+.heroNote {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-top: 4px;
+}
+
+.heroCta {
+  margin-bottom: 24px;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+}
+
+.facts dt {
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.facts dd {
+  color: var(--color-text);
+}
+
+/* ─── 內容區 ───────────────────────────────────────── */
+.body {
+  max-width: 860px;
+  padding-bottom: 80px;
+}
+
+.section {
+  padding: 40px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+
+/* ─── 梯次表格 ─────────────────────────────────────── */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  background: var(--color-cream-dark);
+  padding: 12px 18px;
+}
+
+.table td {
+  padding: 16px 18px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.cellDate {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.cellAction {
+  text-align: right;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.noSession {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+/* 過往梯次（原生 details，不需要 JS） */
+.pastToggle {
+  margin-top: 20px;
+}
+
+.pastToggle summary {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+  padding: 6px 0;
+  width: fit-content;
+}
+
+.pastToggle summary:hover {
+  color: var(--color-gold);
+}
+
+.pastToggle[open] summary {
+  margin-bottom: 12px;
+}
+
+.pastToggle .table {
+  opacity: 0.75;
+}
+
+/* ─── 相關心得文章 ─────────────────────────────────── */
+.relatedGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.relatedCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(61, 56, 48, 0.05);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.relatedCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.relatedThumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  background: var(--color-cream-dark);
+}
+
+.relatedThumb img {
+  object-fit: cover;
+}
+
+.relatedBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px 16px;
+}
+
+.relatedDate {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.relatedTitle {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.backBottom {
+  display: inline-flex;
+  gap: 8px;
+  margin-top: 24px;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+}
+
+.backBottom:hover {
+  color: var(--color-gold);
+}
+
+/* ─── 手機底部固定報名條（桌機隱藏） ──────────────── */
+.stickyCta,
+.stickySpacer {
+  display: none;
+}
+
+/* ─── 手機 ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page {
+    padding-top: 80px;
+  }
+
+  /* 頁尾下方留出固定報名條的高度，避免蓋住頁尾內容 */
+  .stickySpacer {
+    display: block;
+    height: calc(64px + var(--sa-bottom));
+    background: inherit;
+  }
+
+  .hero {
+    padding-bottom: 32px;
+  }
+
+  .heroInner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .heroMedia {
+    aspect-ratio: 16 / 10;
+  }
+
+  .heroCta > * {
+    width: 100%;
+  }
+
+  .body {
+    padding-bottom: 48px;
+  }
+
+  .section {
+    padding: 32px 0;
+  }
+
+  /* 表格 → 每梯一張小卡 */
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table {
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    background: var(--color-white);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 16px rgba(61, 56, 48, 0.06);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+
+  .table td {
+    border-top: none;
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .table td[data-label]::before {
+    content: attr(data-label);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+
+  .cellDate {
+    white-space: normal;
+    text-align: right;
+  }
+
+  .cellAction {
+    padding-top: 10px !important;
+  }
+
+  .cellAction > * {
+    width: 100%;
+  }
+
+  .relatedGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .stickyCta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 10px calc(16px + var(--sa-right)) calc(10px + var(--sa-bottom)) calc(16px + var(--sa-left));
+    background: rgba(250, 247, 240, 0.92);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -6px 24px rgba(61, 56, 48, 0.08);
+  }
+
+  .stickyInfo {
+    min-width: 0;
+  }
+
+  .stickyTitle {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 讓「回到頂部」按鈕浮在報名條上方 */
+  .sttOffset {
+    --stt-offset: 64px;
+  }
+}

@@ -1,0 +1,405 @@
+/* ─── 後台課程管理（深色主題，沿用 admin.module.css / PostEditor.module.css 的色系） ── */
+
+.panel {
+  background: #211e1a;
+  border: 1px solid rgba(201, 169, 110, 0.12);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 24px 0;
+}
+
+.panelTitle {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.panelHint {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: rgba(250, 247, 240, 0.4);
+  margin-bottom: 16px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 20px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 20px;
+}
+
+.required {
+  color: #e07070;
+  margin-left: 2px;
+}
+
+.slugFixed {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: rgba(250, 247, 240, 0.7);
+  padding: 10px 0;
+}
+
+.descArea {
+  min-height: 320px;
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+
+.previewBox {
+  min-height: 320px;
+  max-height: 560px;
+  overflow-y: auto;
+  border: 1px solid rgba(201, 169, 110, 0.18);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.coverRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ─── 課程列表 ─────────────────────────────────────── */
+.courseHeader,
+.courseRow {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 90px 200px 70px 80px;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.courseHeader {
+  background: rgba(201, 169, 110, 0.06);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(250, 247, 240, 0.35);
+  letter-spacing: 0.08em;
+}
+
+.courseRow {
+  border-bottom: 1px solid rgba(201, 169, 110, 0.07);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: rgba(250, 247, 240, 0.55);
+}
+
+.courseRow:last-child {
+  border-bottom: none;
+}
+
+.courseRow:hover {
+  background: rgba(201, 169, 110, 0.04);
+}
+
+.thumb {
+  width: 64px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.courseTitle {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--color-cream);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.courseSlug {
+  display: block;
+  font-size: 0.72rem;
+  color: rgba(250, 247, 240, 0.3);
+}
+
+.muted {
+  color: rgba(250, 247, 240, 0.3);
+}
+
+/* ─── 梯次 ─────────────────────────────────────────── */
+.sessionHeader,
+.sessionRow,
+.sessionNew {
+  display: grid;
+  grid-template-columns: 150px 150px minmax(0, 1fr) 130px 150px;
+  gap: 10px;
+  align-items: center;
+}
+
+.sessionHeader {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: rgba(250, 247, 240, 0.35);
+  letter-spacing: 0.08em;
+  padding: 0 0 8px;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+}
+
+.sessionRow {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.07);
+}
+
+.sessionRowPast {
+  opacity: 0.5;
+}
+
+.sessionRowDirty {
+  background: rgba(201, 169, 110, 0.05);
+}
+
+.sessionNew {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px dashed rgba(201, 169, 110, 0.3);
+  border-radius: 10px;
+}
+
+.sessionInput {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 169, 110, 0.18);
+  border-radius: 6px;
+  color: rgba(250, 247, 240, 0.85);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  outline: none;
+  color-scheme: dark;
+}
+
+.sessionInput:focus {
+  border-color: rgba(201, 169, 110, 0.5);
+}
+
+.rowActions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.smallBtn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  background: var(--color-gold);
+  color: #211e1a;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.smallBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pastLabel {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: rgba(250, 247, 240, 0.4);
+  margin-left: 6px;
+}
+
+.groupTitle {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(250, 247, 240, 0.65);
+  letter-spacing: 0.08em;
+  margin: 8px 0 10px;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(201, 169, 110, 0.12);
+}
+
+.groupHeader .groupTitle,
+.groupHeader .toggleBtn {
+  margin: 0;
+}
+
+.toggleBtn {
+  margin-top: 12px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: rgba(250, 247, 240, 0.45);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.toggleBtn:hover {
+  color: var(--color-gold);
+}
+
+.rowError {
+  grid-column: 1 / -1;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #e07070;
+}
+
+/* 狀態顏色（下拉選單左側色點） */
+.statusSelect[data-status="open"] {
+  border-left: 3px solid #a8b5a0;
+}
+
+.statusSelect[data-status="almost_full"] {
+  border-left: 3px solid #d29a5c;
+}
+
+.statusSelect[data-status="full"],
+.statusSelect[data-status="closed"] {
+  border-left: 3px solid rgba(250, 247, 240, 0.25);
+}
+
+/* ─── 危險操作 ─────────────────────────────────────── */
+.danger {
+  border-color: rgba(224, 112, 112, 0.25);
+}
+
+.dangerTitle {
+  color: #e07070;
+}
+
+.headerLinks {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  color: var(--color-gold);
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.ghostBtn:hover {
+  background: rgba(201, 169, 110, 0.08);
+}
+
+@media (max-width: 900px) {
+
+  .grid2,
+  .grid3 {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 18px 16px;
+  }
+
+  .courseHeader,
+  .sessionHeader {
+    display: none;
+  }
+
+  .courseRow {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 6px 12px;
+  }
+
+  .courseRow> :nth-child(n + 3) {
+    grid-column: 2;
+  }
+
+  .sessionRow,
+  .sessionNew {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sessionRow> :nth-child(3),
+  .sessionNew> :nth-child(3),
+  .rowActions {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── 刪除課程確認視窗（原生 <dialog>） ───────────── */
+.dialog {
+  width: min(480px, calc(100vw - 32px));
+  padding: 24px 28px;
+  background: #211e1a;
+  color: rgba(250, 247, 240, 0.8);
+  border: 1px solid rgba(224, 112, 112, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.dialog::backdrop {
+  background: rgba(10, 8, 6, 0.7);
+}
+
+.dialogText {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  margin: 12px 0 8px;
+}
+
+.dialogList {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: rgba(250, 247, 240, 0.6);
+  padding-left: 1.2em;
+  margin-bottom: 8px;
+}
+
+.dialogText strong,
+.dialogList strong {
+  color: #e8a0a0;
+  font-weight: 600;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+
+.dialogActions button {
+  padding: 9px 18px;
+  font-size: 0.85rem;
+}

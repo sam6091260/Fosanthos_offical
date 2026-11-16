@@ -1,5 +1,6 @@
 import { API_BASE_URL } from './components/Blog/blogData'
 import { SITE_URL } from './lib/site'
+import { getAllCourses } from './lib/courses'
 
 // 每小時重新產生一次，新文章最慢 1 小時內會出現在 sitemap
 export const revalidate = 3600
@@ -21,7 +22,7 @@ async function getPosts() {
 }
 
 export default async function sitemap() {
-  const posts = await getPosts()
+  const [posts, courses] = await Promise.all([getPosts(), getAllCourses()])
 
   const staticRoutes = [
     {
@@ -47,5 +48,21 @@ export default async function sitemap() {
       priority: post.featured ? 0.8 : 0.6,
     }))
 
-  return [...staticRoutes, ...postRoutes]
+  const courseRoutes = [
+    {
+      url: `${SITE_URL}/courses`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...courses.map((course) => ({
+      url: `${SITE_URL}/courses/${course.slug}`,
+      lastModified: course.updatedAt ? new Date(course.updatedAt) : undefined,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })),
+  ]
+
+  // 舊的每梯課程公告不在 /api/posts 回傳中，自然不會進 sitemap
+  return [...staticRoutes, ...courseRoutes, ...postRoutes]
 }

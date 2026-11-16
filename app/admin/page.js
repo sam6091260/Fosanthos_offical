@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { adminFetch } from './_lib/api'
 import { ADMIN_CATEGORIES, CATEGORY_LABELS } from '../components/Blog/blogData'
 import styles from './admin.module.css'
+import AdminLoading from './_components/AdminLoading/AdminLoading'
 
 const CATEGORIES = ADMIN_CATEGORIES
 
@@ -86,7 +87,7 @@ export default function AdminDashboard() {
       </div>
 
       {loading ? (
-        <div className={styles.loading}>載入中…</div>
+        <AdminLoading withHeader={false} padded={false} />
       ) : filteredPosts.length === 0 ? (
         <div className={styles.empty}>
           <p>{activeCategory === 'all' ? '尚無文章' : `尚無「${CATEGORY_LABELS[activeCategory]}」分類的文章`}</p>

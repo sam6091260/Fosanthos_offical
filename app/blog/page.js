@@ -2,11 +2,15 @@ import Navbar from '../components/Navbar/Navbar'
 import Blog from '../components/Blog/Blog'
 import Footer from '../components/Footer/Footer'
 import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
+import UpcomingCoursesStrip from '../components/Courses/UpcomingCoursesStrip'
 import JsonLd from '../components/JsonLd'
 import { SITE_URL, SITE_NAME } from '../lib/site'
 
 const description =
-  '學員的轉變故事、近期課程推廣、寶老師的日常短文 — 在這裡慢慢讀，每一段故事都是一束光。'
+  '學員的轉變故事、寶老師的日常短文與影音分享 — 在這裡慢慢讀，每一段故事都是一束光。'
+
+// 側欄「近期開課」每小時更新（文章列表本身在瀏覽器端抓取，不受影響）
+export const revalidate = 3600
 
 export const metadata = {
   title: '部落格分享 | 心光卉',
@@ -44,7 +48,7 @@ export default function BlogPage() {
       <JsonLd data={breadcrumbSchema} />
       <Navbar />
       <main>
-        <Blog />
+        <Blog sidebar={<UpcomingCoursesStrip />} />
       </main>
       <Footer />
       <ScrollToTop />

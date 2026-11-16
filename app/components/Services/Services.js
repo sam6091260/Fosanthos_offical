@@ -16,7 +16,7 @@ const services = [
     desc: '我們精選來自印度的正統課程，從火供、療癒、冥想到共振，引導你用身體的語言，踏上一場向內的旅程。不需要任何基礎，只需要一份好奇心。',
     tags: ['火供', '療癒', '冥想', '共振'],
     cta: '了解課程',
-    ctaHref: '/blog?category=course',
+    ctaHref: '/courses',
   },
   {
     id: 'university-course',

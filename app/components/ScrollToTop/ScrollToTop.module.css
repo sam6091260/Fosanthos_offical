@@ -1,7 +1,8 @@
 .btn {
   position: fixed;
   /* 避開 home indicator 與橫向的瀏海 */
-  bottom: calc(36px + var(--sa-bottom));
+  /* --stt-offset：頁面底部有固定列時（如課程頁的報名條）往上讓位 */
+  bottom: calc(36px + var(--stt-offset, 0px) + var(--sa-bottom));
   right: calc(36px + var(--sa-right));
   z-index: 99;
   width: 46px;
@@ -44,7 +45,7 @@
 
 @media (max-width: 768px) {
   .btn {
-    bottom: calc(24px + var(--sa-bottom));
+    bottom: calc(24px + var(--stt-offset, 0px) + var(--sa-bottom));
     right: calc(8px + var(--sa-right));
     width: 40px;
     height: 40px;

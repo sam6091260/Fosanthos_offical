@@ -7,6 +7,7 @@ import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import SanctumFlag from './components/SanctumFlag'
+import ScrollToHash from './components/ScrollToHash/ScrollToHash'
 import JsonLd from './components/JsonLd'
 import {
   SITE_URL,
@@ -57,6 +58,8 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={[organizationSchema, websiteSchema]} />
+      {/* 從其他頁面或外部連到 /#contact 等錨點時，確保真的捲到該區塊 */}
+      <ScrollToHash />
       <Navbar />
       <main>
         <Hero />

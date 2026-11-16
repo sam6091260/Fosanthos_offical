@@ -1,14 +1,15 @@
 'use client'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './Blog.module.css'
-import { API_BASE_URL, categories } from './blogData'
+import { API_BASE_URL, categories, CATEGORY_LABELS } from './blogData'
 import CategoryFromQuery from './CategoryFromQuery'
+import LazyVideo from './LazyVideo'
 
 // ─── 圖片元件（含 Skeleton 過渡） ──────────
 // 外層 .imageWrapper 是 position: relative，所以用 fill 讓 next/image 自動轉檔並填滿容器
-function BlogImage({ src, alt, className, sizes = '(max-width: 768px) 100vw, 480px' }) {
+function BlogImage({ src, alt, className, sizes = '(max-width: 768px) 100vw, 480px', priority = false }) {
   const [loaded, setLoaded] = useState(false)
 
   return (
@@ -19,6 +20,7 @@ function BlogImage({ src, alt, className, sizes = '(max-width: 768px) 100vw, 480
         alt={alt}
         fill
         sizes={sizes}
+        priority={priority}
         onLoad={() => setLoaded(true)}
         className={loaded ? styles.imageLoaded : styles.imageLoading}
       />
@@ -56,11 +58,18 @@ function SkeletonFeatured() {
   )
 }
 
-export default function Blog() {
+// sidebar：由 Server Component 傳入的側邊欄內容（例：近期開課）
+// 桌機在文章列表右側（捲動時黏住）；手機排在文章列表下方，不擠壓文章
+// 一般文章每次顯示幾篇（精選文章另計）；捲到底自動再顯示一批
+const PAGE_SIZE = 8
+
+export default function Blog({ sidebar = null }) {
   // Server 與 Client 初次 render 保持一致（'all'），mount 後再從 sessionStorage 還原
   const [activeCategory, setActiveCategory] = useState('all')
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const sentinelRef = useRef(null)
 
   // 從 API 取得文章資料
   useEffect(() => {
@@ -94,6 +103,22 @@ export default function Blog() {
     sessionStorage.setItem('blog_category', activeCategory)
   }, [activeCategory])
 
+  // 已顯示篇數：從文章頁「上一頁」回來時還原，不會又縮回 8 篇
+  useEffect(() => {
+    const saved = Number(sessionStorage.getItem('blog_visible'))
+    if (saved > PAGE_SIZE) setVisibleCount(saved)
+  }, [])
+
+  useEffect(() => {
+    sessionStorage.setItem('blog_visible', String(visibleCount))
+  }, [visibleCount])
+
+  // 切換分類：從頭顯示 8 篇
+  const selectCategory = (key) => {
+    setActiveCategory(key)
+    setVisibleCount(PAGE_SIZE)
+  }
+
   const filteredPosts =
     activeCategory === 'all'
       ? posts
@@ -102,6 +127,24 @@ export default function Blog() {
   // 找出精選文章（第一篇 featured）
   const featuredPost = filteredPosts.find((p) => p.featured)
   const regularPosts = filteredPosts.filter((p) => p !== featuredPost)
+  const visiblePosts = regularPosts.slice(0, visibleCount)
+  const remaining = regularPosts.length - visiblePosts.length
+
+  // 列表底部的觀察點進入畫面附近 → 再顯示一批。
+  // 每次篇數變動都重新觀察：若觀察點仍在範圍內會再觸發，直到填滿畫面或沒有更多。
+  useEffect(() => {
+    if (loading || remaining <= 0) return
+    const el = sentinelRef.current
+    if (!el || !('IntersectionObserver' in window)) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisibleCount((c) => c + PAGE_SIZE)
+      },
+      { rootMargin: '400px 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [loading, remaining, visibleCount])
 
   return (
     <section id="blog" className={styles.blog} aria-label="部落格分享">
@@ -122,6 +165,8 @@ export default function Blog() {
           </p>
         </div>
 
+        <div className={styles.layout}>
+        <div className={styles.mainCol}>
         {/* Category Tabs */}
         <div className={styles.tabs} role="tablist" aria-label="文章分類">
           {categories.map((cat) => (
@@ -130,7 +175,7 @@ export default function Blog() {
               role="tab"
               aria-selected={activeCategory === cat.key}
               className={`${styles.tab} ${activeCategory === cat.key ? styles.tabActive : ''}`}
-              onClick={() => setActiveCategory(cat.key)}
+              onClick={() => selectCategory(cat.key)}
               id={`blog-tab-${cat.key}`}
             >
               {cat.label}
@@ -163,18 +208,15 @@ export default function Blog() {
             {featuredPost.image && (
               <div className={styles.featuredImage}>
                 {featuredPost.image.endsWith('.mp4') ? (
-                  <video
-                    src={featuredPost.image}
-                    autoPlay loop muted playsInline
-                    preload="metadata"
-                    onLoadedMetadata={(e) => { e.currentTarget.currentTime = 0.1 }}
-                  />
+                  <LazyVideo src={featuredPost.image} />
                 ) : (
+                  // 精選圖是列表第一眼看到的大圖（LCP）：優先載入，不要 lazy
                   <BlogImage
                     src={featuredPost.image}
                     alt={featuredPost.title}
                     className={styles.featuredImageInner}
-                    sizes="(max-width: 768px) 100vw, 640px"
+                    sizes="(max-width: 768px) 100vw, 360px"
+                    priority
                   />
                 )}
                 <div className={styles.featuredImageOverlay} />
@@ -182,7 +224,7 @@ export default function Blog() {
             )}
             <div className={styles.featuredBody}>
               <span className={styles.categoryBadge} data-category={featuredPost.category}>
-                {featuredPost.categoryLabel}
+                {CATEGORY_LABELS[featuredPost.category] || featuredPost.categoryLabel}
               </span>
               <Link href={`/blog/${featuredPost.id}`} className={styles.featuredTitleLink}>
                 <h3 className={styles.featuredTitle}>{featuredPost.title}</h3>
@@ -208,7 +250,7 @@ export default function Blog() {
         {/* Regular Posts Grid */}
         {!loading && (
           <div className={styles.grid}>
-            {regularPosts.map((post) => (
+            {visiblePosts.map((post) => (
               <article
                 key={post.id}
                 className={styles.card}
@@ -217,7 +259,7 @@ export default function Blog() {
                 {post.image ? (
                   <div className={styles.cardImage}>
                     {post.image.endsWith('.mp4') ? (
-                      <video src={post.image} autoPlay loop muted playsInline />
+                      <LazyVideo src={post.image} />
                     ) : (
                       <BlogImage
                         src={post.image}
@@ -240,7 +282,7 @@ export default function Blog() {
                 )}
                 <div className={styles.cardBody}>
                   <span className={styles.categoryBadge} data-category={post.category}>
-                    {post.categoryLabel}
+                    {CATEGORY_LABELS[post.category] || post.categoryLabel}
                   </span>
                   <Link href={`/blog/${post.id}`} className={styles.cardTitleLink}>
                     <h3 className={styles.cardTitle}>{post.title}</h3>
@@ -264,6 +306,24 @@ export default function Blog() {
             ))}
           </div>
         )}
+
+        {/* 還有更多文章：觀察點（捲到附近自動載入）＋ 手動按鈕（備用、鍵盤可操作） */}
+        {!loading && remaining > 0 && (
+          <div ref={sentinelRef} className={styles.loadMore}>
+            <button
+              type="button"
+              className={styles.loadMoreBtn}
+              onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+            >
+              顯示更多文章（還有 {remaining} 篇）
+            </button>
+          </div>
+        )}
+        </div>{/* /mainCol */}
+
+        {/* 側邊欄（近期開課）：內容為空時由 CSS :empty 隱藏，文章列表自動佔滿 */}
+        {sidebar && <aside className={styles.sidebar}>{sidebar}</aside>}
+        </div>{/* /layout */}
 
         {/* Back to Home */}
         <div className={styles.viewAll}>

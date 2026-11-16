@@ -16,6 +16,8 @@ const PostSchema = new mongoose.Schema({
   mediaUrl: String,                          // 雲端媒體網址 (R2)
   mediaType: String,                         // 'image' 或 'video'
   status: { type: String, enum: ['draft', 'published'], default: 'published' }, // 草稿/已發布
+  relatedCourse: { type: String, default: null, index: true }, // 關聯課程 slug（文末顯示報名卡）
+  isLegacyCourseAnnouncement: { type: Boolean, default: false }, // 舊的每梯課程公告：不出現在列表，原網址仍可開
   createdAt: { type: Date, default: Date.now }
 });
 

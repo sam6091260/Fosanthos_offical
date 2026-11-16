@@ -1,0 +1,474 @@
+/* ─── 課程共用元件 ──────────────────────────────────────
+   色票、字型、圓角、陰影全部沿用 globals.css 的變數。
+   狀態色：綠 = sage-dark、橘 = 大地橘、灰 = text-muted */
+
+/* ─── 按鈕 ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 40px;
+  font-family: var(--font-serif);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: background var(--transition-base), box-shadow var(--transition-base),
+    border-color var(--transition-base), gap var(--transition-base);
+}
+
+.btnSm { padding: 8px 20px; font-size: 0.82rem; }
+.btnMd { padding: 11px 26px; font-size: 0.9rem; }
+.btnLg { padding: 15px 36px; font-size: 1rem; }
+
+.btnPrimary {
+  background: rgba(201, 169, 110, 0.22);
+  border-color: rgba(201, 169, 110, 0.55);
+  color: var(--color-text);
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btnPrimary:hover {
+  background: rgba(201, 169, 110, 0.34);
+  border-color: rgba(201, 169, 110, 0.75);
+  gap: 12px;
+}
+
+.btnGhost {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(168, 181, 160, 0.6);
+  color: var(--color-sage-dark);
+}
+
+.btnGhost:hover {
+  background: rgba(168, 181, 160, 0.15);
+}
+
+.btnDisabled {
+  background: rgba(166, 159, 148, 0.12);
+  border-color: rgba(166, 159, 148, 0.3);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.btnArrow {
+  transition: transform var(--transition-base);
+}
+
+/* ─── 狀態徽章 ─────────────────────────────────────── */
+.statusBadge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.statusBadge[data-status="open"] {
+  background: rgba(122, 146, 112, 0.12);
+  color: var(--color-sage-dark);
+  border-color: rgba(122, 146, 112, 0.4);
+}
+
+.statusBadge[data-status="almost_full"] {
+  background: rgba(196, 128, 72, 0.12);
+  color: #a8612d;
+  border-color: rgba(196, 128, 72, 0.4);
+}
+
+.statusBadge[data-status="full"],
+.statusBadge[data-status="closed"] {
+  background: rgba(166, 159, 148, 0.12);
+  color: var(--color-text-muted);
+  border-color: rgba(166, 159, 148, 0.35);
+}
+
+/* ─── 標籤（時長／形式） ───────────────────────────── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin-bottom: 12px;
+}
+
+.tag {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-light);
+  background: var(--color-cream);
+  border: 1px solid var(--color-border);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* ─── 課程卡（/courses） ───────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+}
+
+.cardMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(200, 212, 192, 0.3), rgba(201, 169, 110, 0.12));
+}
+
+.cardMedia img {
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.card:hover .cardMedia img {
+  transform: scale(1.04);
+}
+
+.mediaPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 18px 20px;
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.cardTitle a:hover {
+  color: var(--color-gold);
+}
+
+.cardSubtitle {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--color-text-light);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
+}
+
+/* 列表卡（四欄，卡片較窄）：簡介最多 2 行 */
+.card .cardSubtitle {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 下一梯：卡片中最醒目的區塊（日期在上、按鈕在下，按鈕滿版） */
+.nextBox {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-yellow-light), rgba(200, 212, 192, 0.25));
+  border: 1px solid rgba(201, 169, 110, 0.25);
+}
+
+.nextBox .btn {
+  width: 100%;
+}
+
+.card .nextValue {
+  font-size: 0.92rem;
+}
+
+/* 「下一梯：」自成一行，日期區間比較不會被拆開 */
+.card .nextLabel {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+/* 標籤自成一行時，「全年隨時加入・」後面的點不需要 */
+.card .nextLabel .nextSep {
+  display: none;
+}
+
+.nextInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.nextValue {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.nextLabel {
+  font-weight: 400;
+  color: var(--color-text-light);
+}
+
+.nextSep {
+  color: var(--color-gold);
+}
+
+.nextNote {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.04em;
+}
+
+.otherSessions {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+  margin-top: 10px;
+}
+
+.moreLink {
+  align-self: flex-start;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.4);
+  padding-bottom: 2px;
+  margin-top: 16px;
+}
+
+.moreLink:hover {
+  border-color: var(--color-gold);
+}
+
+/* ─── 部落格「近期開課」側欄區塊（垂直排列） ─────────── */
+.strip {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.stripHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.stripTitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-text);
+}
+
+.stripAll {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  color: var(--color-gold);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.stripAll:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* 側欄內一張一列；移到文章下方（平板／手機）時依寬度自動排成多欄 */
+.stripList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.miniCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  box-shadow: 0 4px 16px rgba(61, 56, 48, 0.05);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  height: 100%;
+}
+
+.miniCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.miniThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--color-cream-dark);
+}
+
+.miniThumb img {
+  object-fit: cover;
+}
+
+.miniBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.miniTitle {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.miniDate {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-sage-dark);
+  letter-spacing: 0.04em;
+}
+
+/* ─── 文末課程報名卡 ───────────────────────────────── */
+.registerCard {
+  display: flex;
+  gap: 24px;
+  margin: 48px 0 8px;
+  padding: 20px;
+  background: var(--color-white);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.registerThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 220px;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.registerThumb img {
+  object-fit: cover;
+}
+
+.registerBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.registerEyebrow {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--color-gold);
+  letter-spacing: 0.12em;
+}
+
+.registerTitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.registerTitle a:hover {
+  color: var(--color-gold);
+}
+
+.registerBody .cardSubtitle {
+  margin-bottom: 4px;
+}
+
+.registerActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 8px;
+}
+
+.registerActions .moreLink {
+  margin-top: 0;
+}
+
+/* ─── 手機 ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .strip {
+    padding: 16px;
+  }
+
+  .registerCard {
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .registerThumb {
+    width: 100%;
+  }
+}

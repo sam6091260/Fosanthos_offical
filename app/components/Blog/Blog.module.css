@@ -798,3 +798,125 @@
     padding: 24px 28px 36px;
   }
 }
+/* ─── 文章列表 + 右側欄（近期開課） ───────────────────── */
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.mainCol {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 有側欄時，分類頁籤靠左對齊文章欄 */
+.layout .tabs {
+  justify-content: flex-start;
+  margin-bottom: 40px;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(100px + var(--sa-top));
+}
+
+/* 沒有課程時（Server Component 回傳 null）不佔空間 */
+.sidebar:empty {
+  display: none;
+}
+
+/* 平板以下：側欄移到文章列表下方 */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .layout .tabs {
+    justify-content: center;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-top: 48px;
+  }
+}
+
+/* ─── 精選文章：配合較窄的文章欄（有側欄時約 800px） ─────
+   原本按整頁寬度設計，放進窄欄後標題會擠成 3 行、比例頭重腳輕。
+   只在 769px 以上套用，手機沿用下方原本的 @media 規則。 */
+@media (min-width: 769px) {
+  .mainCol .featured {
+    grid-template-columns: 2fr 3fr;   /* 圖小、字多 */
+    margin-bottom: 28px;
+  }
+
+  .mainCol .featuredImage {
+    min-height: 280px;
+  }
+
+  .mainCol .featuredBody {
+    padding: 24px 32px;
+  }
+
+  .mainCol .featuredTitle {
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    line-height: 1.45;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ─── 標題區：縮小上下間距，讓第一篇文章更早出現 ──────── */
+.header {
+  margin-bottom: 32px;
+}
+
+.header :global(.section-label) {
+  margin-bottom: 10px;
+}
+
+.heading {
+  margin-bottom: 10px;
+}
+
+.layout .tabs {
+  margin-bottom: 28px;
+}
+
+/* ─── 分批顯示：載入更多 ──────────────────────────────── */
+.loadMore {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.loadMoreBtn {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+  padding: 10px 28px;
+  border-radius: 40px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.5);
+  transition: border-color var(--transition-base), color var(--transition-base);
+}
+
+.loadMoreBtn:hover {
+  border-color: rgba(201, 169, 110, 0.5);
+  color: var(--color-gold);
+}
+
+.loadMoreBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}

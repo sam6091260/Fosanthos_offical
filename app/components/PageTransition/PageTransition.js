@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './PageTransition.module.css'
 
+const isAdminPath = (path) => path === '/admin' || (path || '').startsWith('/admin/')
+
 export default function PageTransition({ children }) {
   const pathname = usePathname()
   const router = useRouter()
@@ -25,6 +27,9 @@ export default function PageTransition({ children }) {
   // 攔截所有站內連結點擊
   useEffect(() => {
     const handleClick = (e) => {
+      // 後台不套用前台的白色轉場：深色介面會閃白，且每次換頁多等 450ms
+      if (isAdminPath(window.location.pathname)) return
+
       // 正在轉場中，忽略重複點擊
       if (navigatingRef.current) return
 
@@ -68,6 +73,9 @@ export default function PageTransition({ children }) {
       clearTimeout(timerRef.current)
     }
   }, [router])
+
+  // 後台：不渲染遮罩（後台有自己的深色載入畫面 app/admin/loading.js）
+  if (isAdminPath(pathname)) return <>{children}</>
 
   return (
     <>

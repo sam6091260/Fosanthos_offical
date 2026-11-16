@@ -83,7 +83,8 @@ function RelatedPosts({ currentPost }) {
 }
 
 // ── 主元件 ──────────────────────────────────────────────
-export default function ArticleContainer({ post }) {
+// courseCard：文章有 relatedCourse 時，由 Server Component 傳入的課程報名卡
+export default function ArticleContainer({ post, courseCard = null }) {
   // Server 與 Client 初次 render 保持一致（'medium'），mount 後再從 localStorage 還原
   const [fontSize, setFontSize] = useState('medium')
   const [isExpanded, setIsExpanded] = useState(false)
@@ -143,7 +144,7 @@ export default function ArticleContainer({ post }) {
 
       <div className={styles.container}>
         <span className={styles.categoryBadge} data-category={post.category}>
-          {post.categoryLabel}
+          {CATEGORY_LABELS[post.category] || post.categoryLabel}
         </span>
         <h1 className={styles.title}>{post.title}</h1>
 
@@ -168,7 +169,10 @@ export default function ArticleContainer({ post }) {
 
         <Gallery images={post.gallery} title={post.title} />
 
-        {(post.category === 'course' || post.category === 'teacher-course') && (
+        {courseCard}
+
+        {/* 有課程報名卡時就不再顯示泛用的課程 CTA */}
+        {!courseCard && (post.category === 'course' || post.category === 'teacher-course') && (
           <div className={styles.ctaContainer}>
             <Link href="/#contact" className={styles.ctaButton}>
               了解更多課程資訊 <span className={styles.ctaIcon}>→</span>

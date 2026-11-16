@@ -16,7 +16,12 @@ export default function AdminLayout({ children }) {
   const navItems = [
     { href: '/admin', label: '文章管理', icon: '📄' },
     { href: '/admin/posts/new', label: '新增文章', icon: '✏️' },
+    // match：子頁面（新增／編輯課程）也算在「課程管理」
+    { href: '/admin/courses', label: '課程管理', icon: '🗓️', match: '/admin/courses' },
   ]
+
+  const isActive = (item) =>
+    pathname === item.href || (item.match && pathname.startsWith(`${item.match}/`))
 
   // 登入頁不顯示後台 layout
   if (pathname === '/admin/login') return <>{children}</>
@@ -34,7 +39,7 @@ export default function AdminLayout({ children }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`${styles.navItem} ${pathname === item.href ? styles.navItemActive : ''}`}
+              className={`${styles.navItem} ${isActive(item) ? styles.navItemActive : ''}`}
             >
               <span className={styles.navIcon}>{item.icon}</span>
               {item.label}

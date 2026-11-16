@@ -16,6 +16,9 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
 const Post = require('./models/Post');
+const Course = require('./models/Course');
+const CourseSession = require('./models/CourseSession');
+const { pickCourseInput, pickSessionInput, toHttpError, RESERVED_SLUGS } = require('./lib/courseInput');
 
 const app = express();
 
@@ -128,10 +131,13 @@ async function listPrefix(prefix) {
   return { objects, truncated: true };
 }
 
-// 蒐集所有文章實際使用到的媒體（封面 / gallery / 內文 Markdown）
+// 蒐集所有文章與課程實際使用到的媒體（封面 / gallery / 內文 Markdown）
 // 以 R2 物件 key 而非完整網址比對，公開網域若曾變更也不會誤判為未使用
 async function collectUsedKeys() {
-  const posts = await Post.find({}, 'image gallery content').lean();
+  const [posts, courses] = await Promise.all([
+    Post.find({}, 'image gallery content').lean(),
+    Course.find({}, 'coverImage gallery description').lean(),
+  ]);
   const used = new Set();
   const add = (url) => {
     if (!url) return;
@@ -146,6 +152,11 @@ async function collectUsedKeys() {
     // 內文中的 ![size](url) 或 <img src="url">
     for (const match of (post.content || '').matchAll(/https?:\/\/[^\s)"'<>]+/g)) add(match[0]);
   }
+  for (const course of courses) {
+    add(course.coverImage);
+    for (const url of course.gallery || []) add(url);
+    for (const match of (course.description || '').matchAll(/https?:\/\/[^\s)"'<>]+/g)) add(match[0]);
+  }
   return used;
 }
 
@@ -156,11 +167,14 @@ async function collectUsedKeys() {
 // A. 取得所有已發布文章
 app.get('/api/posts', async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, relatedCourse, includeLegacy } = req.query;
     const filter = {
       $or: [{ status: 'published' }, { status: { $exists: false } }],
     };
-    if (category && category !== 'all') filter.category = category;
+    if (category && category !== 'all') filter.category = String(category);
+    if (relatedCourse) filter.relatedCourse = String(relatedCourse);
+    // 舊的每梯課程公告預設不列出（單篇 /api/posts/:id 仍可取得，舊網址不會壞）
+    if (includeLegacy !== '1') filter.isLegacyCourseAnnouncement = { $ne: true };
     const posts = await Post.find(filter).sort({ publishDate: -1 });
     res.json(posts);
   } catch (err) {
@@ -177,6 +191,39 @@ app.get('/api/posts/:id', async (req, res) => {
     });
     if (!post) return res.status(404).json({ error: '文章不存在' });
     res.json(post);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// B-1. 取得所有課程（依 order 排序）
+app.get('/api/courses', async (req, res) => {
+  try {
+    const courses = await Course.find().sort({ order: 1, createdAt: 1 }).lean();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// B-2. 取得單一課程
+app.get('/api/courses/:slug', async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug }).lean();
+    if (!course) return res.status(404).json({ error: '課程不存在' });
+    res.json(course);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// B-3. 取得某課程的所有梯次（依開課日排序；「是否已過期」由前端用台北時間判斷）
+app.get('/api/courses/:slug/sessions', async (req, res) => {
+  try {
+    const sessions = await CourseSession.find({ courseSlug: req.params.slug })
+      .sort({ startDate: 1 })
+      .lean();
+    res.json(sessions);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -244,6 +291,107 @@ app.delete('/api/posts/:id', authMiddleware, async (req, res) => {
     res.json({ message: '文章已刪除' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ADMIN COURSES（需認證）
+// ═══════════════════════════════════════════════════════════
+
+const sendError = (res, err) => {
+  const { status, error } = toHttpError(err);
+  res.status(status).json({ error });
+};
+
+// C-1. 取得所有課程（含各自的全部梯次）
+app.get('/api/admin/courses', authMiddleware, async (req, res) => {
+  try {
+    const [courses, sessions] = await Promise.all([
+      Course.find().sort({ order: 1, createdAt: 1 }).lean(),
+      CourseSession.find().sort({ startDate: 1 }).lean(),
+    ]);
+    const bySlug = {};
+    for (const s of sessions) (bySlug[s.courseSlug] = bySlug[s.courseSlug] || []).push(s);
+    res.json(courses.map((c) => ({ ...c, sessions: bySlug[c.slug] || [] })));
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-2. 新增課程（slug 建立後不可修改）
+app.post('/api/admin/courses', authMiddleware, async (req, res) => {
+  try {
+    const slug = typeof req.body?.slug === 'string' ? req.body.slug.trim() : '';
+    if (RESERVED_SLUGS.has(slug)) return res.status(400).json({ error: '這個代號是保留字，請換一個' });
+    const course = new Course({ ...pickCourseInput(req.body), slug });
+    await course.save();
+    res.status(201).json(course);
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-3. 更新課程
+app.put('/api/admin/courses/:slug', authMiddleware, async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug });
+    if (!course) return res.status(404).json({ error: '課程不存在' });
+    course.set(pickCourseInput(req.body));
+    await course.save();
+    res.json(course);
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-4. 刪除課程（連同它的梯次；文章的 relatedCourse 保留，課程不存在時前台自動不顯示報名卡）
+app.delete('/api/admin/courses/:slug', authMiddleware, async (req, res) => {
+  try {
+    const course = await Course.findOneAndDelete({ slug: req.params.slug });
+    if (!course) return res.status(404).json({ error: '課程不存在' });
+    const { deletedCount } = await CourseSession.deleteMany({ courseSlug: req.params.slug });
+    res.json({ message: '課程已刪除', deletedSessions: deletedCount });
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-5. 新增梯次
+app.post('/api/admin/courses/:slug/sessions', authMiddleware, async (req, res) => {
+  try {
+    const exists = await Course.exists({ slug: req.params.slug });
+    if (!exists) return res.status(404).json({ error: '課程不存在' });
+    const session = new CourseSession({ ...pickSessionInput(req.body), courseSlug: req.params.slug });
+    await session.save();
+    res.status(201).json(session);
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-6. 更新梯次（用 save() 才會跑「結束日不可早於開始日」的檢查）
+app.put('/api/admin/sessions/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).json({ error: '梯次 ID 不正確' });
+    const session = await CourseSession.findById(req.params.id);
+    if (!session) return res.status(404).json({ error: '梯次不存在' });
+    session.set(pickSessionInput(req.body));
+    await session.save();
+    res.json(session);
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
+// C-7. 刪除梯次
+app.delete('/api/admin/sessions/:id', authMiddleware, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).json({ error: '梯次 ID 不正確' });
+    const session = await CourseSession.findByIdAndDelete(req.params.id);
+    if (!session) return res.status(404).json({ error: '梯次不存在' });
+    res.json({ message: '梯次已刪除', courseSlug: session.courseSlug });
+  } catch (err) {
+    sendError(res, err);
   }
 });
 
@@ -337,7 +485,7 @@ app.delete('/api/admin/media', authMiddleware, async (req, res) => {
 
     const usedKeys = await collectUsedKeys();
     if (usedKeys.has(key)) {
-      return res.status(409).json({ error: '此檔案仍被文章使用中，無法刪除' });
+      return res.status(409).json({ error: '此檔案仍被文章或課程使用中，無法刪除' });
     }
 
     await s3.send(new DeleteObjectCommand({

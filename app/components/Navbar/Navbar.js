@@ -9,6 +9,7 @@ const navLinks = [
   { label: '關於我們', href: '/#about', sectionId: 'about' },
   { label: '服務內容', href: '/#services', sectionId: 'services' },
   { label: '部落格', href: '/blog', sectionId: null },
+  { label: '課程', href: '/courses', sectionId: null },
   { label: '品牌哲學', href: '/#philosophy', sectionId: 'philosophy' },
   { label: '聯絡我們', href: '/#contact', sectionId: 'contact' },
 ]
@@ -72,6 +73,7 @@ export default function Navbar() {
   // 判斷連結是否 active
   const isActive = (link) => {
     if (link.href === '/blog') return pathname === '/blog'
+    if (link.href === '/courses') return pathname === '/courses' || pathname.startsWith('/courses/')
     if (link.sectionId && pathname === '/') {
       return activeSection === link.sectionId
     }

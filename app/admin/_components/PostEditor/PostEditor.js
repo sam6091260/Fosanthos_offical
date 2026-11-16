@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
-import { adminFetch, adminUpload, getToken } from '../../_lib/api'
-import { CATEGORY_LIST } from '../../../components/Blog/blogData'
+import { adminFetch, adminUpload, getToken, API_BASE } from '../../_lib/api'
+import { CATEGORY_LIST, CATEGORY_LABELS } from '../../../components/Blog/blogData'
 import styles from './PostEditor.module.css'
 import DropZone from './DropZone'
 import MediaPicker from './MediaPicker'
@@ -48,6 +48,15 @@ function formatDateTW() {
   return `${y} 年 ${m} 月 ${d} 日`
 }
 
+// '2026 年 7 月 29 日' → 該日台北中午的 ISO 時間；格式不符回傳 null
+function parseDateTW(text) {
+  const m = /(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/.exec(text || '')
+  if (!m) return null
+  const [, y, mo, d] = m
+  const iso = `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}T12:00:00+08:00`
+  return Number.isNaN(Date.parse(iso)) ? null : new Date(iso).toISOString()
+}
+
 function generateId(title, category) {
   const prefix = category || 'post'
   // 只保留 ASCII 字母數字，避免中文字造成 URL 編碼問題
@@ -77,15 +86,27 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
     title: initialData.title || '',
     excerpt: initialData.excerpt || '',
     content: initialData.content || '',
-    category: initialData.category || 'course',
-    categoryLabel: initialData.categoryLabel || '近期課程推廣',
+    category: initialData.category || 'student',
+    categoryLabel: initialData.categoryLabel || CATEGORY_LABELS.student,
     author: initialData.author || '心光卉團隊',
     date: initialData.date || '',
     image: initialData.image || '',
     gallery: initialData.gallery || [],
     featured: initialData.featured || false,
     status: initialData.status || 'draft',
+    relatedCourse: initialData.relatedCourse || '',
   })
+
+  // 關聯課程下拉選單的選項（公開 API，不需登入）
+  const [courseOptions, setCourseOptions] = useState([])
+  useEffect(() => {
+    let cancelled = false
+    fetch(`${API_BASE}/api/courses`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { if (!cancelled && Array.isArray(data)) setCourseOptions(data) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   // ── State ─────────────────────────────────────────────
   const [tab, setTab] = useState('edit')            // 'edit' | 'preview'
@@ -359,6 +380,22 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
     }
   }
 
+  // 發布時間（列表排序、sitemap、搜尋引擎用）：
+  // - 存草稿：不動（undefined 不會送出）
+  // - 第一次發布：現在
+  // - 已發布的文章再編輯：保留原本的；若手動改了「日期」欄位，改用該日期
+  //   （以前每次編輯都會重設成現在，舊文章因此跳到列表最上面）
+  function resolvePublishDate(status) {
+    if (status !== 'published') return undefined
+    const wasPublished = isEdit && initialData.status !== 'draft' && initialData.publishDate
+    if (!wasPublished) return new Date().toISOString()
+    if (form.date.trim() !== (initialData.date || '')) {
+      const fromDate = parseDateTW(form.date)
+      if (fromDate) return fromDate
+    }
+    return initialData.publishDate
+  }
+
   // ── 儲存 ────────────────────────────────────────────────
   async function handleSave(status) {
     setError('')
@@ -374,9 +411,11 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
         ...form,
         content: currentContent,
         status,
+        relatedCourse: form.relatedCourse || null,
         id: isEdit ? form.id : generateId(form.title, form.category),
-        publishDate: status === 'published' ? new Date().toISOString() : undefined,
-        date: isEdit ? formatDateTW() : (form.date || formatDateTW()),
+        publishDate: resolvePublishDate(status),
+        // 編輯時保留原本的日期；欄位清空才自動填今天（以前編輯會被改成當天）
+        date: form.date.trim() || formatDateTW(),
       }
 
       const res = isEdit
@@ -450,6 +489,12 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                     {CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>{c.label}</option>
                     ))}
+                    {/* 舊文章若屬於已停用分類，仍顯示原分類，避免存檔時被默默改掉 */}
+                    {!CATEGORIES.some((c) => c.value === form.category) && (
+                      <option value={form.category} disabled>
+                        {CATEGORY_LABELS[form.category] || form.category}（已停用）
+                      </option>
+                    )}
                   </select>
                 </div>
                 <div className={styles.col}>
@@ -486,6 +531,24 @@ export default function PostEditor({ initialData = EMPTY_INITIAL_DATA, onSuccess
                   </label>
                 </div>
               </div>
+
+              <label htmlFor="editor-related-course" className={styles.label}>關聯課程（選填，文末顯示報名卡）</label>
+              <p className={styles.hint}>學員心得請選「學員奇蹟分享」分類，再選關聯課程，就會出現在該課程頁的「相關心得文章」。</p>
+              <select
+                id="editor-related-course"
+                className={styles.input}
+                value={form.relatedCourse}
+                onChange={(e) => handleChange('relatedCourse', e.target.value)}
+              >
+                <option value="">— 不關聯 —</option>
+                {courseOptions.map((c) => (
+                  <option key={c.slug} value={c.slug}>{c.title}</option>
+                ))}
+                {/* 已存的課程若不在清單（例如已刪除），仍保留顯示，避免存檔時被清掉 */}
+                {form.relatedCourse && !courseOptions.some((c) => c.slug === form.relatedCourse) && (
+                  <option value={form.relatedCourse}>{form.relatedCourse}</option>
+                )}
+              </select>
             </section>
 
             {/* 封面媒體 */}

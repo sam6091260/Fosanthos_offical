@@ -3,7 +3,9 @@ import Image from 'next/image'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop'
-import { API_BASE_URL } from '../../components/Blog/blogData'
+import { API_BASE_URL, CATEGORY_LABELS } from '../../components/Blog/blogData'
+import { getCourseBySlug, getNextSession } from '../../lib/courses'
+import CourseRegisterCard from '../../components/Courses/CourseRegisterCard'
 import JsonLd from '../../components/JsonLd'
 import { SITE_URL, SITE_NAME, absoluteUrl } from '../../lib/site'
 import styles from './Article.module.css'
@@ -86,7 +88,7 @@ export async function generateMetadata({ params }) {
       locale: 'zh_TW',
       publishedTime: post.publishDate,
       authors: [post.author],
-      section: post.categoryLabel,
+      section: CATEGORY_LABELS[post.category] || post.categoryLabel,
     },
     twitter: {
       card: 'summary_large_image',
@@ -109,7 +111,7 @@ function buildArticleSchema(post) {
     image: [absoluteUrl(pickOgImage(post))],
     datePublished: post.publishDate,
     dateModified: post.publishDate,
-    articleSection: post.categoryLabel,
+    articleSection: CATEGORY_LABELS[post.category] || post.categoryLabel,
     inLanguage: 'zh-TW',
     author: {
       '@type': 'Person',
@@ -145,6 +147,16 @@ export default async function ArticlePage({ params }) {
     notFound()
   }
 
+  // 文章有關聯課程 → 文末顯示該課程的報名卡（課程不存在就不顯示）
+  let courseCard = null
+  if (post.relatedCourse) {
+    const [course, next] = await Promise.all([
+      getCourseBySlug(post.relatedCourse),
+      getNextSession(post.relatedCourse),
+    ])
+    if (course) courseCard = <CourseRegisterCard course={course} next={next} />
+  }
+
   return (
     <>
       <JsonLd data={[buildArticleSchema(post), buildBreadcrumbSchema(post)]} />
@@ -166,7 +178,7 @@ export default async function ArticlePage({ params }) {
           <div className={styles.noImageContainer} />
         )}
 
-        <ArticleContainer post={post} />
+        <ArticleContainer post={post} courseCard={courseCard} />
       </main>
       <Footer />
       <ScrollToTop />

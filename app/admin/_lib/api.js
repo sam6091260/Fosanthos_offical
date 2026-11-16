@@ -25,19 +25,27 @@ export function clearTokenCache() {
   _cachedToken = null
 }
 
-// 文章異動後通知前台清除 ISR 快取，讓改動立即可見
+// 文章／課程異動後通知前台清除 ISR 快取，讓改動立即可見
 async function notifyRevalidate(path, method = 'GET') {
   if (method.toUpperCase() === 'GET') return
-  if (!path.startsWith('/api/posts')) return
 
-  const match = path.match(/^\/api\/posts\/([^/?]+)/)
-  const postId = match && match[1] !== 'batch' ? decodeURIComponent(match[1]) : null
+  let body
+  if (path.startsWith('/api/posts')) {
+    const match = path.match(/^\/api\/posts\/([^/?]+)/)
+    const postId = match && match[1] !== 'batch' ? decodeURIComponent(match[1]) : null
+    body = { postId }
+  } else if (path.startsWith('/api/admin/courses') || path.startsWith('/api/admin/sessions')) {
+    const match = path.match(/^\/api\/admin\/courses\/([^/?]+)/)
+    body = { courseSlug: match ? decodeURIComponent(match[1]) : null }
+  } else {
+    return
+  }
 
   try {
     await fetch('/api/revalidate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ postId }),
+      body: JSON.stringify(body),
     })
   } catch {
     // 前台快取更新失敗不該影響後台操作，最慢 60 秒後仍會自動更新
